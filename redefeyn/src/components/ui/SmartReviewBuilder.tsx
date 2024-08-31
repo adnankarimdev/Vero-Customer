@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send } from "lucide-react";
+import { useRouter } from 'next/router';
 import {
   Card,
   CardContent,
@@ -39,6 +40,7 @@ const categories = [
 ];
 
 const SmartReviewBuilder = () => {
+  // const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
   const [questions, setQuestions] = useState([
@@ -122,6 +124,7 @@ const SmartReviewBuilder = () => {
             "_blank",
             "noopener,noreferrer"
           );
+          window.location.reload()
         }, 2000);
       })
       .catch((err) => {
@@ -148,6 +151,7 @@ const SmartReviewBuilder = () => {
             "_blank",
             "noopener,noreferrer"
           );
+          window.location.reload()
         }, 2000);
       })
       .catch((err) => {
