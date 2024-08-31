@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send } from "lucide-react";
 import { useRouter } from 'next/router';
+import { Badge } from "@/components/ui/badge"
 import {
   Card,
   CardContent,
@@ -240,23 +241,27 @@ const SmartReviewBuilder = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full">
           <DialogHeader>
-            <DialogTitle>Sophisticated Review</DialogTitle>
+            <DialogTitle>Redefeyned Review</DialogTitle>
+
             <Textarea
               defaultValue={sophisticatedReview}
               className="w-full min-h-[400px]"
               onChange={(e) => setSophisticatedReview(e.target.value)}
             />
           </DialogHeader>
-          <ScoreRingCard
+          {/* <ScoreRingCard
             score={parseInt(userReviewSophisticatedScore, 10)}
             title="New Review Score"
             description="Indicator displaying how helpful your review is."
-          />
-          <DialogFooter>
-            <Button type="submit" onClick={handleSubmitSophisticated}>
-              Use Review
-            </Button>
-          </DialogFooter>
+          /> */}
+<DialogFooter className="flex justify-between items-center">
+  <div className="flex-1">
+    <Badge variant='outline'>New Review Score: {userReviewSophisticatedScore}</Badge>
+  </div>
+  <Button type="submit" onClick={handleSubmitSophisticated} variant='outline'>
+    Use Review
+  </Button>
+</DialogFooter>
         </DialogContent>
       </Dialog>
     );
@@ -264,28 +269,35 @@ const SmartReviewBuilder = () => {
 
   if (isReviewComplete) {
     return (
-      <Card className="w-full max-w-3xl mx-auto">
-        <CardHeader>
-          <CardTitle>Your Review </CardTitle>
+      <Card className="w-relative max-w-3xl mx-auto">
+  <CardHeader className="flex justify-center items-center relative">
+    <CardTitle>Your Review</CardTitle>
+  <div className="absolute top-0 right-0 mt-2 mr-2">
+    <Badge variant='outline'>Review Score: {userReviewScore}</Badge>
+  </div>
+          
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="flex justify-center items-center relative">
           {categories.map((category, index) => (
             <div key={index} className="space-y-2">
               <p>{reviews[index]}</p>
             </div>
           ))}
           <div className="flex justify-center">
-            <ScoreRingCard
+            {/* <ScoreRingCard
               score={parseInt(userReviewScore, 10)}
               title="Review Score"
               description="Indicator displaying how helpful your review is."
-            />
+            /> */}
+
+            
+
           </div>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <Button onClick={handleSubmit}>Submit Review</Button>
+          <Button onClick={handleSubmit} variant='outline'>Use Review</Button>
           {parseInt(userReviewScore, 10) < 75 && (
-            <Button onClick={handleSophisticateReview}>Improve Review</Button>
+            <Button onClick={handleSophisticateReview} variant='ghost'>Redefeyn Review</Button>
           )}
         </CardFooter>
       </Card>
@@ -330,7 +342,8 @@ const SmartReviewBuilder = () => {
 
       <div className="flex justify-end space-x-2">
         {currentStep === categories.length - 1 ? (
-          <Send onClick={handleNext} />
+          <Button variant='ghost'> <Send onClick={handleNext} /> </Button>
+          
         ) : (
           <CircleArrowRight />
         )}

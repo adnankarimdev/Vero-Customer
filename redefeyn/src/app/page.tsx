@@ -19,7 +19,7 @@ export default function Dashboard() {
 
   const steps = [
     {
-      title: "Step 1: Share Your Thoughts",
+      title: "Step 1: Share Your Thoughts with Redefeyn",
       description:
         "Quickly jot down your answers to questions by Phil & Sebastian, using your own unique style.",
       emoji: "✏️",
@@ -61,23 +61,21 @@ export default function Dashboard() {
           {!showReviewPlatform && (
             <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
   {/* Tutorial Steps Component */}
-  <TutorialSteps steps={steps} />
+  {/* <TutorialSteps steps={steps} /> */}
 
   {/* Card Component */}
   <Card className="w-auto max-w-2xl mx-auto mt-10">
     <CardHeader>
+    <TutorialSteps steps={steps} />
       <CardTitle className="text-center">
-        Choose Your Review Method
-      </CardTitle>
-    </CardHeader>
-    <CardContent className="space-y-4">
-      <Button onClick={() => goToRedefeyn()} className="w-full">
+      <Button onClick={() => goToRedefeyn()} className="w-full" variant='link'>
         Continue to Redefeyn
       </Button>
-      <Button onClick={handleGoToGoogleReview} className="w-full">
+      <Button onClick={handleGoToGoogleReview} className="w-full" variant='link'>
         Go Directly to Google Review
       </Button>
-    </CardContent>
+      </CardTitle>
+    </CardHeader>
   </Card>
 </div>
           )}
