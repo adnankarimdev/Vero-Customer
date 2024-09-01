@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -112,12 +112,15 @@ const SmartReviewBuilder = ({
     useState("");
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isWorryDialogOpen, setIsWorryDialogOpen] = useState(true);
   const [showInitialChoice, setShowInitialChoice] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [placeholder, setPlaceholder] = useState("✍🏻");
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [showRatingsPage, setShowRatingsPage] = useState(true);
+  const [userName, setUserName] = useState("")
+  const [userEmail, setUserEmail] = useState("")
 
   useEffect(() => {
     const questions = categories.map(
@@ -312,48 +315,47 @@ const SmartReviewBuilder = ({
     );
   };
 
-  // if (rating == 1 && isReviewComplete)
-  //   {
-  //     return (
-  //       <Dialog open={true}>
-  //         <DialogContent className="sm:max-w-[425px]">
-  //           <DialogHeader>
-  //             <DialogTitle>We are sorry.</DialogTitle>
-  //             <DialogDescription>
-  //               We are really sorry for your terrible experience. Here at P&S, we want everyone to enjoy there experience. You can still post your review, but can we make things right?
-  //             </DialogDescription>
-  //           </DialogHeader>
-  //           <div className="grid gap-4 py-4">
-  //             <div className="grid grid-cols-4 items-center gap-4">
-  //               <Label htmlFor="name" className="text-right">
-  //                 Name
-  //               </Label>
-  //               <Input
-  //                 id="name"
-  //                 defaultValue="Pedro Duarte"
-  //                 className="col-span-3"
-  //               />
-  //             </div>
-  //             <div className="grid grid-cols-4 items-center gap-4">
-  //               <Label htmlFor="username" className="text-right">
-  //                 Username
-  //               </Label>
-  //               <Input
-  //                 id="username"
-  //                 defaultValue="@peduarte"
-  //                 className="col-span-3"
-  //               />
-  //             </div>
-  //           </div>
-  //           <DialogFooter>
-  //             <Button type="submit">Save changes</Button>
-  //           </DialogFooter>
-  //         </DialogContent>
-  //       </Dialog>
-  //     )
+  const sendEmail = () =>
+  {
+    //axios call to backend for email.
+    const context =
+    "User Rating:" +
+    rating.toString() +
+    " " +
+    "Questions answering: " +
+    questions[rating - 1].questions.join("\n") +
+    "\n";
+  const userReviews = context + "User Review Body:\n" + reviews.join("\n");
+          axios
+        .post("http://localhost:8021/backend/send-email/", {
+          userEmailToSend: userEmail,
+          userNameToSend: userName,
+          userReviewToSend: userReviews
+        })
+        .then((response) => {
+          setIsWorryDialogOpen(false)
+          toast({
+            title: "Email Sent",
+            description:
+              "Thank you for giving us a chance to make things right.",
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000); 
+        })
+        .catch((error) => {
+          toast({
+            title: "Error",
+            description:
+              "Failed to send email.",
+          });
+        });
+  }
 
-  //   }
-
+  const closeWorryDialog = () =>
+  {
+    setIsWorryDialogOpen(false)
+  }
   if (isDialogOpen) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -391,8 +393,14 @@ const SmartReviewBuilder = ({
     );
   }
 
+  const handleWorryRatingDialog = () => {
+    setIsWorryDialogOpen(false)
+
+  }
+
   if (isReviewComplete) {
     return (
+      <div>
       <Card className="w-relative max-w-3xl mx-auto">
         <CardHeader className="flex justify-center items-center relative">
           <CardTitle>Your Review</CardTitle>
@@ -425,6 +433,59 @@ const SmartReviewBuilder = ({
           )}
         </CardFooter>
       </Card>
+      {rating == 1 && (
+                <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle className="flex justify-center items-center" >We are sorry.</DialogTitle>
+                    <DialogDescription>
+                      {
+                      `We’re truly sorry that your experience didn’t meet expectations. 
+                      At P&S, we aim to ensure everyone enjoys their time with us. 
+                      If you agree, we’d love the chance to make things right for you. 
+                      If you give us the opportunity, we’ll reach out to address your concerns, 
+                      and you can update your review afterward. Otherwise, you can still post your original review. 
+                      Your feedback matters to us.`
+                      }
+                    </DialogDescription>
+                  </DialogHeader>
+<div className="grid gap-4 py-4">
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="name" className="text-right">
+              Name
+            </Label>
+            <Input
+              id="name"
+              className="col-span-3"
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="email" className="text-right">
+              Email
+            </Label>
+            <Input
+              id="email"
+              className="col-span-3"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
+            />
+          </div>
+        </div>
+                  <DialogFooter className="flex justify-between">
+  <Button type="button" onClick={closeWorryDialog} className="mr-auto" variant='outline'>
+    Use current review
+  </Button>
+  <Button type="submit" onClick={sendEmail} className="ml-auto" variant='outline'>
+    Send Email 
+  </Button>
+</DialogFooter>
+                </DialogContent>
+              </Dialog>
+      )}
+</div>
+      
     );
   }
 
