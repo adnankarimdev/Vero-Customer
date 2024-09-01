@@ -19,13 +19,13 @@ export default function Dashboard() {
 
   const steps = [
     {
-      title: "Step 1: Share Your Thoughts with Redefeyn",
+      title: "Step 1: Share Your Thoughts",
       description:
         "Quickly jot down your answers to questions by Phil & Sebastian, using your own unique style.",
       emoji: "✏️",
     },
     {
-      title: "Step 2: See the Magic",
+      title: "Step 2: Redefeyn",
       description:
         "If you want, Redefeyn will enhance your response, making sure it's the best it can be based on what you wrote!",
       emoji: "✨",
@@ -48,7 +48,7 @@ export default function Dashboard() {
     window.open(
       "https://search.google.com/local/writereview?placeid=ChIJzd0u2lRlcVMRoSTjaEEDL_E",
       "_blank",
-      "noopener,noreferrer"
+      "noopener,noreferrer",
     );
   };
 
@@ -58,28 +58,36 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto p-4">
-          {!showReviewPlatform && (
-            <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-  {/* Tutorial Steps Component */}
-  {/* <TutorialSteps steps={steps} /> */}
+      {!showReviewPlatform && (
+        <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+          {/* Tutorial Steps Component */}
+          {/* <TutorialSteps steps={steps} /> */}
 
-  {/* Card Component */}
-  <Card className="w-auto max-w-2xl mx-auto mt-10">
-    <CardHeader>
-    <TutorialSteps steps={steps} />
-      <CardTitle className="text-center">
-      <Button onClick={() => goToRedefeyn()} className="w-full" variant='link'>
-        Continue to Redefeyn
-      </Button>
-      <Button onClick={handleGoToGoogleReview} className="w-full" variant='link'>
-        Go Directly to Google Review
-      </Button>
-      </CardTitle>
-    </CardHeader>
-  </Card>
-</div>
-          )}
-          {showReviewPlatform && <SmartReviewBuilder />}
+          {/* Card Component */}
+          <Card className="w-auto max-w-2xl mx-auto mt-10">
+            <CardHeader>
+              <TutorialSteps steps={steps} />
+              <CardTitle className="text-center">
+                <Button
+                  onClick={() => goToRedefeyn()}
+                  className="w-full"
+                  variant="link"
+                >
+                  Continue to Redefeyn
+                </Button>
+                <Button
+                  onClick={handleGoToGoogleReview}
+                  className="w-full"
+                  variant="link"
+                >
+                  Go Directly to Google Review
+                </Button>
+              </CardTitle>
+            </CardHeader>
+          </Card>
+        </div>
+      )}
+      {showReviewPlatform && <SmartReviewBuilder />}
     </div>
   );
 }
