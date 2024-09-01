@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star } from "lucide-react";
 import { useRouter } from "next/router";
@@ -310,6 +311,48 @@ const SmartReviewBuilder = ({
       blocks.map((block) => (block.id === id ? { ...block, content } : block)),
     );
   };
+
+  // if (rating == 1 && isReviewComplete)
+  //   {
+  //     return (
+  //       <Dialog open={true}>
+  //         <DialogContent className="sm:max-w-[425px]">
+  //           <DialogHeader>
+  //             <DialogTitle>We are sorry.</DialogTitle>
+  //             <DialogDescription>
+  //               We are really sorry for your terrible experience. Here at P&S, we want everyone to enjoy there experience. You can still post your review, but can we make things right?
+  //             </DialogDescription>
+  //           </DialogHeader>
+  //           <div className="grid gap-4 py-4">
+  //             <div className="grid grid-cols-4 items-center gap-4">
+  //               <Label htmlFor="name" className="text-right">
+  //                 Name
+  //               </Label>
+  //               <Input
+  //                 id="name"
+  //                 defaultValue="Pedro Duarte"
+  //                 className="col-span-3"
+  //               />
+  //             </div>
+  //             <div className="grid grid-cols-4 items-center gap-4">
+  //               <Label htmlFor="username" className="text-right">
+  //                 Username
+  //               </Label>
+  //               <Input
+  //                 id="username"
+  //                 defaultValue="@peduarte"
+  //                 className="col-span-3"
+  //               />
+  //             </div>
+  //           </div>
+  //           <DialogFooter>
+  //             <Button type="submit">Save changes</Button>
+  //           </DialogFooter>
+  //         </DialogContent>
+  //       </Dialog>
+  //     )
+
+  //   }
 
   if (isDialogOpen) {
     return (
