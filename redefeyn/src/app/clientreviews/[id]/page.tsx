@@ -3,8 +3,6 @@
 import { useState } from "react";
 import {
   Card,
-  CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -12,10 +10,11 @@ import { Button } from "@/components/ui/button";
 import SmartReviewBuilder from "@/components/ui/SmartReviewBuilder";
 
 import TutorialSteps from "@/components/ui/TutorialSteps";
-// import SmartReviewBuilderNew from "@/components/ui/SmartReviewBuilderNew";
+import { useParams } from 'next/navigation';
 
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
+  const { id } = useParams();
 
   const steps = [
     {
@@ -38,11 +37,6 @@ export default function Dashboard() {
     },
   ];
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchQueryGpt, setSearchQueryGpt] = useState<string>("");
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
-  const [returnedGraph, setReturnedGraph] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleGoToGoogleReview = () => {
     window.open(
@@ -60,10 +54,6 @@ export default function Dashboard() {
     <div className="container mx-auto p-4">
       {!showReviewPlatform && (
         <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          {/* Tutorial Steps Component */}
-          {/* <TutorialSteps steps={steps} /> */}
-
-          {/* Card Component */}
           <Card className="w-auto max-w-2xl mx-auto mt-10">
             <CardHeader>
               <TutorialSteps steps={steps} />
@@ -87,7 +77,7 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
-      {showReviewPlatform && <SmartReviewBuilder id={123}/>}
+      {showReviewPlatform && <SmartReviewBuilder id={ Number(id)}/>}
     </div>
   );
 }

@@ -38,15 +38,14 @@ const categories = [
 
 interface StarRatingProps {
   onChange?: (rating: number) => void;
-  initialRating?: number;
   title?: string;
+  id?: number;
 }
 
 const SmartReviewBuilder = ({
   onChange,
-  initialRating = 0,
+  id
 }: StarRatingProps) => {
-  // const router = useRouter();
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
   const [questions, setQuestions] = useState([
@@ -129,7 +128,7 @@ const SmartReviewBuilder = ({
   }, []);
 
   useEffect(() => {
-    const fetchReviewSettings = async (placeId = "123") => {
+    const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
           `http://10.0.0.239:8021/backend/get-review-settings/${placeId}/`,
