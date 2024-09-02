@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, use } from "react";
+import React, { useState, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -119,8 +119,9 @@ const SmartReviewBuilder = ({
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [showRatingsPage, setShowRatingsPage] = useState(true);
-  const [userName, setUserName] = useState("")
-  const [userEmail, setUserEmail] = useState("")
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [worryRating, setWorryRating] = useState(1);
 
   useEffect(() => {
     const questions = categories.map(
@@ -130,6 +131,23 @@ const SmartReviewBuilder = ({
         ],
     );
     setSelectedQuestions(questions);
+  }, []);
+
+  useEffect(() => {
+    const fetchReviewSettings = async (placeId = "123") => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8021/backend/get-review-settings/${placeId}/`,
+        );
+        console.log(response);
+        setQuestions(response.data.questions);
+        setWorryRating(response.data.worryRating);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchReviewSettings();
   }, []);
 
   const handleRating = (currentRating: number) => {
@@ -315,47 +333,43 @@ const SmartReviewBuilder = ({
     );
   };
 
-  const sendEmail = () =>
-  {
+  const sendEmail = () => {
     //axios call to backend for email.
     const context =
-    "User Rating:" +
-    rating.toString() +
-    " " +
-    "Questions answering: " +
-    questions[rating - 1].questions.join("\n") +
-    "\n";
-  const userReviews = context + "User Review Body:\n" + reviews.join("\n");
-          axios
-        .post("http://localhost:8021/backend/send-email/", {
-          userEmailToSend: userEmail,
-          userNameToSend: userName,
-          userReviewToSend: userReviews
-        })
-        .then((response) => {
-          setIsWorryDialogOpen(false)
-          toast({
-            title: "Email Sent",
-            description:
-              "Thank you for giving us a chance to make things right.",
-          });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000); 
-        })
-        .catch((error) => {
-          toast({
-            title: "Error",
-            description:
-              "Failed to send email.",
-          });
+      "User Rating:" +
+      rating.toString() +
+      " " +
+      "Questions answering: " +
+      questions[rating - 1].questions.join("\n") +
+      "\n";
+    const userReviews = context + "User Review Body:\n" + reviews.join("\n");
+    axios
+      .post("http://localhost:8021/backend/send-email/", {
+        userEmailToSend: userEmail,
+        userNameToSend: userName,
+        userReviewToSend: userReviews,
+      })
+      .then((response) => {
+        setIsWorryDialogOpen(false);
+        toast({
+          title: "Email Sent",
+          description: "Thank you for giving us a chance to make things right.",
         });
-  }
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "Failed to send email.",
+        });
+      });
+  };
 
-  const closeWorryDialog = () =>
-  {
-    setIsWorryDialogOpen(false)
-  }
+  const closeWorryDialog = () => {
+    setIsWorryDialogOpen(false);
+  };
   if (isDialogOpen) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -394,98 +408,109 @@ const SmartReviewBuilder = ({
   }
 
   const handleWorryRatingDialog = () => {
-    setIsWorryDialogOpen(false)
-
-  }
+    setIsWorryDialogOpen(false);
+  };
 
   if (isReviewComplete) {
     return (
       <div>
-      <Card className="w-relative max-w-3xl mx-auto">
-        <CardHeader className="flex justify-center items-center relative">
-          <CardTitle>Your Review</CardTitle>
-          <div className="absolute top-0 right-0 mt-2 mr-2">
-            <Badge variant="outline">Review Score: {userReviewScore}</Badge>
-          </div>
-        </CardHeader>
-        <CardContent className="flex justify-center items-center relative">
-          {categories.map((category, index) => (
-            <div key={index} className="space-y-2">
-              <p>{reviews[index]}</p>
+        <Card className="w-relative max-w-3xl mx-auto">
+          <CardHeader className="flex justify-center items-center relative">
+            <CardTitle>Your Review</CardTitle>
+            <div className="absolute top-0 right-0 mt-2 mr-2">
+              <Badge variant="outline">Review Score: {userReviewScore}</Badge>
             </div>
-          ))}
-          <div className="flex justify-center">
-            {/* <ScoreRingCard
+          </CardHeader>
+          <CardContent className="flex justify-center items-center relative">
+            {categories.map((category, index) => (
+              <div key={index} className="space-y-2">
+                <p>{reviews[index]}</p>
+              </div>
+            ))}
+            <div className="flex justify-center">
+              {/* <ScoreRingCard
               score={parseInt(userReviewScore, 10)}
               title="Review Score"
               description="Indicator displaying how helpful your review is."
             /> */}
-          </div>
-        </CardContent>
-        <CardFooter className="flex justify-between">
-          <Button onClick={handleSubmit} variant="outline">
-            Use Review
-          </Button>
-          {parseInt(userReviewScore, 10) < 75 && (
-            <Button onClick={handleSophisticateReview} variant="outline">
-              Redefeyn Review
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <Button onClick={handleSubmit} variant="outline">
+              Use Review
             </Button>
-          )}
-        </CardFooter>
-      </Card>
-      {rating == 1 && (
-                <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
-                <DialogContent className="sm:max-w-[425px]">
-                  <DialogHeader>
-                    <DialogTitle className="flex justify-center items-center" >We are sorry.</DialogTitle>
-                    <DialogDescription>
-                      {
-                      `We’re truly sorry that your experience didn’t meet expectations. 
+            {parseInt(userReviewScore, 10) < 75 && (
+              <Button onClick={handleSophisticateReview} variant="outline">
+                Redefeyn Review
+              </Button>
+            )}
+          </CardFooter>
+        </Card>
+        {rating <= worryRating && (
+          <Dialog
+            open={isWorryDialogOpen}
+            onOpenChange={handleWorryRatingDialog}
+          >
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle className="flex justify-center items-center">
+                  We are sorry.
+                </DialogTitle>
+                <DialogDescription>
+                  {`We’re truly sorry that your experience didn’t meet expectations. 
                       At P&S, we aim to ensure everyone enjoys their time with us. 
                       If you agree, we’d love the chance to make things right for you. 
                       If you give us the opportunity, we’ll reach out to address your concerns, 
                       and you can update your review afterward. Otherwise, you can still post your original review. 
-                      Your feedback matters to us.`
-                      }
-                    </DialogDescription>
-                  </DialogHeader>
-<div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
-            </Label>
-            <Input
-              id="name"
-              className="col-span-3"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="email" className="text-right">
-              Email
-            </Label>
-            <Input
-              id="email"
-              className="col-span-3"
-              value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
-            />
-          </div>
-        </div>
-                  <DialogFooter className="flex justify-between">
-  <Button type="button" onClick={closeWorryDialog} className="mr-auto" variant='outline'>
-    Use current review
-  </Button>
-  <Button type="submit" onClick={sendEmail} className="ml-auto" variant='outline'>
-    Send Email 
-  </Button>
-</DialogFooter>
-                </DialogContent>
-              </Dialog>
-      )}
-</div>
-      
+                      Your feedback matters to us.`}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Name
+                  </Label>
+                  <Input
+                    id="name"
+                    className="col-span-3"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                  />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="email" className="text-right">
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    className="col-span-3"
+                    value={userEmail}
+                    onChange={(e) => setUserEmail(e.target.value)}
+                  />
+                </div>
+              </div>
+              <DialogFooter className="flex justify-between">
+                <Button
+                  type="button"
+                  onClick={closeWorryDialog}
+                  className="mr-auto"
+                  variant="outline"
+                >
+                  Use current review
+                </Button>
+                <Button
+                  type="submit"
+                  onClick={sendEmail}
+                  className="ml-auto"
+                  variant="outline"
+                >
+                  Send Email
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+      </div>
     );
   }
 
