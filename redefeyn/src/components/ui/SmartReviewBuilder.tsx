@@ -138,7 +138,7 @@ const SmartReviewBuilder = ({
     const fetchReviewSettings = async (placeId = "123") => {
       try {
         const response = await axios.get(
-          `http://localhost:8021/backend/get-review-settings/${placeId}/`,
+          `http://10.0.0.239:8021/backend/get-review-settings/${placeId}/`,
         );
         console.log(response);
         setQuestions(response.data.questions);
@@ -182,7 +182,7 @@ const SmartReviewBuilder = ({
         "\n";
       const userReviews = context + "User Review Body:\n" + reviews.join("\n");
       axios
-        .post("http://localhost:8021/backend/create-review-score/", {
+        .post("http://10.0.0.239:8021/backend/create-review-score/", {
           userReview: userReviews,
         })
         .then((response) => {
@@ -266,7 +266,7 @@ const SmartReviewBuilder = ({
       "\n";
     const allReviews = context + "User Review body:\n" + reviews.join("\n");
     axios
-      .post("http://localhost:8021/backend/create-review/", {
+      .post("http://10.0.0.239:8021/backend/create-review/", {
         allReviewsToSend: allReviews,
       })
       .then((response) => {
@@ -275,7 +275,7 @@ const SmartReviewBuilder = ({
           title: "Sophisticated Review Generated",
         });
         // axios
-        //   .post("http://localhost:8021/backend/create-review-score/", {
+        //   .post("http://10.0.0.239:8021/backend/create-review-score/", {
         //     userReview: allReviews,
         //   })
         //   .then((response) => {
@@ -346,7 +346,7 @@ const SmartReviewBuilder = ({
       "\n";
     const userReviews = context + "User Review Body:\n" + reviews.join("\n");
     axios
-      .post("http://localhost:8021/backend/send-email/", {
+      .post("http://10.0.0.239:8021/backend/send-email/", {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,
