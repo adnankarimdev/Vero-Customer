@@ -122,6 +122,7 @@ const SmartReviewBuilder = ({
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [worryRating, setWorryRating] = useState(1);
+  const [worryDialog, setWorryDialog] = useState(false)
 
   useEffect(() => {
     const questions = categories.map(
@@ -142,6 +143,7 @@ const SmartReviewBuilder = ({
         console.log(response);
         setQuestions(response.data.questions);
         setWorryRating(response.data.worryRating);
+        setWorryDialog(response.data.showWorryDialog);
       } catch (err) {
         console.error(err);
       }
@@ -446,7 +448,7 @@ const SmartReviewBuilder = ({
             )}
           </CardFooter>
         </Card>
-        {rating <= worryRating && (
+        {rating <= worryRating && worryDialog && (
           <Dialog
             open={isWorryDialogOpen}
             onOpenChange={handleWorryRatingDialog}
