@@ -6,7 +6,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star } from "lucide-react";
-import { useRouter } from "next/router";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import {
@@ -16,10 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Progress as Prog } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import * as Progress from "@radix-ui/react-progress";
-import ScoreRingCard from "@/components/ui/ScoreRingCard";
 import axios from "axios";
 import {
   Dialog,
@@ -28,10 +24,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Block } from "../Types/types";
-import { Bold, Italic, Plus, Circle } from "lucide-react";
 
 const categories = [
   {
@@ -105,7 +99,6 @@ const SmartReviewBuilder = ({
   );
   const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
   const [isReviewComplete, setIsReviewComplete] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [sophisticatedReview, setSophisticatedReview] = useState("");
   const [userReviewScore, setUserReviewScore] = useState("");
   const [userReviewSophisticatedScore, setUserReviewSophisticatedScore] =
@@ -113,7 +106,6 @@ const SmartReviewBuilder = ({
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isWorryDialogOpen, setIsWorryDialogOpen] = useState(true);
-  const [showInitialChoice, setShowInitialChoice] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [placeholder, setPlaceholder] = useState("✍🏻");
   const [rating, setRating] = useState(0);
@@ -142,7 +134,6 @@ const SmartReviewBuilder = ({
         const response = await axios.get(
           `http://10.0.0.239:8021/backend/get-review-settings/${placeId}/`,
         );
-        console.log(response);
         setQuestions(response.data.questions);
         setWorryRating(response.data.worryRating);
         setWorryDialog(response.data.showWorryDialog);
@@ -199,11 +190,6 @@ const SmartReviewBuilder = ({
     }
   };
 
-  const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
 
   const handleSubmit = () => {
     const allReviews = reviews.join("\n");
@@ -278,16 +264,6 @@ const SmartReviewBuilder = ({
         toast({
           title: "Sophisticated Review Generated",
         });
-        // axios
-        //   .post("http://10.0.0.239:8021/backend/create-review-score/", {
-        //     userReview: allReviews,
-        //   })
-        //   .then((response) => {
-        //     setUserReviewSophisticatedScore(response.data.content);
-        //   })
-        //   .catch((error) => {
-        //     console.error(error);
-        //   });
         setUserReviewSophisticatedScore(
           (Math.floor(Math.random() * (100 - 90 + 1)) + 90).toString(),
         );
@@ -325,22 +301,8 @@ const SmartReviewBuilder = ({
       });
     }
   };
-  const addBlock = (type: "text" | "bullet") => {
-    const newBlock: Block = {
-      id: Date.now().toString(),
-      type,
-      content: "",
-    };
-    setBlocks((blocks) => [...blocks, newBlock]);
-  };
-  const handleBlockChange = (id: string, content: string) => {
-    setBlocks(
-      blocks.map((block) => (block.id === id ? { ...block, content } : block)),
-    );
-  };
 
   const sendEmail = () => {
-    //axios call to backend for email.
     const context =
       "User Rating:" +
       rating.toString() +
@@ -389,11 +351,6 @@ const SmartReviewBuilder = ({
               onChange={(e) => setSophisticatedReview(e.target.value)}
             />
           </DialogHeader>
-          {/* <ScoreRingCard
-            score={parseInt(userReviewSophisticatedScore, 10)}
-            title="New Review Score"
-            description="Indicator displaying how helpful your review is."
-          /> */}
           <DialogFooter className="flex justify-between items-center">
             <div className="flex-1">
               <Badge variant="outline">
@@ -434,11 +391,6 @@ const SmartReviewBuilder = ({
               </div>
             ))}
             <div className="flex justify-center">
-              {/* <ScoreRingCard
-              score={parseInt(userReviewScore, 10)}
-              title="Review Score"
-              description="Indicator displaying how helpful your review is."
-            /> */}
             </div>
           </CardContent>
           <CardFooter className="flex justify-between">
