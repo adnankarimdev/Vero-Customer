@@ -123,6 +123,8 @@ const SmartReviewBuilder = ({
   const [userEmail, setUserEmail] = useState("");
   const [worryRating, setWorryRating] = useState(1);
   const [worryDialog, setWorryDialog] = useState(false)
+  const [worryBody, setWorryBody] = useState("")
+  const [worryTitle, setWorryTitle] = useState("")
 
   useEffect(() => {
     const questions = categories.map(
@@ -144,6 +146,8 @@ const SmartReviewBuilder = ({
         setQuestions(response.data.questions);
         setWorryRating(response.data.worryRating);
         setWorryDialog(response.data.showWorryDialog);
+        setWorryBody(response.data.dialogBody)
+        setWorryTitle(response.data.dialogTitle)
       } catch (err) {
         console.error(err);
       }
@@ -456,15 +460,10 @@ const SmartReviewBuilder = ({
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle className="flex justify-center items-center">
-                  We are sorry.
+                  {worryTitle}
                 </DialogTitle>
                 <DialogDescription>
-                  {`We’re truly sorry that your experience didn’t meet expectations. 
-                      At P&S, we aim to ensure everyone enjoys their time with us. 
-                      If you agree, we’d love the chance to make things right for you. 
-                      If you give us the opportunity, we’ll reach out to address your concerns, 
-                      and you can update your review afterward. Otherwise, you can still post your original review. 
-                      Your feedback matters to us.`}
+                  {worryBody}
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
