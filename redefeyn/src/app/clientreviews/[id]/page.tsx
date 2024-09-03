@@ -1,20 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import SmartReviewBuilder from "@/components/ui/SmartReviewBuilder";
 
 import TutorialSteps from "@/components/ui/TutorialSteps";
-import { useParams } from 'next/navigation';
+import { useParams } from "next/navigation";
 
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
   const { id } = useParams();
+  console.log("idddd", id);
 
   const steps = [
     {
@@ -36,7 +33,6 @@ export default function Dashboard() {
       emoji: "🚀",
     },
   ];
-
 
   const handleGoToGoogleReview = () => {
     window.open(
@@ -77,7 +73,7 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
-      {showReviewPlatform && <SmartReviewBuilder id={ Number(id)}/>}
+      {showReviewPlatform && <SmartReviewBuilder id={id as string} />}
     </div>
   );
 }

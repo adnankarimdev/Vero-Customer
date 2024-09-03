@@ -36,16 +36,13 @@ const categories = [
   },
 ];
 
-interface StarRatingProps {
+interface SmartReviewProps {
   onChange?: (rating: number) => void;
   title?: string;
-  id?: number;
+  id: string;
 }
 
-const SmartReviewBuilder = ({
-  onChange,
-  id
-}: StarRatingProps) => {
+const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
   const [questions, setQuestions] = useState([
@@ -113,31 +110,22 @@ const SmartReviewBuilder = ({
   const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [worryRating, setWorryRating] = useState(1);
-  const [worryDialog, setWorryDialog] = useState(false)
-  const [worryBody, setWorryBody] = useState("")
-  const [worryTitle, setWorryTitle] = useState("")
-
-  useEffect(() => {
-    const questions = categories.map(
-      (category) =>
-        category.questions[
-          Math.floor(Math.random() * category.questions.length)
-        ],
-    );
-    setSelectedQuestions(questions);
-  }, []);
+  const [worryDialog, setWorryDialog] = useState(false);
+  const [worryBody, setWorryBody] = useState("");
+  const [worryTitle, setWorryTitle] = useState("");
 
   useEffect(() => {
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
-          `http://10.0.0.239:8021/backend/get-review-settings/${placeId}/`,
+          `http://10.0.0.239:8021/backend/get-review-questions/${placeId}/`,
         );
+        console.log("my questions", response.data);
         setQuestions(response.data.questions);
         setWorryRating(response.data.worryRating);
         setWorryDialog(response.data.showWorryDialog);
-        setWorryBody(response.data.dialogBody)
-        setWorryTitle(response.data.dialogTitle)
+        setWorryBody(response.data.dialogBody);
+        setWorryTitle(response.data.dialogTitle);
       } catch (err) {
         console.error(err);
       }
@@ -188,7 +176,6 @@ const SmartReviewBuilder = ({
         });
     }
   };
-
 
   const handleSubmit = () => {
     const allReviews = reviews.join("\n");
@@ -389,8 +376,7 @@ const SmartReviewBuilder = ({
                 <p>{reviews[index]}</p>
               </div>
             ))}
-            <div className="flex justify-center">
-            </div>
+            <div className="flex justify-center"></div>
           </CardContent>
           <CardFooter className="flex justify-between">
             <Button onClick={handleSubmit} variant="outline">
@@ -413,9 +399,7 @@ const SmartReviewBuilder = ({
                 <DialogTitle className="flex justify-center items-center">
                   {worryTitle}
                 </DialogTitle>
-                <DialogDescription>
-                  {worryBody}
-                </DialogDescription>
+                <DialogDescription>{worryBody}</DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
