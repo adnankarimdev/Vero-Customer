@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Place } from "../Types/types";
 import {
   Card,
   CardContent,
@@ -126,6 +127,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         setWorryDialog(response.data.showWorryDialog);
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
+        const reviewPlace = response.data.places.find((place: Place) => place.place_id === id)
+        setTitle(reviewPlace.name)
       } catch (err) {
         console.error(err);
       }
