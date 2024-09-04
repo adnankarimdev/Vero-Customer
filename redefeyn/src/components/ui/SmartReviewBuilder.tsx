@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { RiAiGenerate } from "react-icons/ri";
+import { FcGoogle } from "react-icons/fc";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,6 +18,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import {
@@ -27,6 +40,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Block } from "../Types/types";
+import Logo from "./Logo";
 
 const categories = [
   {
@@ -114,6 +128,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [worryDialog, setWorryDialog] = useState(false);
   const [worryBody, setWorryBody] = useState("");
   const [worryTitle, setWorryTitle] = useState("");
+  const [usedReviewTemplate, setUsedReviewTemplate] = useState(false);
 
   useEffect(() => {
     const fetchReviewSettings = async (placeId = id) => {
@@ -127,8 +142,10 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         setWorryDialog(response.data.showWorryDialog);
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
-        const reviewPlace = response.data.places.find((place: Place) => place.place_id === id)
-        setTitle(reviewPlace.name)
+        const reviewPlace = response.data.places.find(
+          (place: Place) => place.place_id === id,
+        );
+        setTitle(reviewPlace.name);
       } catch (err) {
         console.error(err);
       }
@@ -154,10 +171,37 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     setReviews(newReviews);
   };
 
+  const handleGenerateReviewTemplate = () => {
+    setUsedReviewTemplate(true);
+    const contextToSend =
+      "Business Name: " +
+      title +
+      "\n" +
+      "User Rating: " +
+      rating.toString() +
+      "\n" +
+      "Questions answering: " +
+      "\n" +
+      questions[rating - 1].questions.join("\n") +
+      "\n";
+    axios
+      .post("http://localhost:8021/backend/generate-review-template/", {
+        context: contextToSend,
+      })
+      .then((response) => {
+        handleReviewChange(response.data.content);
+      })
+      .catch((error) => {
+        toast({
+          title: "Failed",
+          description: "Failed to generate template.",
+        });
+      });
+  };
   const handleNext = () => {
     if (currentStep < categories.length - 1) {
       setCurrentStep(currentStep + 1);
-    } else {
+    } else if (!usedReviewTemplate) {
       const context =
         "User Rating:" +
         rating.toString() +
@@ -177,6 +221,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         .catch((error) => {
           console.error(error);
         });
+    } else {
+      setIsReviewComplete(true);
     }
   };
 
@@ -250,9 +296,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       })
       .then((response) => {
         setSophisticatedReview(response.data.content);
-        toast({
-          title: "Sophisticated Review Generated",
-        });
         setUserReviewSophisticatedScore(
           (Math.floor(Math.random() * (100 - 90 + 1)) + 90).toString(),
         );
@@ -261,34 +304,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  const handleGoToGoogleReview = () => {
-    window.open(
-      "https://search.google.com/local/writereview?placeid=ChIJzd0u2lRlcVMRoSTjaEEDL_E",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent, id: string) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      const currentBlock = blocks.find((block) => block.id === id);
-      const newBlock: Block = {
-        id: Date.now().toString(),
-        type: currentBlock?.type || "text",
-        content: "",
-      };
-      setBlocks((blocks) => {
-        const index = blocks.findIndex((block) => block.id === id);
-        return [
-          ...blocks.slice(0, index + 1),
-          newBlock,
-          ...blocks.slice(index + 1),
-        ];
-      });
-    }
   };
 
   const sendEmail = () => {
@@ -349,9 +364,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
             <Button
               type="submit"
               onClick={handleSubmitSophisticated}
-              variant="outline"
+              variant="ghost"
             >
-              Use Review
+              <FcGoogle size={24} />
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -370,7 +385,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           <CardHeader className="flex justify-center items-center relative">
             <CardTitle>Your Review</CardTitle>
             <div className="absolute top-0 right-0 mt-2 mr-2">
-              <Badge variant="outline">Review Score: {userReviewScore}</Badge>
+              {!usedReviewTemplate && (
+                <Badge variant="outline">Review Score: {userReviewScore}</Badge>
+              )}
             </div>
           </CardHeader>
           <CardContent className="flex justify-center items-center relative">
@@ -382,14 +399,34 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
             <div className="flex justify-center"></div>
           </CardContent>
           <CardFooter className="flex justify-between">
-            <Button onClick={handleSubmit} variant="outline">
-              Use Review
-            </Button>
-            {parseInt(userReviewScore, 10) < 75 && (
-              <Button onClick={handleSophisticateReview} variant="outline">
-                Redefeyn Review
-              </Button>
+            {parseInt(userReviewScore, 10) < 75 && !usedReviewTemplate && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="ghost">
+                    <Logo />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Refeyen your Review</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {
+                        "This will refeyen your review, and it won't change the message you're trying to get across."
+                      }
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleSophisticateReview}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             )}
+            <Button onClick={handleSubmit} variant="ghost">
+              <FcGoogle size={24} />
+            </Button>
           </CardFooter>
         </Card>
         {rating <= worryRating && worryDialog && (
@@ -525,17 +562,50 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                   : "w-full border-none outline-none text-center"
               }
               style={{ resize: "none" }}
-              rows={1}
+              rows={3}
               placeholder={placeholder}
             />
           </div>
 
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-between items-center w-full">
             {currentStep === categories.length - 1 ? (
-              <Button variant="ghost">
-                {" "}
-                <Send onClick={handleNext} />{" "}
-              </Button>
+              <div className="flex w-full">
+                {/* <Button variant="ghost" onClick={handleGenerateReviewTemplate}>
+        <RiAiGenerate size={24} className="mr-2"/> 
+        {"Generate Review Template"}
+      </Button> */}
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="ghost">
+                      <RiAiGenerate size={24} className="mr-2" />{" "}
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Generate a Review Template
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {
+                          "This will generate a review template for your rating of "
+                        }{" "}
+                        {rating}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleGenerateReviewTemplate}>
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <div className="flex-grow"></div>{" "}
+                {/* This takes up remaining space */}
+                <Button variant="ghost" onClick={handleNext}>
+                  <Send />
+                </Button>
+              </div>
             ) : (
               <CircleArrowRight />
             )}

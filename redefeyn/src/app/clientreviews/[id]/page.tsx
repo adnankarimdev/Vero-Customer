@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,8 +12,8 @@ import { useParams } from "next/navigation";
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
   const { id } = useParams();
-  const [title, setTitle] = useState('');
-  
+  const [title, setTitle] = useState("");
+
   // Initialize steps using useState
   const [steps, setSteps] = useState([
     {
@@ -54,15 +54,16 @@ export default function Dashboard() {
         const response = await axios.get(
           `http://localhost:8021/backend/get-review-questions/${placeId}/`,
         );
-        const reviewPlace = response.data.places.find((place: Place) => place.place_id === id);
+        const reviewPlace = response.data.places.find(
+          (place: Place) => place.place_id === id,
+        );
         setTitle(reviewPlace.name);
-        
+
         // Update steps state
         setSteps([
           {
             title: "Step 1: Share Your Thoughts",
-            description:
-              `Quickly jot down your answers to questions by ${reviewPlace.name}, using your own unique style.`,
+            description: `Quickly jot down your answers to questions by ${reviewPlace.name}, using your own unique style.`,
             emoji: "✏️",
           },
           {
