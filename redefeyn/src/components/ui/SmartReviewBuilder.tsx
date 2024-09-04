@@ -119,7 +119,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
-          `http://10.0.0.239:8021/backend/get-review-questions/${placeId}/`,
+          `http://localhost:8021/backend/get-review-questions/${placeId}/`,
         );
         console.log("my questions", response.data);
         setQuestions(response.data.questions);
@@ -167,7 +167,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         "\n";
       const userReviews = context + "User Review Body:\n" + reviews.join("\n");
       axios
-        .post("http://10.0.0.239:8021/backend/create-review-score/", {
+        .post("http://localhost:8021/backend/create-review-score/", {
           userReview: userReviews,
         })
         .then((response) => {
@@ -245,7 +245,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       "\n";
     const allReviews = context + "User Review body:\n" + reviews.join("\n");
     axios
-      .post("http://10.0.0.239:8021/backend/create-review/", {
+      .post("http://localhost:8021/backend/create-review/", {
         allReviewsToSend: allReviews,
       })
       .then((response) => {
@@ -301,7 +301,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       "\n";
     const userReviews = context + "User Review Body:\n" + reviews.join("\n");
     axios
-      .post("http://10.0.0.239:8021/backend/send-email/", {
+      .post("http://localhost:8021/backend/send-email/", {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,
