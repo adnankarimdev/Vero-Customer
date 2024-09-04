@@ -14,6 +14,7 @@ import { Place } from "../Types/types";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -41,6 +42,7 @@ import {
 } from "@/components/ui/dialog";
 import { Block } from "../Types/types";
 import Logo from "./Logo";
+import FiveStarReviewBuilder from "./FiveStarReviewBuilder";
 
 const categories = [
   {
@@ -281,30 +283,35 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       });
   };
 
-  const handleSophisticateReview = () => {
-    const context =
-      "User Rating:" +
-      rating.toString() +
-      " " +
-      "Questions answering: " +
-      questions[rating - 1].questions.join("\n") +
-      "\n";
-    const allReviews = context + "User Review body:\n" + reviews.join("\n");
-    axios
-      .post("http://localhost:8021/backend/create-review/", {
-        allReviewsToSend: allReviews,
-      })
-      .then((response) => {
-        setSophisticatedReview(response.data.content);
-        setUserReviewSophisticatedScore(
-          (Math.floor(Math.random() * (100 - 90 + 1)) + 90).toString(),
-        );
-        setIsDialogOpen(true);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const handleSendReviewToBackend = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
+  // const handleSophisticateReview = () => {
+  //   const context =
+  //     "User Rating:" +
+  //     rating.toString() +
+  //     " " +
+  //     "Questions answering: " +
+  //     questions[rating - 1].questions.join("\n") +
+  //     "\n";
+  //   const allReviews = context + "User Review body:\n" + reviews.join("\n");
+  //   axios
+  //     .post("http://localhost:8021/backend/create-review/", {
+  //       allReviewsToSend: allReviews,
+  //     })
+  //     .then((response) => {
+  //       setSophisticatedReview(response.data.content);
+  //       setUserReviewSophisticatedScore(
+  //         (Math.floor(Math.random() * (100 - 90 + 1)) + 90).toString(),
+  //       );
+  //       setIsDialogOpen(true);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const sendEmail = () => {
     const context =
@@ -361,13 +368,13 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 New Review Score: {userReviewSophisticatedScore}
               </Badge>
             </div>
-            <Button
+            {/* <Button
               type="submit"
               onClick={handleSubmitSophisticated}
               variant="ghost"
             >
               <FcGoogle size={24} />
-            </Button>
+            </Button> */}
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -384,11 +391,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         <Card className="w-relative max-w-3xl mx-auto">
           <CardHeader className="flex justify-center items-center relative">
             <CardTitle>Your Review</CardTitle>
-            <div className="absolute top-0 right-0 mt-2 mr-2">
-              {!usedReviewTemplate && (
-                <Badge variant="outline">Review Score: {userReviewScore}</Badge>
-              )}
-            </div>
           </CardHeader>
           <CardContent className="flex justify-center items-center relative">
             {categories.map((category, index) => (
@@ -398,35 +400,36 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
             ))}
             <div className="flex justify-center"></div>
           </CardContent>
-          <CardFooter className="flex justify-between">
-            {parseInt(userReviewScore, 10) < 75 && !usedReviewTemplate && (
+          <CardFooter className="flex justify-end">
+            {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="ghost">
-                    <Logo />
+                    <Send />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Refeyen your Review</AlertDialogTitle>
+                    <AlertDialogTitle>Thank you!</AlertDialogTitle>
                     <AlertDialogDescription>
                       {
-                        "This will refeyen your review, and it won't change the message you're trying to get across."
-                      }
+                        "Feedback receieved. We will integrate the feedback you suggested. We hope you decide to come back one day and your rating goes from a "
+                      }{" "}
+                      {rating} {"to a 5."}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleSophisticateReview}>
+                    <AlertDialogAction onClick={handleSendReviewToBackend}>
                       Continue
                     </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
-            )}
-            <Button onClick={handleSubmit} variant="ghost">
+            }
+            {/* <Button onClick={handleSubmit} variant="ghost">
               <FcGoogle size={24} />
-            </Button>
+            </Button> */}
           </CardFooter>
         </Card>
         {rating <= worryRating && worryDialog && (
@@ -496,9 +499,12 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         <div className="flex items-center justify-center min-h-screen p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
-              <CardTitle className="flex items-center justify-center space-x-1">
-                {"Let's begin with your rating"}
+              <CardTitle className="flex items-center justify-center space-x-1 text-lg">
+                {"Hello, you 😇"}
               </CardTitle>
+              <CardDescription className="flex items-center justify-center space-x-1">
+                {"Let's begin with your rating"}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-center space-x-1">
@@ -527,7 +533,14 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && (
+      {!showRatingsPage && rating == 5 && (
+        <FiveStarReviewBuilder
+          buisnessName={title}
+          rating={rating}
+          placeId={id}
+        />
+      )}
+      {!showRatingsPage && rating <= 4 && (
         <div className="max-w-4xl mx-auto p-4 space-y-4">
           <p className="text-3xl font-bold">{title || "Untitled"}</p>
           <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -576,9 +589,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       </Button> */}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <Button variant="ghost">
+                    {/* <Button variant="ghost">
                       <RiAiGenerate size={24} className="mr-2" />{" "}
-                    </Button>
+                    </Button> */}
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>

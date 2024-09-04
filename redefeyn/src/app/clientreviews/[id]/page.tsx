@@ -12,6 +12,7 @@ import Logo from "@/components/ui/Logo";
 
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
+  const [dataLoaded, setIsDataLoaded] = useState(false);
   const { id } = useParams();
   const [title, setTitle] = useState("");
 
@@ -80,6 +81,7 @@ export default function Dashboard() {
             emoji: "🚀",
           },
         ]);
+        setIsDataLoaded(true);
       } catch (err) {
         console.error(err);
       }
@@ -90,32 +92,33 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto p-4">
-      {!showReviewPlatform && (
-        <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          <Card className="w-auto max-w-2xl mx-auto mt-10">
-            <CardHeader>
-              <TutorialSteps steps={steps} />
-              <CardTitle className="text-center">
-                <Button
-                  onClick={() => goToRedefeyn()}
-                  variant="ghost"
-                >
-                  {/* Continue to Redefeyn */}
-                  <Logo/>
-                </Button>
-                {/* <Button
-                  onClick={handleGoToGoogleReview}
-                  className="w-full"
-                  variant="link"
-                >
-                  Go Directly to Google Review
-                </Button> */}
-              </CardTitle>
-            </CardHeader>
-          </Card>
-        </div>
-      )}
-      {showReviewPlatform && <SmartReviewBuilder id={id as string} />}
+      {dataLoaded && <SmartReviewBuilder id={id as string} />}
     </div>
   );
 }
+
+// {!showReviewPlatform && (
+//   <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
+//     <Card className="w-auto max-w-2xl mx-auto mt-10">
+//       <CardHeader>
+//         <TutorialSteps steps={steps} />
+//         <CardTitle className="text-center">
+//           <Button
+//             onClick={() => goToRedefeyn()}
+//             variant="ghost"
+//           >
+//             {/* Continue to Redefeyn */}
+//             <Logo/>
+//           </Button>
+//           {/* <Button
+//             onClick={handleGoToGoogleReview}
+//             className="w-full"
+//             variant="link"
+//           >
+//             Go Directly to Google Review
+//           </Button> */}
+//         </CardTitle>
+//       </CardHeader>
+//     </Card>
+//   </div>
+// )}
