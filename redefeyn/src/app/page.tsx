@@ -87,7 +87,7 @@ export default function Dashboard() {
           </Card>
         </div>
       )}
-      {showReviewPlatform && <SmartReviewBuilder />}
+      {showReviewPlatform && <SmartReviewBuilder id={"123"}/>}
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { Place } from "@/components/Types/types";
 import axios from "axios";
 import TutorialSteps from "@/components/ui/TutorialSteps";
 import { useParams } from "next/navigation";
+import Logo from "@/components/ui/Logo";
 
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
@@ -97,18 +98,18 @@ export default function Dashboard() {
               <CardTitle className="text-center">
                 <Button
                   onClick={() => goToRedefeyn()}
-                  className="w-full"
-                  variant="link"
+                  variant="ghost"
                 >
-                  Continue to Redefeyn
+                  {/* Continue to Redefeyn */}
+                  <Logo/>
                 </Button>
-                <Button
+                {/* <Button
                   onClick={handleGoToGoogleReview}
                   className="w-full"
                   variant="link"
                 >
                   Go Directly to Google Review
-                </Button>
+                </Button> */}
               </CardTitle>
             </CardHeader>
           </Card>
