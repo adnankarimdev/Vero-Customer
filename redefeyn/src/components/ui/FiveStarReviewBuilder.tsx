@@ -112,6 +112,7 @@ export default function FiveStarReviewBuilder({
   };
 
   const handleGenerateReview = () => {
+    setIsLoading(true);
     const contextToSend =
       "Business Name: " +
       buisnessName +
@@ -126,12 +127,14 @@ export default function FiveStarReviewBuilder({
       .then((response) => {
         setGeneratedReview(response.data.content);
         setIsDialogOpen(true);
+        setIsLoading(false);
       })
       .catch((error) => {
         toast({
           title: "Failed",
-          description: "Failed to generate review.",
+          description: "Failed to generate review. Could you try again? 🥺",
         });
+        setIsLoading(false);
       });
   };
 
@@ -140,7 +143,7 @@ export default function FiveStarReviewBuilder({
       .writeText(generatedReview)
       .then(() => {
         toast({
-          title: "Copied to clipboard",
+          title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
         });
@@ -192,8 +195,13 @@ export default function FiveStarReviewBuilder({
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full">
           <DialogHeader>
-            <DialogTitle>Your Review</DialogTitle>
-            <DialogDescription>Feel free to edit this! Once it looks good, click the Google icon below and it will copy the review for you to paste. 🥳</DialogDescription>
+            <DialogTitle className="text-center">
+              Your review is ready to take the spotlight! 🌟
+            </DialogTitle>
+            <DialogDescription className="text-center">
+              Feel free to edit this! Once it looks good, click the Google icon
+              below and it will copy the review for you to paste 🥳
+            </DialogDescription>
 
             <Textarea
               defaultValue={generatedReview}
@@ -216,113 +224,117 @@ export default function FiveStarReviewBuilder({
   }
 
   return (
-    <Card className="w-full max-w-3xl mx-auto border-0">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-          {buisnessName}
-        </CardTitle>
-        <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-          {"We are glad so happy to hear that. Want to tell us why?"}
-        </CardDescription>
-        <div className="flex items-center justify-center space-x-1">
-          {[1, 2, 3, 4, 5].map((star) => (
-            <Star key={star} className={"text-primary fill-primary"} />
-          ))}
-        </div>
-      </CardHeader>
-      {isLoading ? (
-        // Loader for the Card content and more
-        <>
-          <CardContent>
-            <div className="flex items-center justify-center space-x-1 mb-6">
-              {[...Array(5)].map((_, index) => (
-                <div
-                  key={index}
-                  className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
-                ></div>
+    <div className="flex items-center justify-center min-h-screen">
+      <Card className="w-full max-w-3xl border-0">
+        <CardHeader>
+          <CardTitle className="flex items-center justify-center space-x-1 text-sm">
+            {buisnessName}
+          </CardTitle>
+          <CardDescription className="flex items-center justify-center space-x-1 mb-2">
+            {"We are glad so happy to hear that. Want to tell us why?"}
+          </CardDescription>
+          <div className="flex items-center justify-center space-x-1">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star key={star} className={"text-primary fill-primary"} />
+            ))}
+          </div>
+        </CardHeader>
+        {isLoading ? (
+          // Loader for the Card content and more
+          <>
+            <CardContent>
+              <div className="flex items-center justify-center space-x-1 mb-6">
+                {[...Array(5)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
+                  ></div>
+                ))}
+              </div>
+              {[...Array(3)].map((_, index) => (
+                <div key={index} className="mb-6">
+                  <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
+                  <div className="flex flex-wrap gap-2">
+                    {[...Array(5)].map((_, i) => (
+                      <div
+                        key={i}
+                        className="h-8 w-24 bg-gray-300 rounded animate-pulse"
+                      ></div>
+                    ))}
+                  </div>
+                </div>
               ))}
-            </div>
-            {[...Array(3)].map((_, index) => (
-              <div key={index} className="mb-6">
-                <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
-                <div className="flex flex-wrap gap-2">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-8 w-24 bg-gray-300 rounded animate-pulse"
-                    ></div>
-                  ))}
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
+            </CardFooter>
+          </>
+        ) : (
+          <>
+            <CardContent>
+              {categories.map((category) => (
+                <div key={category.name} className="mb-6">
+                  <h3 className="text-lg font-semibold mb-2">
+                    {category.name}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {category.badges.map((badge) => (
+                      <Badge
+                        key={badge}
+                        variant={
+                          selectedBadges[category.name]?.includes(badge)
+                            ? "destructive"
+                            : "outline"
+                        }
+                        className={
+                          selectedBadges[category.name]?.includes(badge)
+                            ? "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
+                            : "cursor-pointer transition-colors"
+                        }
+                        onClick={() => toggleBadge(category.name, badge)}
+                      >
+                        {badge}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
-          </CardFooter>
-        </>
-      ) : (
-        <>
-          <CardContent>
-            {categories.map((category) => (
-              <div key={category.name} className="mb-6">
-                <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-                <div className="flex flex-wrap gap-2">
-                  {category.badges.map((badge) => (
-                    <Badge
-                      key={badge}
-                      variant={
-                        selectedBadges[category.name]?.includes(badge)
-                          ? "destructive"
-                          : "outline"
+              ))}
+            </CardContent>
+            <CardFooter className="flex justify-end">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    disabled={Object.keys(selectedBadges).every(
+                      (key) => selectedBadges[key].length === 0,
+                    )}
+                  >
+                    <Send />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      We've got your feedback, Thank You! 🙌🏼
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {
+                        "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"
                       }
-                      className={
-                        selectedBadges[category.name]?.includes(badge)
-                          ? "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
-                          : "cursor-pointer transition-colors"
-                      }
-                      onClick={() => toggleBadge(category.name, badge)}
-                    >
-                      {badge}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="ghost"
-                  disabled={Object.keys(selectedBadges).every(
-                    (key) => selectedBadges[key].length === 0,
-                  )}
-                >
-                  <Send />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    We've got your feedback, Thank You! 🙌🏼
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    {
-                      "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"
-                    }
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>No Thanks</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleGenerateReview}>
-                    Let's do it
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </CardFooter>
-        </>
-      )}
-    </Card>
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>No Thanks</AlertDialogCancel>
+                    <AlertDialogAction onClick={handleGenerateReview}>
+                      Let's do it
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </CardFooter>
+          </>
+        )}
+      </Card>
+    </div>
   );
 }

@@ -43,6 +43,7 @@ import {
 import { Block } from "../Types/types";
 import Logo from "./Logo";
 import FiveStarReviewBuilder from "./FiveStarReviewBuilder";
+import AnimatedTextareaSkeletonLoader from "./Skeletons/AnimatedSkeletonLoader";
 
 const categories = [
   {
@@ -131,6 +132,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [worryBody, setWorryBody] = useState("");
   const [worryTitle, setWorryTitle] = useState("");
   const [usedReviewTemplate, setUsedReviewTemplate] = useState(false);
+  const [isReviewTemplateLoading, setIsReviewTemplateLoading] = useState(false);
 
   useEffect(() => {
     const fetchReviewSettings = async (placeId = id) => {
@@ -175,6 +177,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
 
   const handleGenerateReviewTemplate = () => {
     setUsedReviewTemplate(true);
+    setIsReviewTemplateLoading(true);
     const contextToSend =
       "Business Name: " +
       title +
@@ -192,8 +195,10 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       })
       .then((response) => {
         handleReviewChange(response.data.content);
+        setIsReviewTemplateLoading(false);
       })
       .catch((error) => {
+        setIsReviewTemplateLoading(false);
         toast({
           title: "Failed",
           description: "Failed to generate template.",
@@ -234,7 +239,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       .writeText(allReviews)
       .then(() => {
         toast({
-          title: "Copied to clipboard",
+          title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
         });
@@ -261,7 +266,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       .writeText(sophisticatedReview)
       .then(() => {
         toast({
-          title: "Copied to clipboard",
+          title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
         });
@@ -468,15 +473,15 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                   />
                 </div>
               </div>
-              <DialogFooter className="flex justify-between">
-                <Button
+              <DialogFooter className="flex justify-end">
+                {/* <Button
                   type="button"
                   onClick={closeWorryDialog}
                   className="mr-auto"
                   variant="outline"
                 >
                   Use current review
-                </Button>
+                </Button> */}
                 <Button
                   type="submit"
                   onClick={sendEmail}
@@ -533,14 +538,14 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && rating == 5 && (
+      {!showRatingsPage && rating >= worryRating && (
         <FiveStarReviewBuilder
           buisnessName={title}
           rating={rating}
           placeId={id}
         />
       )}
-      {!showRatingsPage && rating <= 4 && (
+      {!showRatingsPage && rating <= worryRating && (
         <div className="max-w-4xl mx-auto p-4 space-y-4">
           <p className="text-3xl font-bold">{title || "Untitled"}</p>
           <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -564,20 +569,24 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </div>
 
           <div className="flex-grow">
-            <Textarea
-              value={reviews[currentStep]}
-              onFocus={() => setPlaceholder("")} // Clear placeholder on focus
-              onBlur={() => setPlaceholder(reviews[currentStep] ? "" : "✍🏻")}
-              onChange={(e) => handleReviewChange(e.target.value)}
-              className={
-                placeholder == ""
-                  ? "w-full border-none outline-none"
-                  : "w-full border-none outline-none text-center"
-              }
-              style={{ resize: "none" }}
-              rows={3}
-              placeholder={placeholder}
-            />
+            {isReviewTemplateLoading ? (
+              <AnimatedTextareaSkeletonLoader />
+            ) : (
+              <Textarea
+                value={reviews[currentStep]}
+                onFocus={() => setPlaceholder("")}
+                onBlur={() => setPlaceholder(reviews[currentStep] ? "" : "✍🏻")}
+                onChange={(e) => handleReviewChange(e.target.value)}
+                className={
+                  placeholder == ""
+                    ? "w-full border-none outline-none"
+                    : "w-full border-none outline-none text-center"
+                }
+                style={{ resize: "none" }}
+                rows={3}
+                placeholder={placeholder}
+              />
+            )}
           </div>
 
           <div className="flex justify-between items-center w-full">
@@ -589,9 +598,14 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       </Button> */}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    {/* <Button variant="ghost">
-                      <RiAiGenerate size={24} className="mr-2" />{" "}
-                    </Button> */}
+                    {rating == 4 && (
+                      <Button
+                        variant="ghost"
+                        disabled={isReviewTemplateLoading}
+                      >
+                        <RiAiGenerate size={24} className="mr-2" />{" "}
+                      </Button>
+                    )}
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
@@ -615,7 +629,11 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 </AlertDialog>
                 <div className="flex-grow"></div>{" "}
                 {/* This takes up remaining space */}
-                <Button variant="ghost" onClick={handleNext}>
+                <Button
+                  variant="ghost"
+                  onClick={handleNext}
+                  disabled={isReviewTemplateLoading}
+                >
                   <Send />
                 </Button>
               </div>
