@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
+import { CustomerReviewInfo } from "../Types/types";
 import { Send, StarIcon, Star } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "./Logo";
@@ -83,6 +84,7 @@ interface FiveStarReviewBuilderProps {
 export default function FiveStarReviewBuilder({
   buisnessName,
   placeId,
+  rating
 }: FiveStarReviewBuilderProps) {
   const [selectedBadges, setSelectedBadges] = useState<SelectedBadges>({
     Service: [],
@@ -96,6 +98,7 @@ export default function FiveStarReviewBuilder({
   const [isLoading, setIsLoading] = useState(true);
   const reviewUrl = `https://search.google.com/local/writereview?placeid=${placeId}`;
   const hasFetched = useRef(false);
+  const [initialGeneratedRevieBody, setInitialGeneratedReviewBody] = useState('')
 
   const toggleBadge = (category: string, badge: string) => {
     setSelectedBadges((prev) => {
@@ -126,6 +129,7 @@ export default function FiveStarReviewBuilder({
       })
       .then((response) => {
         setGeneratedReview(response.data.content);
+        setInitialGeneratedReviewBody(response.data.content)
         setIsDialogOpen(true);
         setIsLoading(false);
       })
@@ -138,7 +142,62 @@ export default function FiveStarReviewBuilder({
       });
   };
 
-  const handlePostGeneratedReviewToGoogle = () => {
+  const handleSaveReviewWithoutGenerate =  async () =>
+  {
+       //send data to backend to process.
+       setIsLoading(true)
+       const allBadges: string[] = Object.values(selectedBadges).flat();
+       const dataToSave : CustomerReviewInfo = {
+           location: buisnessName,
+           rating: rating,    
+           placeIdFromReview: placeId,
+           badges: allBadges,
+           postedToGoogleReview: false, 
+           generatedReviewBody: '', 
+           finalReviewBody: '',  
+           emailSentToCompany: false  
+       }
+       await axios
+       .post("http://localhost:8021/backend/save-customer-review/", {
+         data: dataToSave,
+       })
+       .then((response) => {
+        //  setIsLoading(false);
+       })
+       .catch((error) => {
+         console.log(error);
+        //  setIsLoading(false);
+       });
+
+       setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+  }
+  const handlePostGeneratedReviewToGoogle = async () => {
+    //send data to backend to process.
+    setIsLoading(true)
+    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const dataToSave : CustomerReviewInfo = {
+        location: buisnessName,
+        rating: rating,    
+        placeIdFromReview: placeId,
+        badges: allBadges,
+        postedToGoogleReview: true, 
+        generatedReviewBody: initialGeneratedRevieBody, 
+        finalReviewBody: generatedReview,  
+        emailSentToCompany: false  
+    }
+    await axios
+    .post("http://localhost:8021/backend/save-customer-review/", {
+      data: dataToSave,
+    })
+    .then((response) => {
+      setIsLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setIsLoading(false);
+    });
     navigator.clipboard
       .writeText(generatedReview)
       .then(() => {
@@ -324,7 +383,7 @@ export default function FiveStarReviewBuilder({
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>No Thanks</AlertDialogCancel>
+                    <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>No Thanks</AlertDialogCancel>
                     <AlertDialogAction onClick={handleGenerateReview}>
                       Let's do it
                     </AlertDialogAction>

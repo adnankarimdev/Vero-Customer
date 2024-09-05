@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Place } from "../Types/types";
+import { Place, CustomerReviewInfo} from "../Types/types";
 import {
   Card,
   CardContent,
@@ -288,10 +288,29 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       });
   };
 
-  const handleSendReviewToBackend = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+  const handleSendReviewToBackendWithoutEmail = async () => {
+            //save data here
+            const dataToSave : CustomerReviewInfo = {
+              location: title,
+              rating: rating,    
+              placeIdFromReview: id,
+              badges: [],
+              postedToGoogleReview: false, 
+              generatedReviewBody: '', 
+              finalReviewBody: reviews.join("\n"),  
+              emailSentToCompany: false  
+          }
+          await axios
+          .post("http://localhost:8021/backend/save-customer-review/", {
+            data: dataToSave,
+          })
+          .then((response) => {
+            // setIsLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            // setIsLoading(false);
+          });
   };
   // const handleSophisticateReview = () => {
   //   const context =
@@ -318,7 +337,29 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   //     });
   // };
 
-  const sendEmail = () => {
+  const sendEmail = async () => {
+        //save data here
+        const dataToSave : CustomerReviewInfo = {
+          location: title,
+          rating: rating,    
+          placeIdFromReview: id,
+          badges: [],
+          postedToGoogleReview: false, 
+          generatedReviewBody: '', 
+          finalReviewBody: reviews.join("\n"),  
+          emailSentToCompany: true  
+      }
+      await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setIsLoading(false);
+      });
     const context =
       "User Rating:" +
       rating.toString() +
@@ -354,6 +395,11 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const closeWorryDialog = () => {
     setIsWorryDialogOpen(false);
   };
+
+  const handleReload = () =>
+  {
+    window.location.reload();
+  }
   if (isDialogOpen) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -410,7 +456,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="ghost">
-                    <Send />
+                    <Send onClick={handleSendReviewToBackendWithoutEmail}/>
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -425,7 +471,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleSendReviewToBackend}>
+                    <AlertDialogAction onClick={handleReload}>
                       Continue
                     </AlertDialogAction>
                   </AlertDialogFooter>
@@ -538,7 +584,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && rating >= worryRating && (
+      {!showRatingsPage && rating > worryRating && (
         <FiveStarReviewBuilder
           buisnessName={title}
           rating={rating}
@@ -596,7 +642,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         <RiAiGenerate size={24} className="mr-2"/> 
         {"Generate Review Template"}
       </Button> */}
-                <AlertDialog>
+                {/* <AlertDialog>
                   <AlertDialogTrigger asChild>
                     {rating == 4 && (
                       <Button
@@ -626,7 +672,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>
-                </AlertDialog>
+                </AlertDialog> */}
                 <div className="flex-grow"></div>{" "}
                 {/* This takes up remaining space */}
                 <Button
