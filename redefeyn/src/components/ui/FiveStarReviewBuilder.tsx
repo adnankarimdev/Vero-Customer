@@ -84,10 +84,10 @@ interface FiveStarReviewBuilderProps {
 export default function FiveStarReviewBuilder({
   buisnessName,
   placeId,
-  rating
+  rating,
 }: FiveStarReviewBuilderProps) {
-    const startTimeRef = useRef<number | null>(null);
-    const endTimeRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const endTimeRef = useRef<number | null>(null);
   const [selectedBadges, setSelectedBadges] = useState<SelectedBadges>({
     Service: [],
     Location: [],
@@ -100,8 +100,23 @@ export default function FiveStarReviewBuilder({
   const [isLoading, setIsLoading] = useState(true);
   const reviewUrl = `https://search.google.com/local/writereview?placeid=${placeId}`;
   const hasFetched = useRef(false);
-  const [initialGeneratedRevieBody, setInitialGeneratedReviewBody] = useState('')
-  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0)
+  const [initialGeneratedRevieBody, setInitialGeneratedReviewBody] =
+    useState("");
+  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
+
+  const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long", // 'long' for full month name (e.g., 'September')
+      day: "numeric", // numeric day of the month (e.g., 5)
+      year: "numeric", // numeric year (e.g., 2024)
+      hour: "2-digit", // 2-digit hour (e.g., 14 for 2 PM)
+      minute: "2-digit", // 2-digit minute (e.g., 30)
+      second: "2-digit", // 2-digit second (e.g., 00)
+      hour12: true, // use 24-hour time format
+    };
+
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
 
   const toggleBadge = (category: string, badge: string) => {
     setSelectedBadges((prev) => {
@@ -132,7 +147,7 @@ export default function FiveStarReviewBuilder({
       })
       .then((response) => {
         setGeneratedReview(response.data.content);
-        setInitialGeneratedReviewBody(response.data.content)
+        setInitialGeneratedReviewBody(response.data.content);
         setIsDialogOpen(true);
         setIsLoading(false);
       })
@@ -145,64 +160,65 @@ export default function FiveStarReviewBuilder({
       });
   };
 
-  const handleSaveReviewWithoutGenerate =  async () =>
-  {
-       //send data to backend to process.
-       setIsLoading(true)
-       const allBadges: string[] = Object.values(selectedBadges).flat();
-       const dataToSave : CustomerReviewInfo = {
-           location: buisnessName,
-           rating: rating,    
-           placeIdFromReview: placeId,
-           badges: allBadges,
-           postedToGoogleReview: false, 
-           generatedReviewBody: '', 
-           finalReviewBody: '',  
-           emailSentToCompany: false,
-           timeTakenToWriteReview: timeTakenToWriteReview
-       }
-       await axios
-       .post("http://localhost:8021/backend/save-customer-review/", {
-         data: dataToSave,
-       })
-       .then((response) => {
+  const handleSaveReviewWithoutGenerate = async () => {
+    //send data to backend to process.
+    setIsLoading(true);
+    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const dataToSave: CustomerReviewInfo = {
+      location: buisnessName,
+      rating: rating,
+      placeIdFromReview: placeId,
+      badges: allBadges,
+      postedToGoogleReview: false,
+      generatedReviewBody: "",
+      finalReviewBody: "",
+      emailSentToCompany: false,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+    };
+    await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
         //  setIsLoading(false);
-       })
-       .catch((error) => {
-         console.log(error);
+      })
+      .catch((error) => {
+        console.log(error);
         //  setIsLoading(false);
-       });
+      });
 
-       setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-  }
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
-    setIsLoading(true)
+    setIsLoading(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
-    const dataToSave : CustomerReviewInfo = {
-        location: buisnessName,
-        rating: rating,    
-        placeIdFromReview: placeId,
-        badges: allBadges,
-        postedToGoogleReview: true, 
-        generatedReviewBody: initialGeneratedRevieBody, 
-        finalReviewBody: generatedReview,  
-        emailSentToCompany: false,
-        timeTakenToWriteReview: timeTakenToWriteReview
-    }
+    const dataToSave: CustomerReviewInfo = {
+      location: buisnessName,
+      rating: rating,
+      placeIdFromReview: placeId,
+      badges: allBadges,
+      postedToGoogleReview: true,
+      generatedReviewBody: initialGeneratedRevieBody,
+      finalReviewBody: generatedReview,
+      emailSentToCompany: false,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+    };
     await axios
-    .post("http://localhost:8021/backend/save-customer-review/", {
-      data: dataToSave,
-    })
-    .then((response) => {
-      setIsLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-      setIsLoading(false);
-    });
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setIsLoading(false);
+      });
     navigator.clipboard
       .writeText(generatedReview)
       .then(() => {
@@ -257,12 +273,12 @@ export default function FiveStarReviewBuilder({
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
-    console.log('Timer started');
+    console.log("Timer started");
   };
 
   const stopTimer = () => {
     if (startTimeRef.current === null) {
-      console.log('Timer was not started');
+      console.log("Timer was not started");
       return;
     }
     endTimeRef.current = Date.now();
@@ -406,7 +422,11 @@ export default function FiveStarReviewBuilder({
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>No Thanks</AlertDialogCancel>
+                    <AlertDialogCancel
+                      onClick={handleSaveReviewWithoutGenerate}
+                    >
+                      No Thanks
+                    </AlertDialogCancel>
                     <AlertDialogAction onClick={handleGenerateReview}>
                       Let's do it
                     </AlertDialogAction>

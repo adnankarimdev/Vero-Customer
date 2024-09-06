@@ -14,13 +14,14 @@ export interface Place {
 }
 
 export interface CustomerReviewInfo {
-  location: string;  // Required string
+  location: string; // Required string
   placeIdFromReview: string;
-  rating: number;    // Required number
+  rating: number; // Required number
   badges?: string[]; // Optional array of strings
   postedToGoogleReview?: boolean; // Defaults to false
-  generatedReviewBody?: string;   // Defaults to empty string
-  finalReviewBody?: string;        // Defaults to empty string
-  emailSentToCompany?: boolean;   // Defaults to false
+  generatedReviewBody?: string; // Defaults to empty string
+  finalReviewBody?: string; // Defaults to empty string
+  emailSentToCompany?: boolean; // Defaults to false
   timeTakenToWriteReview?: number;
-};
+  reviewDate?: string;
+}

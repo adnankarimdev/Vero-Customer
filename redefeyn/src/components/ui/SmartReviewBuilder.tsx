@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Place, CustomerReviewInfo} from "../Types/types";
+import { Place, CustomerReviewInfo } from "../Types/types";
 import {
   Card,
   CardContent,
@@ -135,8 +135,21 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [worryTitle, setWorryTitle] = useState("");
   const [usedReviewTemplate, setUsedReviewTemplate] = useState(false);
   const [isReviewTemplateLoading, setIsReviewTemplateLoading] = useState(false);
-  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0)
+  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
 
+  const formatDate = (date: Date): string => {
+    const options: Intl.DateTimeFormatOptions = {
+      month: "long", // 'long' for full month name (e.g., 'September')
+      day: "numeric", // numeric day of the month (e.g., 5)
+      year: "numeric", // numeric year (e.g., 2024)
+      hour: "2-digit", // 2-digit hour (e.g., 14 for 2 PM)
+      minute: "2-digit", // 2-digit minute (e.g., 30)
+      second: "2-digit", // 2-digit second (e.g., 00)
+      hour12: true, // use 24-hour time format
+    };
+
+    return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
   useEffect(() => {
     const fetchReviewSettings = async (placeId = id) => {
       try {
@@ -166,17 +179,16 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     if (!showRatingsPage && rating <= worryRating) {
       startTimer();
     }
-
   }, [showRatingsPage, rating, worryRating]); // Only re-run when these change
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
-    console.log('Timer started');
+    console.log("Timer started");
   };
 
   const stopTimer = () => {
     if (startTimeRef.current === null) {
-      console.log('Timer was not started');
+      console.log("Timer was not started");
       return;
     }
     endTimeRef.current = Date.now();
@@ -237,7 +249,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     if (currentStep < categories.length - 1) {
       setCurrentStep(currentStep + 1);
     }
-    setIsReviewComplete(true); 
+    setIsReviewComplete(true);
     // else if (!usedReviewTemplate) {
     //   const context =
     //     "User Rating:" +
@@ -319,29 +331,30 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   };
 
   const handleSendReviewToBackendWithoutEmail = async () => {
-            //save data here
-            const dataToSave : CustomerReviewInfo = {
-              location: title,
-              rating: rating,    
-              placeIdFromReview: id,
-              badges: [],
-              postedToGoogleReview: false, 
-              generatedReviewBody: '', 
-              finalReviewBody: reviews.join("\n"),  
-              emailSentToCompany: false,
-              timeTakenToWriteReview: timeTakenToWriteReview
-          }
-          await axios
-          .post("http://localhost:8021/backend/save-customer-review/", {
-            data: dataToSave,
-          })
-          .then((response) => {
-            // setIsLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            // setIsLoading(false);
-          });
+    //save data here
+    const dataToSave: CustomerReviewInfo = {
+      location: title,
+      rating: rating,
+      placeIdFromReview: id,
+      badges: [],
+      postedToGoogleReview: false,
+      generatedReviewBody: "",
+      finalReviewBody: reviews.join("\n"),
+      emailSentToCompany: false,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+    };
+    await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setIsLoading(false);
+      });
   };
   // const handleSophisticateReview = () => {
   //   const context =
@@ -369,19 +382,20 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   // };
 
   const sendEmail = async () => {
-        //save data here
-        const dataToSave : CustomerReviewInfo = {
-          location: title,
-          rating: rating,    
-          placeIdFromReview: id,
-          badges: [],
-          postedToGoogleReview: false, 
-          generatedReviewBody: '', 
-          finalReviewBody: reviews.join("\n"),  
-          emailSentToCompany: true,
-          timeTakenToWriteReview: timeTakenToWriteReview
-      }
-      await axios
+    //save data here
+    const dataToSave: CustomerReviewInfo = {
+      location: title,
+      rating: rating,
+      placeIdFromReview: id,
+      badges: [],
+      postedToGoogleReview: false,
+      generatedReviewBody: "",
+      finalReviewBody: reviews.join("\n"),
+      emailSentToCompany: true,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+    };
+    await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
         data: dataToSave,
       })
@@ -428,10 +442,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     setIsWorryDialogOpen(false);
   };
 
-  const handleReload = () =>
-  {
+  const handleReload = () => {
     window.location.reload();
-  }
+  };
   if (isDialogOpen) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -488,7 +501,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button variant="ghost">
-                    <Send onClick={handleSendReviewToBackendWithoutEmail}/>
+                    <Send onClick={handleSendReviewToBackendWithoutEmail} />
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
