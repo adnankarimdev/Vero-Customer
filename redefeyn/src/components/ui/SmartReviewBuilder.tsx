@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { RiAiGenerate } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { Textarea } from "@/components/ui/textarea";
@@ -61,6 +61,8 @@ interface SmartReviewProps {
 }
 
 const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
+  const startTimeRef = useRef<number | null>(null);
+  const endTimeRef = useRef<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
   const [questions, setQuestions] = useState([
@@ -133,6 +135,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [worryTitle, setWorryTitle] = useState("");
   const [usedReviewTemplate, setUsedReviewTemplate] = useState(false);
   const [isReviewTemplateLoading, setIsReviewTemplateLoading] = useState(false);
+  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0)
 
   useEffect(() => {
     const fetchReviewSettings = async (placeId = id) => {
@@ -157,6 +160,30 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
 
     fetchReviewSettings();
   }, []);
+
+  useEffect(() => {
+    // Check conditions to start the timer
+    if (!showRatingsPage && rating <= worryRating) {
+      startTimer();
+    }
+
+  }, [showRatingsPage, rating, worryRating]); // Only re-run when these change
+
+  const startTimer = () => {
+    startTimeRef.current = Date.now();
+    console.log('Timer started');
+  };
+
+  const stopTimer = () => {
+    if (startTimeRef.current === null) {
+      console.log('Timer was not started');
+      return;
+    }
+    endTimeRef.current = Date.now();
+    const duration = (endTimeRef.current - startTimeRef.current) / 1000;
+    console.log(`Timer stopped after ${duration} seconds`);
+    setTimeTakenToWriteReview(duration);
+  };
 
   const handleRating = (currentRating: number) => {
     setRating(currentRating);
@@ -206,31 +233,34 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       });
   };
   const handleNext = () => {
+    stopTimer();
     if (currentStep < categories.length - 1) {
       setCurrentStep(currentStep + 1);
-    } else if (!usedReviewTemplate) {
-      const context =
-        "User Rating:" +
-        rating.toString() +
-        " " +
-        "Questions answering: " +
-        questions[rating - 1].questions.join("\n") +
-        "\n";
-      const userReviews = context + "User Review Body:\n" + reviews.join("\n");
-      axios
-        .post("http://localhost:8021/backend/create-review-score/", {
-          userReview: userReviews,
-        })
-        .then((response) => {
-          setUserReviewScore(response.data.content);
-          setIsReviewComplete(true);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    } else {
-      setIsReviewComplete(true);
     }
+    setIsReviewComplete(true); 
+    // else if (!usedReviewTemplate) {
+    //   const context =
+    //     "User Rating:" +
+    //     rating.toString() +
+    //     " " +
+    //     "Questions answering: " +
+    //     questions[rating - 1].questions.join("\n") +
+    //     "\n";
+    //   const userReviews = context + "User Review Body:\n" + reviews.join("\n");
+    //   axios
+    //     .post("http://localhost:8021/backend/create-review-score/", {
+    //       userReview: userReviews,
+    //     })
+    //     .then((response) => {
+    //       setUserReviewScore(response.data.content);
+    //       setIsReviewComplete(true);
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // } else {
+    //   setIsReviewComplete(true);
+    // }
   };
 
   const handleSubmit = () => {
@@ -298,7 +328,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
               postedToGoogleReview: false, 
               generatedReviewBody: '', 
               finalReviewBody: reviews.join("\n"),  
-              emailSentToCompany: false  
+              emailSentToCompany: false,
+              timeTakenToWriteReview: timeTakenToWriteReview
           }
           await axios
           .post("http://localhost:8021/backend/save-customer-review/", {
@@ -347,7 +378,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           postedToGoogleReview: false, 
           generatedReviewBody: '', 
           finalReviewBody: reviews.join("\n"),  
-          emailSentToCompany: true  
+          emailSentToCompany: true,
+          timeTakenToWriteReview: timeTakenToWriteReview
       }
       await axios
       .post("http://localhost:8021/backend/save-customer-review/", {

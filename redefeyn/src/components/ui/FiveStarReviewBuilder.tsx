@@ -86,6 +86,8 @@ export default function FiveStarReviewBuilder({
   placeId,
   rating
 }: FiveStarReviewBuilderProps) {
+    const startTimeRef = useRef<number | null>(null);
+    const endTimeRef = useRef<number | null>(null);
   const [selectedBadges, setSelectedBadges] = useState<SelectedBadges>({
     Service: [],
     Location: [],
@@ -99,6 +101,7 @@ export default function FiveStarReviewBuilder({
   const reviewUrl = `https://search.google.com/local/writereview?placeid=${placeId}`;
   const hasFetched = useRef(false);
   const [initialGeneratedRevieBody, setInitialGeneratedReviewBody] = useState('')
+  const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0)
 
   const toggleBadge = (category: string, badge: string) => {
     setSelectedBadges((prev) => {
@@ -155,7 +158,8 @@ export default function FiveStarReviewBuilder({
            postedToGoogleReview: false, 
            generatedReviewBody: '', 
            finalReviewBody: '',  
-           emailSentToCompany: false  
+           emailSentToCompany: false,
+           timeTakenToWriteReview: timeTakenToWriteReview
        }
        await axios
        .post("http://localhost:8021/backend/save-customer-review/", {
@@ -185,7 +189,8 @@ export default function FiveStarReviewBuilder({
         postedToGoogleReview: true, 
         generatedReviewBody: initialGeneratedRevieBody, 
         finalReviewBody: generatedReview,  
-        emailSentToCompany: false  
+        emailSentToCompany: false,
+        timeTakenToWriteReview: timeTakenToWriteReview
     }
     await axios
     .post("http://localhost:8021/backend/save-customer-review/", {
@@ -220,6 +225,7 @@ export default function FiveStarReviewBuilder({
       });
   };
   useEffect(() => {
+    startTimer();
     const fetchCategories = async () => {
       if (hasFetched.current) return;
 
@@ -248,6 +254,22 @@ export default function FiveStarReviewBuilder({
 
     fetchCategories();
   }, []);
+
+  const startTimer = () => {
+    startTimeRef.current = Date.now();
+    console.log('Timer started');
+  };
+
+  const stopTimer = () => {
+    if (startTimeRef.current === null) {
+      console.log('Timer was not started');
+      return;
+    }
+    endTimeRef.current = Date.now();
+    const duration = (endTimeRef.current - startTimeRef.current) / 1000;
+    console.log(`Timer stopped after ${duration} seconds`);
+    setTimeTakenToWriteReview(duration);
+  };
 
   if (isDialogOpen) {
     return (
@@ -367,6 +389,7 @@ export default function FiveStarReviewBuilder({
                     disabled={Object.keys(selectedBadges).every(
                       (key) => selectedBadges[key].length === 0,
                     )}
+                    onClick={stopTimer}
                   >
                     <Send />
                   </Button>
