@@ -79,12 +79,14 @@ interface FiveStarReviewBuilderProps {
   buisnessName: string;
   rating: number;
   placeId: string;
+  keywords?: string[];
 }
 
 export default function FiveStarReviewBuilder({
   buisnessName,
   placeId,
   rating,
+  keywords
 }: FiveStarReviewBuilderProps) {
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -135,11 +137,14 @@ export default function FiveStarReviewBuilder({
   const handleGenerateReview = () => {
     setIsLoading(true);
     const contextToSend =
-      "Business Name: " +
+      "Business Name:\n" +
       buisnessName +
       "\n" +
-      "User Selected Badges " +
-      JSON.stringify(selectedBadges);
+      "User Selected Badges:\n" +
+      JSON.stringify(selectedBadges) +
+      "\n" +
+      "Keywords:\n" +
+      JSON.stringify(keywords)
 
     axios
       .post("http://localhost:8021/backend/generate-five-star-review/", {

@@ -44,6 +44,7 @@ import { Block } from "../Types/types";
 import Logo from "./Logo";
 import FiveStarReviewBuilder from "./FiveStarReviewBuilder";
 import AnimatedTextareaSkeletonLoader from "./Skeletons/AnimatedSkeletonLoader";
+import EmailSkeleton from "./Skeletons/EmailSkeleton";
 
 const categories = [
   {
@@ -65,6 +66,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const endTimeRef = useRef<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
+  const [keywords, setKeywords] = useState([])
   const [questions, setQuestions] = useState([
     {
       id: 1,
@@ -136,6 +138,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [usedReviewTemplate, setUsedReviewTemplate] = useState(false);
   const [isReviewTemplateLoading, setIsReviewTemplateLoading] = useState(false);
   const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
+  const [sendingEmail, setIsSendingEmail] = useState(false)
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -162,6 +165,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         setWorryDialog(response.data.showWorryDialog);
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
+        setKeywords(response.data.keywords)
         const reviewPlace = response.data.places.find(
           (place: Place) => place.place_id === id,
         );
@@ -382,6 +386,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   // };
 
   const sendEmail = async () => {
+    setIsSendingEmail(true)
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: title,
@@ -419,10 +424,15 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,
+        buisnessName: title
       })
       .then((response) => {
+        setIsSendingEmail(false)
         setIsWorryDialogOpen(false);
         toast({
+          className: cn(
+            'top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4'
+          ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
         });
@@ -431,6 +441,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         }, 2000);
       })
       .catch((error) => {
+        setIsSendingEmail(false)
         toast({
           title: "Error",
           description: "Failed to send email.",
@@ -484,7 +495,12 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   if (isReviewComplete) {
     return (
       <div>
-        <Card className="w-relative max-w-3xl mx-auto">
+        {sendingEmail && (
+          <EmailSkeleton/>
+        )}
+        {!sendingEmail && (
+       <>
+       <Card className="w-relative max-w-3xl mx-auto">
           <CardHeader className="flex justify-center items-center relative">
             <CardTitle>Your Review</CardTitle>
           </CardHeader>
@@ -584,6 +600,10 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
               </DialogFooter>
             </DialogContent>
           </Dialog>
+
+          
+        )}
+       </>   
         )}
       </div>
     );
@@ -634,6 +654,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           buisnessName={title}
           rating={rating}
           placeId={id}
+          keywords={keywords}
         />
       )}
       {!showRatingsPage && rating <= worryRating && (
