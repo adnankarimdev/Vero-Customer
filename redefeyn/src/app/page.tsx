@@ -25,9 +25,9 @@ export default function Dashboard() {
       emoji: "✏️",
     },
     {
-      title: "Step 2: Redefeyn",
+      title: "Step 2: Vero",
       description:
-        "If you want, Redefeyn will enhance your response, making sure it's the best it can be based on what you wrote!",
+        "If you want, Vero will enhance your response, making sure it's the best it can be based on what you wrote!",
       emoji: "✨",
     },
     {
@@ -52,7 +52,7 @@ export default function Dashboard() {
     );
   };
 
-  const goToRedefeyn = () => {
+  const goToVero = () => {
     setShowReviewPlatform(true);
   };
 
@@ -69,11 +69,11 @@ export default function Dashboard() {
               <TutorialSteps steps={steps} />
               <CardTitle className="text-center">
                 <Button
-                  onClick={() => goToRedefeyn()}
+                  onClick={() => goToVero()}
                   className="w-full"
                   variant="link"
                 >
-                  Continue to Redefeyn
+                  Continue to Vero
                 </Button>
                 <Button
                   onClick={handleGoToGoogleReview}

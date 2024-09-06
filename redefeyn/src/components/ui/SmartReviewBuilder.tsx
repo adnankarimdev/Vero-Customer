@@ -450,7 +450,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="w-full">
           <DialogHeader>
-            <DialogTitle>Redefeyned Review</DialogTitle>
+            <DialogTitle>Veroed Review</DialogTitle>
 
             <Textarea
               defaultValue={sophisticatedReview}

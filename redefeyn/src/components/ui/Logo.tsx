@@ -1,48 +1,22 @@
-import { Inter } from "next/font/google";
+interface VeroLogoProps {
+  size?: number;
+  color?: string;
+}
 
-const inter = Inter({ subsets: ["latin"] });
-
-export default function Logo() {
+export default function Logo({ size = 100, color = 'black' }: VeroLogoProps = {}) {
   return (
-    <div className="w-12 h-10 bg-transparent flex items-center justify-center relative">
-      <svg
-        viewBox="0 0 100 100"
-        className="w-full h-full"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {/* Circular arrows */}
-        <path
-          d="M50 10 A40 40 0 1 1 49.9999 10"
-          fill="none"
-          stroke="hsl(var(--primary))"
-          strokeWidth="1"
-          strokeLinecap="round"
-          strokeDasharray="1 10"
-        >
-          <animateTransform
-            attributeName="transform"
-            attributeType="XML"
-            type="rotate"
-            from="0 50 50"
-            to="360 50 50"
-            dur="10s"
-            repeatCount="indefinite"
-          />
-        </path>
-
-        {/* Letter R */}
-        <text
-          x="50"
-          y="65"
-          fontSize="50"
-          fontWeight="bold"
-          textAnchor="middle"
-          fill="hsl(var(--primary))"
-          className={inter.className}
-        >
-          R
-        </text>
-      </svg>
-    </div>
-  );
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      {/* Circle */}
+      <circle cx="50" cy="50" r="48" stroke={color} strokeWidth="2" />
+      
+      {/* Letter V */}
+      <path d="M35 30L50 70L65 30" stroke={color} strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      
+      {/* Arrow heads */}
+      {/* <path d="M45 2L50 7L55 2" fill={color} />
+      <path d="M95 45L90 50L95 55" fill={color} />
+      <path d="M55 98L50 93L45 98" fill={color} />
+      <path d="M5 55L10 50L5 45" fill={color} /> */}
+    </svg>
+  )
 }
