@@ -86,7 +86,7 @@ export default function FiveStarReviewBuilder({
   buisnessName,
   placeId,
   rating,
-  keywords
+  keywords,
 }: FiveStarReviewBuilderProps) {
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -144,7 +144,7 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(selectedBadges) +
       "\n" +
       "Keywords:\n" +
-      JSON.stringify(keywords)
+      JSON.stringify(keywords);
 
     axios
       .post("http://localhost:8021/backend/generate-five-star-review/", {
