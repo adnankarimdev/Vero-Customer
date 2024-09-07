@@ -140,6 +140,9 @@ export default function FiveStarReviewBuilder({
       "Business Name:\n" +
       buisnessName +
       "\n" +
+      "User Rating:\n" +
+      rating + 
+      "\n" +
       "User Selected Badges:\n" +
       JSON.stringify(selectedBadges) +
       "\n" +
@@ -252,7 +255,7 @@ export default function FiveStarReviewBuilder({
 
       hasFetched.current = true;
 
-      const contextToSend = "Business Name: " + buisnessName;
+      const contextToSend = "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
       axios
         .post("http://localhost:8021/backend/generate-categories/", {
           context: contextToSend,
@@ -333,7 +336,7 @@ export default function FiveStarReviewBuilder({
             {buisnessName}
           </CardTitle>
           <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-            {"We are glad so happy to hear that. Want to tell us why?"}
+            {"We are so happy to hear that. Want to tell us why?"}
           </CardDescription>
           <div className="flex items-center justify-center space-x-1">
             {[1, 2, 3, 4, 5].map((star) => (
