@@ -1,14 +1,19 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { CustomerReviewInfo } from "../Types/types";
-import { Send, StarIcon, Star } from "lucide-react";
+import { RiAiGenerate } from "react-icons/ri";
+import { Send, StarIcon, Star, Mail } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "./Logo";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import EmailSkeleton from "./Skeletons/EmailSkeleton";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -80,6 +85,11 @@ interface FiveStarReviewBuilderProps {
   rating: number;
   placeId: string;
   keywords?: string[];
+  worryRating: number;
+  worryBody?: string;
+  worryTitle?: string;
+  bubbleRatingPlatform?: boolean;
+  showEmailWorryDialog?: boolean;
 }
 
 export default function FiveStarReviewBuilder({
@@ -87,6 +97,11 @@ export default function FiveStarReviewBuilder({
   placeId,
   rating,
   keywords,
+  worryBody,
+  worryTitle,
+  bubbleRatingPlatform,
+  showEmailWorryDialog,
+  worryRating
 }: FiveStarReviewBuilderProps) {
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -105,6 +120,12 @@ export default function FiveStarReviewBuilder({
   const [initialGeneratedRevieBody, setInitialGeneratedReviewBody] =
     useState("");
   const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
+  const [sendingEmail, setIsSendingEmail] = useState(false);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [isWorryDialogOpen, setIsWorryDialogOpen] = useState(false);
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+  const [worryDialog, setWorryDialog] = useState(false);
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -141,7 +162,7 @@ export default function FiveStarReviewBuilder({
       buisnessName +
       "\n" +
       "User Rating:\n" +
-      rating + 
+      rating +
       "\n" +
       "User Selected Badges:\n" +
       JSON.stringify(selectedBadges) +
@@ -156,6 +177,7 @@ export default function FiveStarReviewBuilder({
       .then((response) => {
         setGeneratedReview(response.data.content);
         setInitialGeneratedReviewBody(response.data.content);
+        setIsAlertDialogOpen(false);
         setIsDialogOpen(true);
         setIsLoading(false);
       })
@@ -183,6 +205,7 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform:rating > worryRating ? true : bubbleRatingPlatform
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -200,8 +223,46 @@ export default function FiveStarReviewBuilder({
       window.location.reload();
     }, 2000);
   };
+  const handleWorryRatingDialog = async () => {
+    setIsWorryDialogOpen(false);
+    setIsSendingEmail(true);
+    const allBadges: string[] = Object.values(selectedBadges).flat();
+    //save data here
+    const dataToSave: CustomerReviewInfo = {
+      location: buisnessName,
+      rating: rating,
+      placeIdFromReview: placeId,
+      badges: allBadges,
+      postedToGoogleReview: false,
+      generatedReviewBody: initialGeneratedRevieBody,
+      finalReviewBody: generatedReview,
+      emailSentToCompany: false,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform:rating > worryRating ? true : bubbleRatingPlatform
+    };
+    await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setIsLoading(false);
+      });
+      toast({
+        title: "Thank you for your feedback!",
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+  };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
+    console.log("rating", rating)
+    console.log("worryrating", worryRating)
     setIsLoading(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
     const dataToSave: CustomerReviewInfo = {
@@ -215,6 +276,7 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform: rating > worryRating  ? true : bubbleRatingPlatform
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -235,10 +297,10 @@ export default function FiveStarReviewBuilder({
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
         });
-        setTimeout(() => {
-          window.open(reviewUrl, "_blank", "noopener,noreferrer");
-          window.location.reload();
-        }, 2000);
+        // setTimeout(() => {
+        //   window.open(reviewUrl, "_blank", "noopener,noreferrer");
+        //   window.location.reload();
+        // }, 2000);
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
@@ -255,7 +317,8 @@ export default function FiveStarReviewBuilder({
 
       hasFetched.current = true;
 
-      const contextToSend = "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
+      const contextToSend =
+        "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
       axios
         .post("http://localhost:8021/backend/generate-categories/", {
           context: contextToSend,
@@ -284,6 +347,72 @@ export default function FiveStarReviewBuilder({
     console.log("Timer started");
   };
 
+  const sendEmail = async () => {
+    setIsSendingEmail(true);
+    const allBadges: string[] = Object.values(selectedBadges).flat();
+    //save data here
+    const dataToSave: CustomerReviewInfo = {
+      location: buisnessName,
+      rating: rating,
+      placeIdFromReview: placeId,
+      badges: allBadges,
+      postedToGoogleReview: false,
+      generatedReviewBody: initialGeneratedRevieBody,
+      finalReviewBody: generatedReview,
+      emailSentToCompany: true,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform: rating > worryRating ? true : bubbleRatingPlatform
+    };
+    await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setIsLoading(false);
+      });
+    const context =
+      "User Rating:" +
+      rating.toString() +
+      " " +
+      "Questions answering: \n" +
+      "No questions given" +
+      "\n";
+    const userReviews = context + "User Review Selected Badges:\n" + allBadges.join("\n");
+    axios
+      .post("http://localhost:8021/backend/send-email/", {
+        userEmailToSend: userEmail,
+        userNameToSend: userName,
+        userReviewToSend: userReviews,
+        buisnessName: buisnessName,
+      })
+      .then((response) => {
+        setIsSendingEmail(false);
+        setIsWorryDialogOpen(false);
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+          ),
+          title: "Email Sent",
+          description: "Thank you for giving us a chance to make things right.",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((error) => {
+        setIsSendingEmail(false);
+        toast({
+          title: "Error",
+          description: "Failed to send email.",
+        });
+      });
+  };
+
   const stopTimer = () => {
     if (startTimeRef.current === null) {
       console.log("Timer was not started");
@@ -293,34 +422,115 @@ export default function FiveStarReviewBuilder({
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
     console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
+
+    if (rating <= worryRating && showEmailWorryDialog) {
+      setIsWorryDialogOpen(true);
+    } else if(rating > worryRating){
+      setIsAlertDialogOpen(true);
+    }
+    // no email dialog by client, make sure to save the badges.
+    else
+    {
+      handleWorryRatingDialog()
+    }
   };
 
   if (isDialogOpen) {
-    return (
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="w-full">
-          <DialogHeader>
-            <DialogTitle className="text-center">
-              Your review is ready to take the spotlight! 🌟
-            </DialogTitle>
-            <DialogDescription className="text-center">
-              Feel free to edit this! Once it looks good, click the Google icon
-              below and it will copy the review for you to paste 🥳
-            </DialogDescription>
+    if (rating > worryRating) {
+      return (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="w-full">
+            <DialogHeader>
+              <DialogTitle className="text-center">
+                Your review is ready to take the spotlight! 🌟
+              </DialogTitle>
+              <DialogDescription className="text-center">
+                Feel free to edit this! Once it looks good, click the Google
+                icon below and it will copy the review for you to paste 🥳
+              </DialogDescription>
 
-            <Textarea
-              defaultValue={generatedReview}
-              className="w-full min-h-[400px]"
-              onChange={(e) => setGeneratedReview(e.target.value)}
-            />
+              <Textarea
+                defaultValue={generatedReview}
+                className="w-full min-h-[400px]"
+                onChange={(e) => setGeneratedReview(e.target.value)}
+              />
+            </DialogHeader>
+            <DialogFooter className="flex justify-between items-center">
+              <Button
+                type="submit"
+                onClick={handlePostGeneratedReviewToGoogle}
+                variant="ghost"
+              >
+                <FcGoogle size={24} />
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      );
+    }
+  }
+
+  if (isWorryDialogOpen && showEmailWorryDialog) {
+    return (
+      <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex justify-center items-center">
+              {worryTitle}
+            </DialogTitle>
+            <DialogDescription>{worryBody}</DialogDescription>
           </DialogHeader>
-          <DialogFooter className="flex justify-between items-center">
-            <Button
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="name" className="text-left">
+                Name
+              </Label>
+              <Input
+                id="name"
+                className="col-span-3"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email" className="text-left">
+                Email
+              </Label>
+              <Input
+                id="email"
+                className="w-full"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+              />
+            </div>
+
+            <div className="">
+              <Label htmlFor="text" className="text-right">
+                Personalized Feedback
+              </Label>
+              <Button
               type="submit"
-              onClick={handlePostGeneratedReviewToGoogle}
+              onClick={handleGenerateReview}
+              className="ml-auto"
               variant="ghost"
             >
-              <FcGoogle size={24} />
+              <RiAiGenerate />
+            </Button>
+              <Textarea
+                defaultValue={generatedReview}
+                className="w-full min-h-[400px]"
+                onChange={(e) => setGeneratedReview(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex justify-end">
+            <Button
+              type="submit"
+              onClick={sendEmail}
+              className="ml-auto"
+              variant="ghost"
+            >
+              <Mail/>
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -330,121 +540,129 @@ export default function FiveStarReviewBuilder({
 
   return (
     <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-full max-w-3xl border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-            {buisnessName}
-          </CardTitle>
-          <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-            {"We are so happy to hear that. Want to tell us why?"}
-          </CardDescription>
-          <div className="flex items-center justify-center space-x-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} className={"text-primary fill-primary"} />
-            ))}
-          </div>
-        </CardHeader>
-        {isLoading ? (
-          // Loader for the Card content and more
-          <>
-            <CardContent>
-              <div className="flex items-center justify-center space-x-1 mb-6">
-                {[...Array(5)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
-                  ></div>
+      {sendingEmail && <EmailSkeleton />}
+      {!sendingEmail && (
+        <Card className="w-full max-w-3xl border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-center space-x-1 text-sm">
+              {buisnessName}
+            </CardTitle>
+            <CardDescription className="flex items-center justify-center space-x-1 mb-2">
+              {rating <= 4 && "Want to tell us why?"}
+              {rating == 5 &&
+                "We are so happy to hear that. 🥳 Want to tell us why?"}
+            </CardDescription>
+            <div className="flex items-center justify-center space-x-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-5 h-5 ${i < rating ? "text-black fill-black" : "text-gray-300"}`}
+                />
+              ))}
+            </div>
+          </CardHeader>
+          {isLoading ? (
+            // Loader for the Card content and more
+            <>
+              <CardContent>
+                <div className="flex items-center justify-center space-x-1 mb-6">
+                  {[...Array(5)].map((_, index) => (
+                    <div
+                      key={index}
+                      className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+                {[...Array(3)].map((_, index) => (
+                  <div key={index} className="mb-6">
+                    <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
+                    <div className="flex flex-wrap gap-2">
+                      {[...Array(5)].map((_, i) => (
+                        <div
+                          key={i}
+                          className="h-8 w-24 bg-gray-300 rounded animate-pulse"
+                        ></div>
+                      ))}
+                    </div>
+                  </div>
                 ))}
-              </div>
-              {[...Array(3)].map((_, index) => (
-                <div key={index} className="mb-6">
-                  <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
-                  <div className="flex flex-wrap gap-2">
-                    {[...Array(5)].map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-8 w-24 bg-gray-300 rounded animate-pulse"
-                      ></div>
-                    ))}
+              </CardContent>
+              <CardFooter className="flex justify-end">
+                <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
+              </CardFooter>
+            </>
+          ) : (
+            <>
+              <CardContent>
+                {categories.map((category) => (
+                  <div key={category.name} className="mb-6">
+                    <h3 className="text-lg font-semibold mb-2">
+                      {category.name}
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {category.badges.map((badge) => (
+                        <Badge
+                          key={badge}
+                          variant={
+                            selectedBadges[category.name]?.includes(badge)
+                              ? "destructive"
+                              : "outline"
+                          }
+                          className={
+                            selectedBadges[category.name]?.includes(badge)
+                              ? rating < 4
+                                ? "bg-red-500 text-white hover:bg-red-500 hover:text-white cursor-pointer"
+                                : "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
+                              : "cursor-pointer transition-colors"
+                          }
+                          onClick={() => toggleBadge(category.name, badge)}
+                        >
+                          {badge}
+                        </Badge>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
-            </CardFooter>
-          </>
-        ) : (
-          <>
-            <CardContent>
-              {categories.map((category) => (
-                <div key={category.name} className="mb-6">
-                  <h3 className="text-lg font-semibold mb-2">
-                    {category.name}
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {category.badges.map((badge) => (
-                      <Badge
-                        key={badge}
-                        variant={
-                          selectedBadges[category.name]?.includes(badge)
-                            ? "destructive"
-                            : "outline"
+                ))}
+              </CardContent>
+              <CardFooter className="flex justify-end">
+                <AlertDialog open={isAlertDialogOpen}>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        We've got your feedback, Thank You! 🙌🏼
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        {
+                          "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"
                         }
-                        className={
-                          selectedBadges[category.name]?.includes(badge)
-                            ? "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
-                            : "cursor-pointer transition-colors"
-                        }
-                        onClick={() => toggleBadge(category.name, badge)}
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel
+                        onClick={handleSaveReviewWithoutGenerate}
                       >
-                        {badge}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    disabled={Object.keys(selectedBadges).every(
-                      (key) => selectedBadges[key].length === 0,
-                    )}
-                    onClick={stopTimer}
-                  >
-                    <Send />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      We've got your feedback, Thank You! 🙌🏼
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      {
-                        "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"
-                      }
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      onClick={handleSaveReviewWithoutGenerate}
-                    >
-                      No Thanks
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={handleGenerateReview}>
-                      Let's do it
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </CardFooter>
-          </>
-        )}
-      </Card>
+                        No Thanks
+                      </AlertDialogCancel>
+                      <AlertDialogAction onClick={handleGenerateReview}>
+                        Let's do it
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <Button
+                  variant="ghost"
+                  disabled={Object.keys(selectedBadges).every(
+                    (key) => selectedBadges[key].length === 0,
+                  )}
+                  onClick={stopTimer}
+                >
+                  <Send />
+                </Button>
+              </CardFooter>
+            </>
+          )}
+        </Card>
+      )}
     </div>
   );
 }

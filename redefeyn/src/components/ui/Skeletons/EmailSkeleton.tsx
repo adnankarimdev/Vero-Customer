@@ -38,7 +38,6 @@ export default function EmailSkeleton() {
       </div>
 
       <p className="text-center text-sm text-muted-foreground">
-        Sending email... Please wait.
       </p>
     </div>
   );

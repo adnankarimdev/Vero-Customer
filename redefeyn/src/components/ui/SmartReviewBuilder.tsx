@@ -139,6 +139,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [isReviewTemplateLoading, setIsReviewTemplateLoading] = useState(false);
   const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
   const [sendingEmail, setIsSendingEmail] = useState(false);
+  const [useBubblePlatform, setUseBubblePlatform] = useState(false);
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -166,6 +167,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
         setKeywords(response.data.keywords);
+        setUseBubblePlatform(response.data.useBubblePlatform)
         const reviewPlace = response.data.places.find(
           (place: Place) => place.place_id === id,
         );
@@ -347,6 +349,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform: useBubblePlatform
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -360,30 +363,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         // setIsLoading(false);
       });
   };
-  // const handleSophisticateReview = () => {
-  //   const context =
-  //     "User Rating:" +
-  //     rating.toString() +
-  //     " " +
-  //     "Questions answering: " +
-  //     questions[rating - 1].questions.join("\n") +
-  //     "\n";
-  //   const allReviews = context + "User Review body:\n" + reviews.join("\n");
-  //   axios
-  //     .post("http://localhost:8021/backend/create-review/", {
-  //       allReviewsToSend: allReviews,
-  //     })
-  //     .then((response) => {
-  //       setSophisticatedReview(response.data.content);
-  //       setUserReviewSophisticatedScore(
-  //         (Math.floor(Math.random() * (100 - 90 + 1)) + 90).toString(),
-  //       );
-  //       setIsDialogOpen(true);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
 
   const sendEmail = async () => {
     setIsSendingEmail(true);
@@ -399,6 +378,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       emailSentToCompany: true,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform: useBubblePlatform
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -645,15 +625,20 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && rating > worryRating && (
+      {!showRatingsPage && (useBubblePlatform || (rating > worryRating)) && (
         <FiveStarReviewBuilder
           buisnessName={title}
           rating={rating}
           placeId={id}
           keywords={keywords}
+          worryBody={worryBody}
+          worryRating={worryRating}
+          worryTitle={worryTitle}
+          bubbleRatingPlatform={useBubblePlatform}
+          showEmailWorryDialog={worryDialog}
         />
       )}
-      {!showRatingsPage && rating <= worryRating && (
+      {!showRatingsPage && (!useBubblePlatform && (rating <= worryRating))  && (
         <div className="max-w-4xl mx-auto p-4 space-y-4">
           <p className="text-3xl font-bold">{title || "Untitled"}</p>
           <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -740,7 +725,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 <Button
                   variant="ghost"
                   onClick={handleNext}
-                  disabled={isReviewTemplateLoading}
+                  disabled={isReviewTemplateLoading || reviews[currentStep].trim() == ''}
                 >
                   <Send />
                 </Button>
