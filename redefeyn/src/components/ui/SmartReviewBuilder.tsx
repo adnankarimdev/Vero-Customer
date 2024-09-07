@@ -167,7 +167,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
         setKeywords(response.data.keywords);
-        setUseBubblePlatform(response.data.useBubblePlatform)
+        setUseBubblePlatform(response.data.useBubblePlatform);
         const reviewPlace = response.data.places.find(
           (place: Place) => place.place_id === id,
         );
@@ -349,7 +349,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform: useBubblePlatform
+      postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -378,7 +378,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       emailSentToCompany: true,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform: useBubblePlatform
+      postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -625,7 +625,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && (useBubblePlatform || (rating > worryRating)) && (
+      {!showRatingsPage && (useBubblePlatform || rating > worryRating) && (
         <FiveStarReviewBuilder
           buisnessName={title}
           rating={rating}
@@ -638,7 +638,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           showEmailWorryDialog={worryDialog}
         />
       )}
-      {!showRatingsPage && (!useBubblePlatform && (rating <= worryRating))  && (
+      {!showRatingsPage && !useBubblePlatform && rating <= worryRating && (
         <div className="max-w-4xl mx-auto p-4 space-y-4">
           <p className="text-3xl font-bold">{title || "Untitled"}</p>
           <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -725,7 +725,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 <Button
                   variant="ghost"
                   onClick={handleNext}
-                  disabled={isReviewTemplateLoading || reviews[currentStep].trim() == ''}
+                  disabled={
+                    isReviewTemplateLoading || reviews[currentStep].trim() == ""
+                  }
                 >
                   <Send />
                 </Button>

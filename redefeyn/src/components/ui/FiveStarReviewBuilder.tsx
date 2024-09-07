@@ -101,7 +101,7 @@ export default function FiveStarReviewBuilder({
   worryTitle,
   bubbleRatingPlatform,
   showEmailWorryDialog,
-  worryRating
+  worryRating,
 }: FiveStarReviewBuilderProps) {
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -205,7 +205,8 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform:rating > worryRating ? true : bubbleRatingPlatform
+      postedWithBubbleRatingPlatform:
+        rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -239,7 +240,8 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform:rating > worryRating ? true : bubbleRatingPlatform
+      postedWithBubbleRatingPlatform:
+        rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -252,17 +254,17 @@ export default function FiveStarReviewBuilder({
         console.log(error);
         // setIsLoading(false);
       });
-      toast({
-        title: "Thank you for your feedback!",
-      });
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+    toast({
+      title: "Thank you for your feedback!",
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
   };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
-    console.log("rating", rating)
-    console.log("worryrating", worryRating)
+    console.log("rating", rating);
+    console.log("worryrating", worryRating);
     setIsLoading(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
     const dataToSave: CustomerReviewInfo = {
@@ -276,7 +278,8 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform: rating > worryRating  ? true : bubbleRatingPlatform
+      postedWithBubbleRatingPlatform:
+        rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -362,7 +365,8 @@ export default function FiveStarReviewBuilder({
       emailSentToCompany: true,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
-      postedWithBubbleRatingPlatform: rating > worryRating ? true : bubbleRatingPlatform
+      postedWithBubbleRatingPlatform:
+        rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
       .post("http://localhost:8021/backend/save-customer-review/", {
@@ -382,7 +386,8 @@ export default function FiveStarReviewBuilder({
       "Questions answering: \n" +
       "No questions given" +
       "\n";
-    const userReviews = context + "User Review Selected Badges:\n" + allBadges.join("\n");
+    const userReviews =
+      context + "User Review Selected Badges:\n" + allBadges.join("\n");
     axios
       .post("http://localhost:8021/backend/send-email/", {
         userEmailToSend: userEmail,
@@ -425,13 +430,12 @@ export default function FiveStarReviewBuilder({
 
     if (rating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
-    } else if(rating > worryRating){
+    } else if (rating > worryRating) {
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
-    else
-    {
-      handleWorryRatingDialog()
+    else {
+      handleWorryRatingDialog();
     }
   };
 
@@ -509,13 +513,13 @@ export default function FiveStarReviewBuilder({
                 Personalized Feedback
               </Label>
               <Button
-              type="submit"
-              onClick={handleGenerateReview}
-              className="ml-auto"
-              variant="ghost"
-            >
-              <RiAiGenerate />
-            </Button>
+                type="submit"
+                onClick={handleGenerateReview}
+                className="ml-auto"
+                variant="ghost"
+              >
+                <RiAiGenerate />
+              </Button>
               <Textarea
                 defaultValue={generatedReview}
                 className="w-full min-h-[400px]"
@@ -530,7 +534,7 @@ export default function FiveStarReviewBuilder({
               className="ml-auto"
               variant="ghost"
             >
-              <Mail/>
+              <Mail />
             </Button>
           </DialogFooter>
         </DialogContent>

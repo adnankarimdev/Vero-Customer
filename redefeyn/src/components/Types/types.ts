@@ -24,5 +24,5 @@ export interface CustomerReviewInfo {
   emailSentToCompany?: boolean; // Defaults to false
   timeTakenToWriteReview?: number;
   reviewDate?: string;
-  postedWithBubbleRatingPlatform?: boolean
+  postedWithBubbleRatingPlatform?: boolean;
 }

@@ -37,8 +37,7 @@ export default function EmailSkeleton() {
         </div>
       </div>
 
-      <p className="text-center text-sm text-muted-foreground">
-      </p>
+      <p className="text-center text-sm text-muted-foreground"></p>
     </div>
   );
 }
