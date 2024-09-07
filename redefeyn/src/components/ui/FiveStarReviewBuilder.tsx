@@ -300,10 +300,10 @@ export default function FiveStarReviewBuilder({
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
         });
-        // setTimeout(() => {
-        //   window.open(reviewUrl, "_blank", "noopener,noreferrer");
-        //   window.location.reload();
-        // }, 2000);
+        setTimeout(() => {
+          window.open(reviewUrl, "_blank", "noopener,noreferrer");
+          window.location.reload();
+        }, 2000);
       })
       .catch((err) => {
         console.error("Failed to copy: ", err);
