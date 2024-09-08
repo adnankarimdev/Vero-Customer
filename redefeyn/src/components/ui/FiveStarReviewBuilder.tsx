@@ -8,6 +8,8 @@ import { RiAiGenerate } from "react-icons/ri";
 import { Send, StarIcon, Star, Mail } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "./Logo";
+import copy from 'copy-to-clipboard';
+import clipboardCopy from 'clipboard-copy';
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -171,7 +173,7 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(keywords);
 
     axios
-      .post("http://localhost:8021/backend/generate-five-star-review/", {
+      .post("https://vero.ngrok.dev/backend/generate-five-star-review/", {
         context: contextToSend,
       })
       .then((response) => {
@@ -210,7 +212,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -245,7 +247,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -265,6 +267,10 @@ export default function FiveStarReviewBuilder({
   };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
+    // copy immediately. If not, works janky on mobile browsers.
+    // Also, don't open a new tab. Direct them straight there. 
+    // Saves us having to reload the page again. so all good!
+    copy(generatedReview);
     console.log("rating", rating);
     console.log("worryrating", worryRating);
     setIsLoading(true);
@@ -283,8 +289,9 @@ export default function FiveStarReviewBuilder({
       postedWithBubbleRatingPlatform:
         rating > worryRating ? true : bubbleRatingPlatform,
     };
+
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -294,28 +301,16 @@ export default function FiveStarReviewBuilder({
         console.log(error);
         setIsLoading(false);
       });
-    navigator.clipboard
-      .writeText(generatedReview)
-      .then(() => {
-        toast({
-          title: "Your text is ready to paste!",
-          description:
-            "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-          duration: 1000,
-        });
-        setTimeout(() => {
-          window.open(reviewUrl, "_blank", "noopener,noreferrer");
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-        toast({
-          title: "Review failed to Process",
-          description: "It's not you, it's us. Please try again.",
-          duration: 1000,
-        });
+      
+      toast({
+        title: "Your text is ready to paste!",
+        description:
+          "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
+        duration: 1000,
       });
+      setTimeout(() => {
+        window.location.href = reviewUrl
+      }, 2000);
   };
   useEffect(() => {
     startTimer();
@@ -327,7 +322,7 @@ export default function FiveStarReviewBuilder({
       const contextToSend =
         "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
       axios
-        .post("http://localhost:8021/backend/generate-categories/", {
+        .post("https://vero.ngrok.dev/backend/generate-categories/", {
           context: contextToSend,
         })
         .then((response) => {
@@ -373,7 +368,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating ? true : bubbleRatingPlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -393,7 +388,7 @@ export default function FiveStarReviewBuilder({
     const userReviews =
       context + "User Review Selected Badges:\n" + allBadges.join("\n");
     axios
-      .post("http://localhost:8021/backend/send-email/", {
+      .post("https://vero.ngrok.dev/backend/send-email/", {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,

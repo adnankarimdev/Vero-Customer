@@ -54,7 +54,7 @@ export default function Dashboard() {
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
-          `http://localhost:8021/backend/get-review-questions/${placeId}/`,
+          `https://vero.ngrok.dev/backend/get-review-questions/${placeId}/`,
         );
         const reviewPlace = response.data.places.find(
           (place: Place) => place.place_id === id,

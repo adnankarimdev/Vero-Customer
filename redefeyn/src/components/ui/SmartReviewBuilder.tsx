@@ -143,6 +143,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [useBubblePlatform, setUseBubblePlatform] = useState(false);
   const [alertDialogDone, setAlertDialogDone] = useState(false);
   const [handleWithEmailSkeleton, showHandleWithoutEmailSkeleton] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -158,10 +159,11 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
   useEffect(() => {
+    setIsLoading(true)
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
-          `http://localhost:8021/backend/get-review-questions/${placeId}/`,
+          `https://vero.ngrok.dev/backend/get-review-questions/${placeId}/`,
         );
         console.log("my questions", response.data);
         setQuestions(response.data.questions);
@@ -175,8 +177,10 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           (place: Place) => place.place_id === id,
         );
         setTitle(reviewPlace.name);
+        setIsLoading(false)
       } catch (err) {
         console.error(err);
+        setIsLoading(false)
       }
     };
 
@@ -238,7 +242,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       questions[rating - 1].questions.join("\n") +
       "\n";
     axios
-      .post("http://localhost:8021/backend/generate-review-template/", {
+      .post("https://vero.ngrok.dev/backend/generate-review-template/", {
         context: contextToSend,
       })
       .then((response) => {
@@ -270,7 +274,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     //     "\n";
     //   const userReviews = context + "User Review Body:\n" + reviews.join("\n");
     //   axios
-    //     .post("http://localhost:8021/backend/create-review-score/", {
+    //     .post("https://vero.ngrok.dev/backend/create-review-score/", {
     //       userReview: userReviews,
     //     })
     //     .then((response) => {
@@ -360,7 +364,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -391,7 +395,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -422,7 +426,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post("http://localhost:8021/backend/save-customer-review/", {
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
@@ -441,7 +445,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       "\n";
     const userReviews = context + "User Review Body:\n" + reviews.join("\n");
     axios
-      .post("http://localhost:8021/backend/send-email/", {
+      .post("https://vero.ngrok.dev/backend/send-email/", {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,
@@ -626,7 +630,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
 
   return (
     <div>
-      {!alertDialogDone && showRatingsPage && (
+      {isLoading && <RatingCardSkeleton/>}
+      {!isLoading && !alertDialogDone && showRatingsPage && (
         <div className="flex items-center justify-center min-h-screen p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
