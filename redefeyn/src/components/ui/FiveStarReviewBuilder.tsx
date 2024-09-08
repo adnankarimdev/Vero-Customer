@@ -185,7 +185,7 @@ export default function FiveStarReviewBuilder({
         toast({
           title: "Failed",
           description: "Failed to generate review. Could you try again? 🥺",
-          duration:1000
+          duration: 1000,
         });
         setIsLoading(false);
       });
@@ -257,7 +257,7 @@ export default function FiveStarReviewBuilder({
       });
     toast({
       title: "Thank you for your feedback!",
-      duration:1000
+      duration: 1000,
     });
     setTimeout(() => {
       window.location.reload();
@@ -301,7 +301,7 @@ export default function FiveStarReviewBuilder({
           title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-            duration:1000
+          duration: 1000,
         });
         setTimeout(() => {
           window.open(reviewUrl, "_blank", "noopener,noreferrer");
@@ -313,7 +313,7 @@ export default function FiveStarReviewBuilder({
         toast({
           title: "Review failed to Process",
           description: "It's not you, it's us. Please try again.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -408,7 +408,7 @@ export default function FiveStarReviewBuilder({
           ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
-          duration:1000
+          duration: 1000,
         });
         setTimeout(() => {
           window.location.reload();
@@ -419,7 +419,7 @@ export default function FiveStarReviewBuilder({
         toast({
           title: "Error",
           description: "Failed to send email.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -445,10 +445,15 @@ export default function FiveStarReviewBuilder({
     }
   };
 
+  const handleGoogleReviewDialogChange = () =>
+  {
+    handleSaveReviewWithoutGenerate()
+    setIsDialogOpen(false)
+  }
   if (isDialogOpen) {
     if (rating > worryRating) {
       return (
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={handleGoogleReviewDialogChange}>
           <DialogContent className="w-full">
             <DialogHeader>
               <DialogTitle className="text-center">

@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { CircleArrowRight, Send, Star } from "lucide-react";
+import { CircleArrowRight, Send, Star, Mail } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Place, CustomerReviewInfo } from "../Types/types";
@@ -45,6 +45,7 @@ import Logo from "./Logo";
 import FiveStarReviewBuilder from "./FiveStarReviewBuilder";
 import AnimatedTextareaSkeletonLoader from "./Skeletons/AnimatedSkeletonLoader";
 import EmailSkeleton from "./Skeletons/EmailSkeleton";
+import RatingCardSkeleton from "./Skeletons/RatingCardSkeleton";
 
 const categories = [
   {
@@ -140,6 +141,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [timeTakenToWriteReview, setTimeTakenToWriteReview] = useState(0);
   const [sendingEmail, setIsSendingEmail] = useState(false);
   const [useBubblePlatform, setUseBubblePlatform] = useState(false);
+  const [alertDialogDone, setAlertDialogDone] = useState(false);
+  const [handleWithEmailSkeleton, showHandleWithoutEmailSkeleton] = useState(false)
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -247,7 +250,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         toast({
           title: "Failed",
           description: "Failed to generate template.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -291,7 +294,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-            duration:1000
+          duration: 1000,
         });
         setTimeout(() => {
           window.open(
@@ -307,7 +310,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         toast({
           title: "Review failed to Process",
           description: "It's not you, it's us. Please try again.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -320,7 +323,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           title: "Your text is ready to paste!",
           description:
             "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-            duration:1000
+          duration: 1000,
         });
         setTimeout(() => {
           window.open(
@@ -336,7 +339,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         toast({
           title: "Review failed to Process",
           description: "It's not you, it's us. Please try again.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -361,7 +364,40 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         data: dataToSave,
       })
       .then((response) => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      })
+      .catch((error) => {
+        console.log(error);
         // setIsLoading(false);
+      });
+  };
+
+  const handleSendReviewToBackendWithoutEmailAlert = async () => {
+    //save data here
+    setWorryDialog(false);
+    const dataToSave: CustomerReviewInfo = {
+      location: title,
+      rating: rating,
+      placeIdFromReview: id,
+      badges: [],
+      postedToGoogleReview: false,
+      generatedReviewBody: "",
+      finalReviewBody: reviews.join("\n"),
+      emailSentToCompany: false,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform: useBubblePlatform,
+    };
+    await axios
+      .post("http://localhost:8021/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
@@ -420,7 +456,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
-          duration:1000
+          duration: 1000,
         });
         setTimeout(() => {
           window.location.reload();
@@ -431,7 +467,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         toast({
           title: "Error",
           description: "Failed to send email.",
-          duration:1000
+          duration: 1000,
         });
       });
   };
@@ -476,60 +512,23 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   }
 
   const handleWorryRatingDialog = () => {
+    showHandleWithoutEmailSkeleton(true)
+    handleSendReviewToBackendWithoutEmail()
     setIsWorryDialogOpen(false);
   };
 
-  if (isReviewComplete) {
+  const handleAlertDialogLoader = () => {
+    setAlertDialogDone(true);
+  };
+
+  if (isReviewComplete && worryDialog) {
     return (
       <div>
+        {handleWithEmailSkeleton && <RatingCardSkeleton/>}
         {sendingEmail && <EmailSkeleton />}
         {!sendingEmail && (
           <>
-            <Card className="w-relative max-w-3xl mx-auto">
-              <CardHeader className="flex justify-center items-center relative">
-                <CardTitle>Your Review</CardTitle>
-              </CardHeader>
-              <CardContent className="flex justify-center items-center relative">
-                {categories.map((category, index) => (
-                  <div key={index} className="space-y-2">
-                    <p>{reviews[index]}</p>
-                  </div>
-                ))}
-                <div className="flex justify-center"></div>
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                {
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button variant="ghost">
-                        <Send onClick={handleSendReviewToBackendWithoutEmail} />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Thank you!</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {
-                            "Feedback receieved. We will integrate the feedback you suggested. We hope you decide to come back one day and your rating goes from a "
-                          }{" "}
-                          {rating} {"to a 5."}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleReload}>
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                }
-                {/* <Button onClick={handleSubmit} variant="ghost">
-              <FcGoogle size={24} />
-            </Button> */}
-              </CardFooter>
-            </Card>
-            {rating <= worryRating && worryDialog && (
+            {rating <= worryRating && (
               <Dialog
                 open={isWorryDialogOpen}
                 onOpenChange={handleWorryRatingDialog}
@@ -580,7 +579,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                       className="ml-auto"
                       variant="outline"
                     >
-                      Send Email
+                      <Mail />
                     </Button>
                   </DialogFooter>
                 </DialogContent>
@@ -590,11 +589,44 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         )}
       </div>
     );
+  } else if (isReviewComplete && !worryDialog) {
+    return (
+      <>
+        {alertDialogDone && <RatingCardSkeleton />}
+        {!alertDialogDone && (
+          <AlertDialog
+            open={!worryDialog}
+            onOpenChange={handleAlertDialogLoader}
+          >
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-center">
+                  Thank you!
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-center">
+                  {
+                    "Feedback receieved. We will integrate the feedback you suggested. We hope you decide to come back one day and your rating goes from a "
+                  }{" "}
+                  {rating} {"to a 5!"}
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogAction
+                  onClick={handleSendReviewToBackendWithoutEmailAlert}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )}
+      </>
+    );
   }
 
   return (
     <div>
-      {showRatingsPage && (
+      {!alertDialogDone && showRatingsPage && (
         <div className="flex items-center justify-center min-h-screen p-4">
           <Card className="w-full max-w-md">
             <CardHeader>
