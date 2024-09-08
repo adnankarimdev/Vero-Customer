@@ -581,7 +581,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                       type="submit"
                       onClick={sendEmail}
                       className="ml-auto"
-                      variant="outline"
+                      variant="ghost"
                     >
                       <Mail />
                     </Button>
@@ -716,8 +716,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 onChange={(e) => handleReviewChange(e.target.value)}
                 className={
                   placeholder == ""
-                    ? "w-full border-none outline-none"
-                    : "w-full border-none outline-none text-center"
+                    ? "w-full border-none outline-none text-[16px]"
+                    : "w-full border-none outline-none text-center text-[16px]"
                 }
                 style={{ resize: "none" }}
                 rows={3}
