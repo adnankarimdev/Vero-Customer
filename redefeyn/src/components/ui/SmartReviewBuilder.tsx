@@ -11,7 +11,7 @@ import { CircleArrowRight, Send, Star, Mail, Mic, MicOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Place, CustomerReviewInfo } from "../Types/types";
-import SpeechToElement from 'speech-to-element';
+import SpeechToElement from "speech-to-element";
 import {
   Card,
   CardContent,
@@ -65,7 +65,6 @@ interface SmartReviewProps {
 }
 
 const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
-  
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -148,7 +147,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [handleWithEmailSkeleton, showHandleWithoutEmailSkeleton] =
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [startRecording, setStartRecording] = useState(false)
+  const [startRecording, setStartRecording] = useState(false);
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -481,13 +480,12 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       });
   };
 
-  const handleSpeechRecord = () =>
-  {
-    const targetElement = document.getElementById('reviewArea');
-  
+  const handleSpeechRecord = () => {
+    const targetElement = document.getElementById("reviewArea");
+
     if (!startRecording && targetElement) {
       // Start speech recognition
-      SpeechToElement.toggle('webspeech', {
+      SpeechToElement.toggle("webspeech", {
         element: targetElement,
         displayInterimResults: true,
         onResult: (text, isFinal) => {
@@ -497,18 +495,15 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         },
         onStop: () => {
           // Handle any actions after recording stops, if needed
-        }
+        },
       });
       setStartRecording(true);
     } else {
       // Stop speech recognition
-      SpeechToElement.stop();  // Assuming 'stop' is the correct method
+      SpeechToElement.stop(); // Assuming 'stop' is the correct method
       setStartRecording(false);
-
-
-      
     }
-  }
+  };
   const closeWorryDialog = () => {
     setIsWorryDialogOpen(false);
   };
@@ -665,51 +660,51 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     <div>
       {startRecording && (
         <>
-<div className="flex flex-col items-center justify-center h-screen bg-background">
+          <div className="flex flex-col items-center justify-center h-screen bg-background">
+            <Card className="w-[350px] mx-auto mb-10">
+              <CardContent className="pt-6">
+                <p className="text-foreground">{reviews[currentStep]}</p>
+              </CardContent>
+            </Card>
+            <div className="flex space-x-2 mb-4">
+              <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-1"></div>
+              <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-2"></div>
+              <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-3"></div>
+            </div>
 
-<Card className="w-[350px] mx-auto mb-10">
-      <CardContent className="pt-6">
-        <p className="text-foreground">
-          {reviews[currentStep]}
-        </p>
-      </CardContent>
-    </Card>
-  <div className="flex space-x-2 mb-4">
-    <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-1"></div>
-    <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-2"></div>
-    <div className="w-3 h-3 bg-foreground rounded-full animate-bounce-3"></div>
-  </div>
+            <Button variant="ghost" onClick={handleSpeechRecord}>
+              <MicOff />
+            </Button>
 
-  <Button variant="ghost" onClick={handleSpeechRecord}>
-    <MicOff />
-  </Button>
-
-  <style jsx>{`
-    @keyframes bounce {
-      0%, 100% { 
-        transform: translateY(0) scale(1);
-        opacity: 1;
-      }
-      50% { 
-        transform: translateY(-10px) scale(0.9);
-        opacity: 0.7;
-      }
-    }
-    .animate-bounce-1 {
-      animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0s;
-    }
-    .animate-bounce-2 {
-      animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.2s;
-    }
-    .animate-bounce-3 {
-      animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s;
-    }
-  `}</style>
-</div>
-        {/* <RecordingLoader/> */}
-
-      </>
-        )}
+            <style jsx>{`
+              @keyframes bounce {
+                0%,
+                100% {
+                  transform: translateY(0) scale(1);
+                  opacity: 1;
+                }
+                50% {
+                  transform: translateY(-10px) scale(0.9);
+                  opacity: 0.7;
+                }
+              }
+              .animate-bounce-1 {
+                animation: bounce 1.5s infinite
+                  cubic-bezier(0.45, 0.05, 0.55, 0.95) 0s;
+              }
+              .animate-bounce-2 {
+                animation: bounce 1.5s infinite
+                  cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.2s;
+              }
+              .animate-bounce-3 {
+                animation: bounce 1.5s infinite
+                  cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s;
+              }
+            `}</style>
+          </div>
+          {/* <RecordingLoader/> */}
+        </>
+      )}
       {isLoading && !startRecording && <RatingCardSkeleton />}
       {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
         <div className="flex items-center justify-center min-h-screen p-4">
@@ -762,75 +757,82 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           showEmailWorryDialog={worryDialog}
         />
       )}
-      {!showRatingsPage && !useBubblePlatform && rating <= worryRating && !startRecording && (
-        <div className="max-w-4xl mx-auto p-4 space-y-4">
-          <p className="text-3xl font-bold">{title || "Untitled"}</p>
-          <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
-            <ul className="space-y-4">
-              {questions[rating - 1].questions.map((item, index) => (
-                <li
-                  key={index}
-                  className="flex items-start space-x-3 transition-opacity duration-300 ease-in-out"
-                  style={{
-                    opacity:
-                      hoveredIndex === null || hoveredIndex === index ? 1 : 0.5,
-                  }}
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
-                >
-                  <span className="flex-shrink-0 w-1.5 h-1.5 mt-2 rounded-full bg-gray-400" />
-                  <span className="text-gray-700">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+      {!showRatingsPage &&
+        !useBubblePlatform &&
+        rating <= worryRating &&
+        !startRecording && (
+          <div className="max-w-4xl mx-auto p-4 space-y-4">
+            <p className="text-3xl font-bold">{title || "Untitled"}</p>
+            <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
+              <ul className="space-y-4">
+                {questions[rating - 1].questions.map((item, index) => (
+                  <li
+                    key={index}
+                    className="flex items-start space-x-3 transition-opacity duration-300 ease-in-out"
+                    style={{
+                      opacity:
+                        hoveredIndex === null || hoveredIndex === index
+                          ? 1
+                          : 0.5,
+                    }}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(null)}
+                  >
+                    <span className="flex-shrink-0 w-1.5 h-1.5 mt-2 rounded-full bg-gray-400" />
+                    <span className="text-gray-700">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-          <div className="flex-grow">
-            {isReviewTemplateLoading ? (
-              <AnimatedTextareaSkeletonLoader />
-            ) : (
-              <Textarea
-                id="reviewArea"
-                value={reviews[currentStep]}
-                onFocus={() => setPlaceholder("")}
-                onBlur={() => setPlaceholder(reviews[currentStep] ? "" : "✍🏻")}
-                onChange={(e) => handleReviewChange(e.target.value)}
-                className={
-                  placeholder == ""
-                    ? "w-full border-none outline-none text-[16px]"
-                    : "w-full border-none outline-none text-center text-[16px]"
-                }
-                style={{ resize: "none" }}
-                rows={3}
-                placeholder={placeholder}
-              />
-            )}
-          </div>
+            <div className="flex-grow">
+              {isReviewTemplateLoading ? (
+                <AnimatedTextareaSkeletonLoader />
+              ) : (
+                <Textarea
+                  id="reviewArea"
+                  value={reviews[currentStep]}
+                  onFocus={() => setPlaceholder("")}
+                  onBlur={() =>
+                    setPlaceholder(reviews[currentStep] ? "" : "✍🏻")
+                  }
+                  onChange={(e) => handleReviewChange(e.target.value)}
+                  className={
+                    placeholder == ""
+                      ? "w-full border-none outline-none text-[16px]"
+                      : "w-full border-none outline-none text-center text-[16px]"
+                  }
+                  style={{ resize: "none" }}
+                  rows={3}
+                  placeholder={placeholder}
+                />
+              )}
+            </div>
 
-          <div className="flex justify-between items-center w-full">
-            {currentStep === categories.length - 1 ? (
-              <div className="flex w-full justify-between items-center">
-  <Button
-    variant="ghost"
-    onClick={handleSpeechRecord}
-  >
-    <Mic />
-  </Button>
-  
-  <Button
-    variant="ghost"
-    onClick={handleNext}
-    disabled={isReviewTemplateLoading || reviews[currentStep].trim() === ""}
-  >
-    <Send />
-  </Button>
-</div>
-            ) : (
-              <CircleArrowRight />
-            )}
+            <div className="flex justify-between items-center w-full">
+              {currentStep === categories.length - 1 ? (
+                <div className="flex w-full justify-between items-center">
+                  <Button variant="ghost" onClick={handleSpeechRecord}>
+                    <Mic />
+                  </Button>
+
+                  <Button
+                    variant="ghost"
+                    onClick={handleNext}
+                    disabled={
+                      isReviewTemplateLoading ||
+                      reviews[currentStep].trim() === ""
+                    }
+                  >
+                    <Send />
+                  </Button>
+                </div>
+              ) : (
+                <CircleArrowRight />
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };

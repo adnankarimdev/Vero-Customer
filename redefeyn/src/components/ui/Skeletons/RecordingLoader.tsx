@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 
 export default function RecordingLoader() {
   return (
@@ -10,25 +10,29 @@ export default function RecordingLoader() {
       </div>
       <style jsx>{`
         @keyframes bounce {
-          0%, 100% { 
+          0%,
+          100% {
             transform: translateY(0) scale(1);
             opacity: 1;
           }
-          50% { 
+          50% {
             transform: translateY(-10px) scale(0.9);
             opacity: 0.7;
           }
         }
         .animate-bounce-1 {
-          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0s;
+          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95)
+            0s;
         }
         .animate-bounce-2 {
-          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.2s;
+          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95)
+            0.2s;
         }
         .animate-bounce-3 {
-          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95) 0.4s;
+          animation: bounce 1.5s infinite cubic-bezier(0.45, 0.05, 0.55, 0.95)
+            0.4s;
         }
       `}</style>
     </div>
-  )
+  );
 }
