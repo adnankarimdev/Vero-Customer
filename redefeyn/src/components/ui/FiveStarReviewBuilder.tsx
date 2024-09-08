@@ -528,7 +528,8 @@ export default function FiveStarReviewBuilder({
               </Button>
               <Textarea
                 defaultValue={generatedReview}
-                className="w-full min-h-[400px]"
+                className="w-full"
+                rows={5}
                 onChange={(e) => setGeneratedReview(e.target.value)}
               />
             </div>
