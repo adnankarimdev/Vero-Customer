@@ -8,8 +8,8 @@ import { RiAiGenerate } from "react-icons/ri";
 import { Send, StarIcon, Star, Mail } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import Logo from "./Logo";
-import copy from 'copy-to-clipboard';
-import clipboardCopy from 'clipboard-copy';
+import copy from "copy-to-clipboard";
+import clipboardCopy from "clipboard-copy";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -268,7 +268,7 @@ export default function FiveStarReviewBuilder({
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
     // copy immediately. If not, works janky on mobile browsers.
-    // Also, don't open a new tab. Direct them straight there. 
+    // Also, don't open a new tab. Direct them straight there.
     // Saves us having to reload the page again. so all good!
     copy(generatedReview);
     console.log("rating", rating);
@@ -301,16 +301,16 @@ export default function FiveStarReviewBuilder({
         console.log(error);
         setIsLoading(false);
       });
-      
-      toast({
-        title: "Your text is ready to paste!",
-        description:
-          "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-        duration: 1000,
-      });
-      setTimeout(() => {
-        window.location.href = reviewUrl
-      }, 2000);
+
+    toast({
+      title: "Your text is ready to paste!",
+      description:
+        "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
+      duration: 1000,
+    });
+    setTimeout(() => {
+      window.location.href = reviewUrl;
+    }, 2000);
   };
   useEffect(() => {
     startTimer();
@@ -440,15 +440,17 @@ export default function FiveStarReviewBuilder({
     }
   };
 
-  const handleGoogleReviewDialogChange = () =>
-  {
-    handleSaveReviewWithoutGenerate()
-    setIsDialogOpen(false)
-  }
+  const handleGoogleReviewDialogChange = () => {
+    handleSaveReviewWithoutGenerate();
+    setIsDialogOpen(false);
+  };
   if (isDialogOpen) {
     if (rating > worryRating) {
       return (
-        <Dialog open={isDialogOpen} onOpenChange={handleGoogleReviewDialogChange}>
+        <Dialog
+          open={isDialogOpen}
+          onOpenChange={handleGoogleReviewDialogChange}
+        >
           <DialogContent className="w-full">
             <DialogHeader>
               <DialogTitle className="text-center">

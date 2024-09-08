@@ -142,8 +142,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   const [sendingEmail, setIsSendingEmail] = useState(false);
   const [useBubblePlatform, setUseBubblePlatform] = useState(false);
   const [alertDialogDone, setAlertDialogDone] = useState(false);
-  const [handleWithEmailSkeleton, showHandleWithoutEmailSkeleton] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
+  const [handleWithEmailSkeleton, showHandleWithoutEmailSkeleton] =
+    useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -159,7 +160,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
   useEffect(() => {
-    setIsLoading(true)
+    setIsLoading(true);
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
@@ -177,10 +178,10 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           (place: Place) => place.place_id === id,
         );
         setTitle(reviewPlace.name);
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
-        setIsLoading(false)
+        setIsLoading(false);
       }
     };
 
@@ -516,8 +517,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   }
 
   const handleWorryRatingDialog = () => {
-    showHandleWithoutEmailSkeleton(true)
-    handleSendReviewToBackendWithoutEmail()
+    showHandleWithoutEmailSkeleton(true);
+    handleSendReviewToBackendWithoutEmail();
     setIsWorryDialogOpen(false);
   };
 
@@ -528,7 +529,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
   if (isReviewComplete && worryDialog) {
     return (
       <div>
-        {handleWithEmailSkeleton && <RatingCardSkeleton/>}
+        {handleWithEmailSkeleton && <RatingCardSkeleton />}
         {sendingEmail && <EmailSkeleton />}
         {!sendingEmail && (
           <>
@@ -630,7 +631,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
 
   return (
     <div>
-      {isLoading && <RatingCardSkeleton/>}
+      {isLoading && <RatingCardSkeleton />}
       {!isLoading && !alertDialogDone && showRatingsPage && (
         <div className="flex items-center justify-center min-h-screen p-4">
           <Card className="w-full max-w-md">
