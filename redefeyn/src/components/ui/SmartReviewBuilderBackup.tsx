@@ -811,6 +811,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 />
               )}
             </div>
+
             <div className="flex justify-between items-center w-full">
               {currentStep === categories.length - 1 ? (
                 <div className="flex w-full justify-between items-center">
