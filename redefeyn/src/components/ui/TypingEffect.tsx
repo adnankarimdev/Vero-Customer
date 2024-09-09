@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 
-const TypingEffect = ({ text = "Thank You 🙌🏼", speed = 100, className = "text-4xl font-bold text-gray-800" }) => {
-  const [displayedText, setDisplayedText] = useState('');
+const TypingEffect = ({
+  text = "Thank You 🙌🏼",
+  speed = 100,
+  className = "text-4xl font-bold text-gray-800",
+}) => {
+  const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -15,11 +19,7 @@ const TypingEffect = ({ text = "Thank You 🙌🏼", speed = 100, className = "t
     }
   }, [index, text, speed]);
 
-  return (
-    <div className={className}>
-      {displayedText}
-    </div>
-  );
+  return <div className={className}>{displayedText}</div>;
 };
 
 export default TypingEffect;

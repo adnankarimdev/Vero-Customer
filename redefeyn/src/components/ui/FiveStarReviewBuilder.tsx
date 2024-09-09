@@ -225,7 +225,7 @@ export default function FiveStarReviewBuilder({
         //  setIsLoading(false);
       });
 
-      router.push("/thankyou")
+    router.push("/thankyou");
   };
   const handleWorryRatingDialog = async () => {
     setIsWorryDialogOpen(false);
@@ -261,7 +261,7 @@ export default function FiveStarReviewBuilder({
       title: "Thank you for your feedback!",
       duration: 1000,
     });
-    router.push("/thankyou")
+    router.push("/thankyou");
   };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
@@ -403,7 +403,7 @@ export default function FiveStarReviewBuilder({
           description: "Thank you for giving us a chance to make things right.",
           duration: 1000,
         });
-        router.push("/thankyou")
+        router.push("/thankyou");
       })
       .catch((error) => {
         setIsSendingEmail(false);

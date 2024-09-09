@@ -656,9 +656,9 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       </>
     );
   }
-  const MAX_TWEET_LENGTH = 280
-  const remainingChars = MAX_TWEET_LENGTH - reviews[currentStep].length
-  const isOverLimit = remainingChars < 0
+  const MAX_TWEET_LENGTH = 280;
+  const remainingChars = MAX_TWEET_LENGTH - reviews[currentStep].length;
+  const isOverLimit = remainingChars < 0;
   return (
     <div>
       {startRecording && (
