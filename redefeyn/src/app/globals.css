@@ -108,3 +108,28 @@
 .animation-delay-400 {
   animation-delay: 400ms;
 }
+
+.typing-container {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+}
+
+.typing-text {
+  font-size: 2rem; /* Adjust as needed */
+  font-weight: bold;
+  color: #4A5568; /* Adjust text color as needed */
+  white-space: nowrap;
+  border-right: 3px solid #4A5568; /* Cursor effect */
+  animation: typing 4s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #4A5568; } /* Cursor color */
+}

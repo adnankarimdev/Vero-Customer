@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { CircleArrowRight, Send, Star, Mail, Mic, MicOff } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Place, CustomerReviewInfo } from "../Types/types";
 import SpeechToElement from "speech-to-element";
@@ -66,6 +67,7 @@ interface SmartReviewProps {
 }
 
 const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
+  const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
@@ -269,88 +271,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       setCurrentStep(currentStep + 1);
     }
     setIsReviewComplete(true);
-    // else if (!usedReviewTemplate) {
-    //   const context =
-    //     "User Rating:" +
-    //     rating.toString() +
-    //     " " +
-    //     "Questions answering: " +
-    //     questions[rating - 1].questions.join("\n") +
-    //     "\n";
-    //   const userReviews = context + "User Review Body:\n" + reviews.join("\n");
-    //   axios
-    //     .post("https://vero.ngrok.dev/backend/create-review-score/", {
-    //       userReview: userReviews,
-    //     })
-    //     .then((response) => {
-    //       setUserReviewScore(response.data.content);
-    //       setIsReviewComplete(true);
-    //     })
-    //     .catch((error) => {
-    //       console.error(error);
-    //     });
-    // } else {
-    //   setIsReviewComplete(true);
-    // }
-  };
-
-  const handleSubmit = () => {
-    const allReviews = reviews.join("\n");
-    navigator.clipboard
-      .writeText(allReviews)
-      .then(() => {
-        toast({
-          title: "Your text is ready to paste!",
-          description:
-            "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-          duration: 1000,
-        });
-        setTimeout(() => {
-          window.open(
-            "https://search.google.com/local/writereview?placeid=ChIJzd0u2lRlcVMRoSTjaEEDL_E",
-            "_blank",
-            "noopener,noreferrer",
-          );
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-        toast({
-          title: "Review failed to Process",
-          description: "It's not you, it's us. Please try again.",
-          duration: 1000,
-        });
-      });
-  };
-
-  const handleSubmitSophisticated = () => {
-    navigator.clipboard
-      .writeText(sophisticatedReview)
-      .then(() => {
-        toast({
-          title: "Your text is ready to paste!",
-          description:
-            "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
-          duration: 1000,
-        });
-        setTimeout(() => {
-          window.open(
-            "https://search.google.com/local/writereview?placeid=ChIJzd0u2lRlcVMRoSTjaEEDL_E",
-            "_blank",
-            "noopener,noreferrer",
-          );
-          window.location.reload();
-        }, 2000);
-      })
-      .catch((err) => {
-        console.error("Failed to copy: ", err);
-        toast({
-          title: "Review failed to Process",
-          description: "It's not you, it's us. Please try again.",
-          duration: 1000,
-        });
-      });
   };
 
   const handleSendReviewToBackendWithoutEmail = async () => {
@@ -374,7 +294,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       })
       .then((response) => {
         setTimeout(() => {
-          window.location.reload();
+          router.push("/thankyou")
         }, 2000);
       })
       .catch((error) => {
@@ -405,7 +325,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       })
       .then((response) => {
         setTimeout(() => {
-          window.location.reload();
+          router.push("/thankyou")
         }, 2000);
       })
       .catch((error) => {
@@ -468,7 +388,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           duration: 1000,
         });
         setTimeout(() => {
-          window.location.reload();
+          router.push("/thankyou")
         }, 2000);
       })
       .catch((error) => {
@@ -505,13 +425,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       setStartRecording(false);
     }
   };
-  const closeWorryDialog = () => {
-    setIsWorryDialogOpen(false);
-  };
 
-  const handleReload = () => {
-    window.location.reload();
-  };
   if (isDialogOpen) {
     return (
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -764,6 +678,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         !useBubblePlatform &&
         rating <= worryRating &&
         !startRecording && (
+          <div className="flex items-center justify-center min-h-screen">
           <div className="max-w-4xl mx-auto p-4 space-y-4">
             <p className="text-3xl font-bold">{title || "Untitled"}</p>
             <div className="max mx-auto p-6 bg-white rounded-lg shadow-sm">
@@ -833,6 +748,8 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
                 <CircleArrowRight />
               )}
             </div>
+            </div>
+
           </div>
         )}
     </div>

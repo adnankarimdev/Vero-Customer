@@ -7,6 +7,7 @@ import { CustomerReviewInfo } from "../Types/types";
 import { RiAiGenerate } from "react-icons/ri";
 import { Send, StarIcon, Star, Mail } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
+import { useRouter } from "next/navigation";
 import Logo from "./Logo";
 import copy from "copy-to-clipboard";
 import clipboardCopy from "clipboard-copy";
@@ -105,6 +106,7 @@ export default function FiveStarReviewBuilder({
   showEmailWorryDialog,
   worryRating,
 }: FiveStarReviewBuilderProps) {
+  const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
   const [selectedBadges, setSelectedBadges] = useState<SelectedBadges>({
@@ -223,9 +225,7 @@ export default function FiveStarReviewBuilder({
         //  setIsLoading(false);
       });
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+      router.push("/thankyou")
   };
   const handleWorryRatingDialog = async () => {
     setIsWorryDialogOpen(false);
@@ -261,9 +261,7 @@ export default function FiveStarReviewBuilder({
       title: "Thank you for your feedback!",
       duration: 1000,
     });
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    router.push("/thankyou")
   };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
@@ -405,9 +403,7 @@ export default function FiveStarReviewBuilder({
           description: "Thank you for giving us a chance to make things right.",
           duration: 1000,
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        router.push("/thankyou")
       })
       .catch((error) => {
         setIsSendingEmail(false);
