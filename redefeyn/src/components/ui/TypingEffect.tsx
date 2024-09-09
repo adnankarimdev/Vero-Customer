@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 const TypingEffect = ({
   text = "Thank You 🙌🏼",
   speed = 100,
-  className = "text-4xl font-bold text-gray-800",
+  className = "text-2xl font-bold text-gray-800",
 }) => {
   const [displayedText, setDisplayedText] = useState("");
   const [index, setIndex] = useState(0);

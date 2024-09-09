@@ -10,15 +10,15 @@ export default function ThankYouPage() {
   useEffect(() => {
     const firstEmojiTimer = setTimeout(() => {
       setShowFirstEmoji(true);
-    }, 2800); // Show emoji after the first text types
+    }, 1600); // Show emoji after the first text types
 
     const secondComponentTimer = setTimeout(() => {
       setShowSecondComponent(true);
-    }, 3000); // Wait for 3 seconds for the second text
+    }, 2000); // Wait for 3 seconds for the second text
 
     const secondEmojiTimer = setTimeout(() => {
       setShowSecondEmoji(true);
-    }, 4200); // Show emoji after the second text types
+    }, 3300); // Show emoji after the second text types
 
     return () => {
       clearTimeout(firstEmojiTimer);
@@ -31,7 +31,7 @@ export default function ThankYouPage() {
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
       <div className="flex items-center">
         <TypingEffect
-          text="See how fast that was? You’re a feedback superstar!"
+          text="You’re a feedback superstar!"
           speed={50}
         />
         {showFirstEmoji && <span className="text-4xl ml-2">🏃💨</span>}
