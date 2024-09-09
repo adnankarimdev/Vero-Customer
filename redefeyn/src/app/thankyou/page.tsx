@@ -30,10 +30,7 @@ export default function ThankYouPage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
       <div className="flex items-center">
-        <TypingEffect
-          text="You’re a feedback superstar!"
-          speed={50}
-        />
+        <TypingEffect text="You’re a feedback superstar!" speed={50} />
         {showFirstEmoji && <span className="text-4xl ml-2">🏃💨</span>}
       </div>
 

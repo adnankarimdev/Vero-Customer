@@ -25,4 +25,5 @@ export interface CustomerReviewInfo {
   timeTakenToWriteReview?: number;
   reviewDate?: string;
   postedWithBubbleRatingPlatform?: boolean;
+  postedWithInStoreMode?: boolean;
 }

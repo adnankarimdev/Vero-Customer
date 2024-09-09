@@ -93,6 +93,7 @@ interface FiveStarReviewBuilderProps {
   worryTitle?: string;
   bubbleRatingPlatform?: boolean;
   showEmailWorryDialog?: boolean;
+  inStoreMode?: boolean;
 }
 
 export default function FiveStarReviewBuilder({
@@ -105,6 +106,7 @@ export default function FiveStarReviewBuilder({
   bubbleRatingPlatform,
   showEmailWorryDialog,
   worryRating,
+  inStoreMode,
 }: FiveStarReviewBuilderProps) {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
@@ -129,6 +131,7 @@ export default function FiveStarReviewBuilder({
   const [userEmail, setUserEmail] = useState("");
   const [isWorryDialogOpen, setIsWorryDialogOpen] = useState(false);
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+  const [isEmailReviewDialogOpen, setIsEmailReviewDialogOpen] = useState(false);
   const [worryDialog, setWorryDialog] = useState(false);
 
   const formatDate = (date: Date): string => {
@@ -160,6 +163,10 @@ export default function FiveStarReviewBuilder({
   };
 
   const handleGenerateReview = () => {
+    if (rating > worryRating && inStoreMode) {
+      setIsEmailReviewDialogOpen(true);
+      return;
+    }
     setIsLoading(true);
     const contextToSend =
       "Business Name:\n" +
@@ -211,7 +218,8 @@ export default function FiveStarReviewBuilder({
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
-        rating > worryRating ? true : bubbleRatingPlatform,
+        rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
+      postedWithInStoreMode: inStoreMode,
     };
     await axios
       .post("https://vero.ngrok.dev/backend/save-customer-review/", {
@@ -219,16 +227,26 @@ export default function FiveStarReviewBuilder({
       })
       .then((response) => {
         //  setIsLoading(false);
+        if (inStoreMode) {
+          toast({
+            title: "Thank you for your feedback!",
+            duration: 1000,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          router.push("/thankyou");
+        }
       })
       .catch((error) => {
         console.log(error);
         //  setIsLoading(false);
       });
-
-    router.push("/thankyou");
   };
   const handleWorryRatingDialog = async () => {
     setIsWorryDialogOpen(false);
+    setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
     //save data here
@@ -244,24 +262,30 @@ export default function FiveStarReviewBuilder({
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
-        rating > worryRating ? true : bubbleRatingPlatform,
+        rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
+      postedWithInStoreMode: inStoreMode,
     };
     await axios
       .post("https://vero.ngrok.dev/backend/save-customer-review/", {
         data: dataToSave,
       })
       .then((response) => {
-        // setIsLoading(false);
+        if (inStoreMode) {
+          toast({
+            title: "Thank you for your feedback!",
+            duration: 1000,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          router.push("/thankyou");
+        }
       })
       .catch((error) => {
         console.log(error);
         // setIsLoading(false);
       });
-    toast({
-      title: "Thank you for your feedback!",
-      duration: 1000,
-    });
-    router.push("/thankyou");
   };
   const handlePostGeneratedReviewToGoogle = async () => {
     //send data to backend to process.
@@ -285,7 +309,8 @@ export default function FiveStarReviewBuilder({
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
-        rating > worryRating ? true : bubbleRatingPlatform,
+        rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
+      postedWithInStoreMode: inStoreMode,
     };
 
     await axios
@@ -347,6 +372,85 @@ export default function FiveStarReviewBuilder({
     console.log("Timer started");
   };
 
+  const sendEmailToClientWithReview = async () => {
+    setIsSendingEmail(true);
+    setIsEmailReviewDialogOpen(false);
+    const allBadges: string[] = Object.values(selectedBadges).flat();
+    //save data here
+    const dataToSave: CustomerReviewInfo = {
+      location: buisnessName,
+      rating: rating,
+      placeIdFromReview: placeId,
+      badges: allBadges,
+      postedToGoogleReview: false,
+      generatedReviewBody: initialGeneratedRevieBody,
+      finalReviewBody: generatedReview,
+      emailSentToCompany: true,
+      timeTakenToWriteReview: timeTakenToWriteReview,
+      reviewDate: formatDate(new Date()),
+      postedWithBubbleRatingPlatform:
+        rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
+      postedWithInStoreMode: inStoreMode,
+    };
+    await axios
+      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+        data: dataToSave,
+      })
+      .then((response) => {
+        // setIsLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        // setIsLoading(false);
+      });
+
+    const contextToSend =
+      "Business Name:\n" +
+      buisnessName +
+      "\n" +
+      "User Rating:\n" +
+      rating +
+      "\n" +
+      "User Selected Badges:\n" +
+      JSON.stringify(selectedBadges) +
+      "\n" +
+      "Keywords:\n" +
+      JSON.stringify(keywords);
+
+    axios
+      .post("https://vero.ngrok.dev/backend/send-email-to-post-later/", {
+        context: contextToSend,
+        userEmailToSend: userEmail,
+        userNameToSend: userName,
+        googleReviewUrl: reviewUrl,
+      })
+      .then((response) => {
+        setIsEmailReviewDialogOpen(false);
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+          ),
+          title: "Email Sent",
+          description: "Thank you for giving us a chance to make things right.",
+          duration: 1000,
+        });
+        if (inStoreMode) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          router.push("/thankyou");
+        }
+      })
+      .catch((error) => {
+        setIsSendingEmail(false);
+        toast({
+          title: "Error",
+          description: "Failed to send email.",
+          duration: 1000,
+        });
+      });
+  };
   const sendEmail = async () => {
     setIsSendingEmail(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
@@ -363,7 +467,8 @@ export default function FiveStarReviewBuilder({
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
-        rating > worryRating ? true : bubbleRatingPlatform,
+        rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
+      postedWithInStoreMode: inStoreMode,
     };
     await axios
       .post("https://vero.ngrok.dev/backend/save-customer-review/", {
@@ -403,7 +508,13 @@ export default function FiveStarReviewBuilder({
           description: "Thank you for giving us a chance to make things right.",
           duration: 1000,
         });
-        router.push("/thankyou");
+        if (inStoreMode) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          router.push("/thankyou");
+        }
       })
       .catch((error) => {
         setIsSendingEmail(false);
@@ -441,7 +552,7 @@ export default function FiveStarReviewBuilder({
     setIsDialogOpen(false);
   };
   if (isDialogOpen) {
-    if (rating > worryRating) {
+    if (rating > worryRating && !inStoreMode) {
       return (
         <Dialog
           open={isDialogOpen}
@@ -547,6 +658,62 @@ export default function FiveStarReviewBuilder({
     );
   }
 
+  if (isEmailReviewDialogOpen) {
+    return (
+      <Dialog
+        open={isEmailReviewDialogOpen}
+        onOpenChange={handleWorryRatingDialog}
+      >
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="flex justify-center items-center">
+              {"You're the best 🤩"}
+            </DialogTitle>
+            <DialogDescription>
+              {
+                "Go ahead and give us your name and email, and it'll be in your inbox soon! 💌"
+              }
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="name" className="text-left">
+                Name
+              </Label>
+              <Input
+                id="name"
+                className="col-span-3"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email" className="text-left">
+                Email
+              </Label>
+              <Input
+                id="email"
+                className="w-full"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+              />
+            </div>
+          </div>
+          <DialogFooter className="flex justify-end">
+            <Button
+              type="submit"
+              onClick={sendEmailToClientWithReview}
+              className="ml-auto"
+              variant="ghost"
+            >
+              <Mail />
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       {sendingEmail && <EmailSkeleton />}
@@ -641,9 +808,9 @@ export default function FiveStarReviewBuilder({
                         We've got your feedback, Thank You! 🙌🏼
                       </AlertDialogTitle>
                       <AlertDialogDescription>
-                        {
-                          "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"
-                        }
+                        {inStoreMode
+                          ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
+                          : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

@@ -64,9 +64,14 @@ interface SmartReviewProps {
   onChange?: (rating: number) => void;
   title?: string;
   id: string;
+  inStoreMode?: boolean;
 }
 
-const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
+const SmartReviewBuilder = ({
+  onChange,
+  id,
+  inStoreMode,
+}: SmartReviewProps) => {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
@@ -293,13 +298,21 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         data: dataToSave,
       })
       .then((response) => {
-        setTimeout(() => {
+        if (inStoreMode) {
+          toast({
+            title: "Thank you for your feedback!",
+            duration: 1000,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
           router.push("/thankyou");
-        }, 2000);
+        }
       })
       .catch((error) => {
         console.log(error);
-        // setIsLoading(false);
+        window.location.reload();
       });
   };
 
@@ -324,12 +337,21 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         data: dataToSave,
       })
       .then((response) => {
-        setTimeout(() => {
+        if (inStoreMode) {
+          toast({
+            title: "Thank you for your feedback!",
+            duration: 1000,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
           router.push("/thankyou");
-        }, 2000);
+        }
       })
       .catch((error) => {
         console.log(error);
+        window.location.reload();
         // setIsLoading(false);
       });
   };
@@ -387,9 +409,13 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           description: "Thank you for giving us a chance to make things right.",
           duration: 1000,
         });
-        setTimeout(() => {
+        if (inStoreMode) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
           router.push("/thankyou");
-        }, 2000);
+        }
       })
       .catch((error) => {
         setIsSendingEmail(false);
@@ -661,22 +687,25 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
           </Card>
         </div>
       )}
-      {!showRatingsPage && (useBubblePlatform || rating > worryRating) && (
-        <FiveStarReviewBuilder
-          buisnessName={title}
-          rating={rating}
-          placeId={id}
-          keywords={keywords}
-          worryBody={worryBody}
-          worryRating={worryRating}
-          worryTitle={worryTitle}
-          bubbleRatingPlatform={useBubblePlatform}
-          showEmailWorryDialog={worryDialog}
-        />
-      )}
+      {!showRatingsPage &&
+        (useBubblePlatform || rating > worryRating || inStoreMode) && (
+          <FiveStarReviewBuilder
+            buisnessName={title}
+            rating={rating}
+            placeId={id}
+            keywords={keywords}
+            worryBody={worryBody}
+            worryRating={worryRating}
+            worryTitle={worryTitle}
+            bubbleRatingPlatform={useBubblePlatform}
+            showEmailWorryDialog={worryDialog}
+            inStoreMode={inStoreMode}
+          />
+        )}
       {!showRatingsPage &&
         !useBubblePlatform &&
         rating <= worryRating &&
+        !inStoreMode &&
         !startRecording && (
           <div className="flex items-center justify-center min-h-screen">
             <div className="max-w-4xl mx-auto p-4 space-y-4">

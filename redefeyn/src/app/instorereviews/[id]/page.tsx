@@ -95,7 +95,7 @@ export default function Dashboard() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
       {dataLoaded && (
-        <SmartReviewBuilder id={id as string} inStoreMode={false} />
+        <SmartReviewBuilder id={id as string} inStoreMode={true} />
       )}
     </div>
   );
