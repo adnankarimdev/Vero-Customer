@@ -411,7 +411,7 @@ const SmartReviewBuilder = ({
           ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
-          duration: 1000,
+          duration: 3000,
         });
         if (inStoreMode) {
           setTimeout(() => {

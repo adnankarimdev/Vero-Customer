@@ -439,7 +439,7 @@ export default function FiveStarReviewBuilder({
           ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
-          duration: 1000,
+          duration: 3000,
         });
         if (inStoreMode) {
           setTimeout(() => {
@@ -514,7 +514,7 @@ export default function FiveStarReviewBuilder({
           ),
           title: "Email Sent",
           description: "Thank you for giving us a chance to make things right.",
-          duration: 1000,
+          duration: 3000,
         });
         if (inStoreMode) {
           setTimeout(() => {
@@ -597,7 +597,7 @@ export default function FiveStarReviewBuilder({
     }
   }
 
-  if (isWorryDialogOpen && showEmailWorryDialog) {
+  if (isWorryDialogOpen && showEmailWorryDialog && !sendingEmail) {
     return (
       <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
         <DialogContent className="sm:max-w-[425px]">
@@ -631,7 +631,7 @@ export default function FiveStarReviewBuilder({
               />
             </div>
 
-            <div className="">
+            {/* <div className="">
               <Label htmlFor="text" className="text-right">
                 Personalized Feedback
               </Label>
@@ -649,7 +649,7 @@ export default function FiveStarReviewBuilder({
                 rows={5}
                 onChange={(e) => setGeneratedReview(e.target.value)}
               />
-            </div>
+            </div> */}
           </div>
           <DialogFooter className="flex justify-end">
             <Button
