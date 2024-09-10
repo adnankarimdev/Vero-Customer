@@ -26,4 +26,5 @@ export interface CustomerReviewInfo {
   reviewDate?: string;
   postedWithBubbleRatingPlatform?: boolean;
   postedWithInStoreMode?: boolean;
+  reviewUuid?: string;
 }
