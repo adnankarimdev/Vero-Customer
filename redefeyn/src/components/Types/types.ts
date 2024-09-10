@@ -27,4 +27,5 @@ export interface CustomerReviewInfo {
   postedWithBubbleRatingPlatform?: boolean;
   postedWithInStoreMode?: boolean;
   reviewUuid?: string;
+  pendingGoogleReview?: boolean;
 }

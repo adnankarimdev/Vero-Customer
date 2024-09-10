@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { RiAiGenerate } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

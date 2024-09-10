@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import { Badge } from "@/components/ui/badge";
 import { CustomerReviewInfo } from "../Types/types";
 import { RiAiGenerate } from "react-icons/ri";
@@ -396,6 +396,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
+      pendingGoogleReview: true,
     };
     await axios
       .post("https://vero.ngrok.dev/backend/save-customer-review/", {
@@ -428,7 +429,7 @@ export default function FiveStarReviewBuilder({
         userEmailToSend: userEmail,
         userNameToSend: userName,
         googleReviewUrl: reviewUrl,
-        reviewUuid: dataToSave.reviewUuid
+        reviewUuid: dataToSave.reviewUuid,
       })
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
