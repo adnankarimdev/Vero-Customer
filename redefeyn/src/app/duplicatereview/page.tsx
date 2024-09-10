@@ -35,19 +35,13 @@ export default function DuplicateReviewPage() {
           speed={50}
           className="text-2xl"
         />
-        {showFirstEmoji && <span className="text-2xl ml-2">🦸‍♂️</span>}
+        {showFirstEmoji && <span className="text-xl ml-2">🦸‍♂️</span>}
       </div>
 
       {/* Embedding the YouTube video iframe with autoplay */}
-      <div className=" flex mt-6 w-full items-center justify-center ">
-        <iframe
-          src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1"
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; web-share"
-          referrerPolicy="strict-origin-when-cross-origin"
-        ></iframe>
-      </div>
+      {/* <div className=" flex mt-6 w-full items-center justify-center ">
+      <iframe src="https://giphy.com/embed/bnrMLzlb3xTVuBgFsX" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/studiosoriginals-bnrMLzlb3xTVuBgFsX">via GIPHY</a></p>
+      </div> */}
 
       {showSecondComponent && (
         <div className="flex items-center">
