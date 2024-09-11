@@ -654,11 +654,11 @@ const SmartReviewBuilder = ({
       )}
       {isLoading && !startRecording && <RatingCardSkeleton />}
       {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
-            <StarRating
-            rating={rating}
-            handleRating={handleRating}
-            handleRatingToReview={handleRatingToReview}
-          />
+        <StarRating
+          rating={rating}
+          handleRating={handleRating}
+          handleRatingToReview={handleRatingToReview}
+        />
       )}
       {!showRatingsPage &&
         (useBubblePlatform || rating > worryRating || inStoreMode) && (

@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"; 
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Star, CircleArrowRight } from "lucide-react"; 
+import { Star, CircleArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface StarRatingProps {
@@ -37,7 +44,7 @@ const StarRating: React.FC<StarRatingProps> = ({
                   "w-8 h-8 cursor-pointer transition-all duration-150",
                   hover >= star || rating >= star
                     ? "text-primary fill-primary"
-                    : "text-muted-foreground"
+                    : "text-muted-foreground",
                 )}
                 onClick={() => handleRating(star)}
                 onMouseEnter={() => setHover(star)}

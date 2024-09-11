@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea"; 
-import { Mic, Send, CircleArrowRight } from "lucide-react"; 
+import { Textarea } from "@/components/ui/textarea";
+import { Mic, Send, CircleArrowRight } from "lucide-react";
 import AnimatedTextareaSkeletonLoader from "@/components/ui/Skeletons/AnimatedSkeletonLoader";
 
 interface FreeformPlatformProps {
