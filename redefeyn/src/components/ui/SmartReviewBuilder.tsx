@@ -50,6 +50,7 @@ import EmailSkeleton from "./Skeletons/EmailSkeleton";
 import RatingCardSkeleton from "./Skeletons/RatingCardSkeleton";
 import RecordingLoader from "./Skeletons/RecordingLoader";
 import { Separator } from "./separator";
+import StarRating from "./StarRating/StarRating";
 
 const categories = [
   {
@@ -653,42 +654,11 @@ const SmartReviewBuilder = ({
       )}
       {isLoading && !startRecording && <RatingCardSkeleton />}
       {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
-        <div className="flex items-center justify-center min-h-screen p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle className="flex items-center justify-center space-x-1 text-lg">
-                {"Hello, you 😇"}
-              </CardTitle>
-              <CardDescription className="flex items-center justify-center space-x-1">
-                {"Let's begin with your rating"}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex items-center justify-center space-x-1">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={cn(
-                      "w-8 h-8 cursor-pointer transition-all duration-150",
-                      hover >= star || rating >= star
-                        ? "text-primary fill-primary"
-                        : "text-muted-foreground",
-                      hover >= star,
-                    )}
-                    onClick={() => handleRating(star)}
-                    onMouseEnter={() => setHover(star)}
-                    onMouseLeave={() => setHover(0)}
-                  />
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button variant="ghost">
-                <CircleArrowRight onClick={handleRatingToReview} />
-              </Button>
-            </CardFooter>
-          </Card>
-        </div>
+            <StarRating
+            rating={rating}
+            handleRating={handleRating}
+            handleRatingToReview={handleRatingToReview}
+          />
       )}
       {!showRatingsPage &&
         (useBubblePlatform || rating > worryRating || inStoreMode) && (
