@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { useState } from "react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 const defaultCategories = [
   {
@@ -32,10 +32,12 @@ const defaultCategories = [
       "Unique blends",
     ],
   },
-]
+];
 
 export default function Component() {
-  const [selectedBadges, setSelectedBadges] = useState<Record<string, string[]>>({})
+  const [selectedBadges, setSelectedBadges] = useState<
+    Record<string, string[]>
+  >({});
 
   const toggleBadge = (category: string, badge: string) => {
     setSelectedBadges((prev) => {
@@ -59,10 +61,12 @@ export default function Component() {
           <h2 className="text-2xl font-semibold mb-4">{category.name}</h2>
           <div className="flex overflow-x-auto space-x-4 pb-4">
             {category.badges.map((badge) => (
-              <Card 
-                key={badge} 
+              <Card
+                key={badge}
                 className={`flex-shrink-0 w-[200px] bg-[#2F2F2F] border-none cursor-pointer transition-transform hover:scale-105 rounded-lg overflow-hidden ${
-                  selectedBadges[category.name]?.includes(badge) ? 'ring-2 ring-[#E50914]' : ''
+                  selectedBadges[category.name]?.includes(badge)
+                    ? "ring-2 ring-[#E50914]"
+                    : ""
                 }`}
                 onClick={() => toggleBadge(category.name, badge)}
               >
@@ -72,7 +76,9 @@ export default function Component() {
                   </div>
                 </CardContent>
                 <CardFooter className="p-2 text-center bg-white">
-                  <p className="w-full text-sm font-medium text-black">{badge}</p>
+                  <p className="w-full text-sm font-medium text-black">
+                    {badge}
+                  </p>
                 </CardFooter>
               </Card>
             ))}
@@ -80,5 +86,5 @@ export default function Component() {
         </div>
       ))}
     </div>
-  )
+  );
 }

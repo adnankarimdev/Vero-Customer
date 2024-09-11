@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 
 // import your dialog components
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea"; // import necessary components from your UI library
 import { FcGoogle } from "react-icons/fc"; // if using Google icon
 

@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Plus, X, Music } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Plus, X, Music } from "lucide-react";
 
 const defaultCategories = [
   {
@@ -37,20 +37,20 @@ const defaultCategories = [
       "Unique blends",
     ],
   },
-]
+];
 
 export default function Component() {
-  const [playlist, setPlaylist] = useState<string[]>([])
+  const [playlist, setPlaylist] = useState<string[]>([]);
 
   const addToPlaylist = (badge: string) => {
     if (!playlist.includes(badge)) {
-      setPlaylist([...playlist, badge])
+      setPlaylist([...playlist, badge]);
     }
-  }
+  };
 
   const removeFromPlaylist = (badge: string) => {
-    setPlaylist(playlist.filter(item => item !== badge))
-  }
+    setPlaylist(playlist.filter((item) => item !== badge));
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6 bg-[#121212] text-white min-h-screen">
@@ -90,11 +90,16 @@ export default function Component() {
           <CardContent>
             <ScrollArea className="h-[calc(100vh-200px)]">
               {playlist.length === 0 ? (
-                <p className="text-center text-[#B3B3B3]">Your playlist is empty. Add some badges!</p>
+                <p className="text-center text-[#B3B3B3]">
+                  Your playlist is empty. Add some badges!
+                </p>
               ) : (
                 <ul className="space-y-2">
                   {playlist.map((badge, index) => (
-                    <li key={index} className="flex items-center justify-between bg-[#1DB954] text-black p-2 rounded-md">
+                    <li
+                      key={index}
+                      className="flex items-center justify-between bg-[#1DB954] text-black p-2 rounded-md"
+                    >
                       <span>{badge}</span>
                       <Button
                         variant="ghost"
@@ -114,5 +119,5 @@ export default function Component() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

@@ -3,16 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
-import { CustomerReviewInfo } from "../Types/types";
+import { CustomerReviewInfo } from "../../Types/types";
 import { useRouter } from "next/navigation";
 import copy from "copy-to-clipboard";
 import axios from "axios";
-import EmailSkeleton from "./Skeletons/EmailSkeleton";
+import EmailSkeleton from "../Skeletons/EmailSkeleton";
 import { useToast } from "@/hooks/use-toast";
-import GoogleReviewDialogContent from "./BubblePlatform/GoogleReviewDialog";
-import WorryDialogContent from "./BubblePlatform/WorryDialogContent";
-import EmailPostFiveStarReview from "./BubblePlatform/EmailPostFiveStarReview";
-import RatingBubbleCard from "./BubblePlatform/RatingBubbleCard";
+import GoogleReviewDialogContent from "./GoogleReviewDialog";
+import WorryDialogContent from "./WorryDialogContent";
+import EmailPostFiveStarReview from "./EmailPostFiveStarReview";
+import RatingBubbleCard from "./RatingBubbleCard";
 
 const defaultCategories = [
   {
@@ -572,20 +572,20 @@ export default function FiveStarReviewBuilder({
     <div className="flex items-center justify-center min-h-screen">
       {sendingEmail && <EmailSkeleton />}
       {!sendingEmail && (
-          <RatingBubbleCard
-            buisnessName={buisnessName}
-            rating={rating}
-            categories={categories}
-            selectedBadges={selectedBadges}
-            toggleBadge={toggleBadge}
-            isLoading={isLoading}
-            isAlertDialogOpen={isAlertDialogOpen}
-            handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
-            handleGenerateReview={handleGenerateReview}
-            stopTimer={stopTimer}
-            sendingEmail={sendingEmail}
-            inStoreMode={inStoreMode}
-          />
+        <RatingBubbleCard
+          buisnessName={buisnessName}
+          rating={rating}
+          categories={categories}
+          selectedBadges={selectedBadges}
+          toggleBadge={toggleBadge}
+          isLoading={isLoading}
+          isAlertDialogOpen={isAlertDialogOpen}
+          handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+          handleGenerateReview={handleGenerateReview}
+          stopTimer={stopTimer}
+          sendingEmail={sendingEmail}
+          inStoreMode={inStoreMode}
+        />
       )}
     </div>
   );

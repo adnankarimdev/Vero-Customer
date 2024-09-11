@@ -1,8 +1,15 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"// adjust the path for shadcn components
-import { Input } from "@/components/ui/input"; 
-import { Label } from "@/components/ui/label"; 
-import { Button } from "@/components/ui/button"; 
-import { Mail } from "lucide-react"; 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"; // adjust the path for shadcn components
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react";
 
 interface WorryDialogContentProps {
   isWorryDialogOpen: boolean;
@@ -60,7 +67,12 @@ const WorryDialogContent: React.FC<WorryDialogContentProps> = ({
         </div>
       </div>
       <DialogFooter className="flex justify-end">
-        <Button type="submit" onClick={sendEmail} className="ml-auto" variant="ghost">
+        <Button
+          type="submit"
+          onClick={sendEmail}
+          className="ml-auto"
+          variant="ghost"
+        >
           <Mail />
         </Button>
       </DialogFooter>

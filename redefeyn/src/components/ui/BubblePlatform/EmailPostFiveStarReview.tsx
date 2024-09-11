@@ -1,8 +1,15 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog"// adjust the path for shadcn components
-import { Input } from "@/components/ui/input"; 
-import { Label } from "@/components/ui/label"; 
-import { Button } from "@/components/ui/button"; 
-import { Mail } from "lucide-react"; 
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog"; // adjust the path for shadcn components
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react";
 
 interface EmailPostFiveStarReviewProps {
   isEmailReviewDialogOpen: boolean;
@@ -30,7 +37,9 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
           {"You're the best 🤩"}
         </DialogTitle>
         <DialogDescription>
-          {"Go ahead and give us your name and email, and it'll be in your inbox soon! 💌"}
+          {
+            "Go ahead and give us your name and email, and it'll be in your inbox soon! 💌"
+          }
         </DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">

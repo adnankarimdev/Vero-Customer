@@ -30,7 +30,12 @@ export default function ThankYouPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
-        <TinderFiveStarReviewBuilder businessName="" rating={5} placeId="123" worryRating={2}/>
+      <TinderFiveStarReviewBuilder
+        businessName=""
+        rating={5}
+        placeId="123"
+        worryRating={2}
+      />
     </div>
   );
 }
