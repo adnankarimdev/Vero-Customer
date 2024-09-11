@@ -44,7 +44,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Block } from "../Types/types";
-import Logo from "./Logo";
 import FiveStarReviewBuilder from "./FiveStarReviewBuilder";
 import AnimatedTextareaSkeletonLoader from "./Skeletons/AnimatedSkeletonLoader";
 import EmailSkeleton from "./Skeletons/EmailSkeleton";

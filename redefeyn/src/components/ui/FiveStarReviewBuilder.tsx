@@ -3,49 +3,16 @@
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { v4 as uuidv4 } from "uuid";
-import { Badge } from "@/components/ui/badge";
 import { CustomerReviewInfo } from "../Types/types";
-import { RiAiGenerate } from "react-icons/ri";
-import { Send, StarIcon, Star, Mail } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
-import Logo from "./Logo";
 import copy from "copy-to-clipboard";
-import clipboardCopy from "clipboard-copy";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import EmailSkeleton from "./Skeletons/EmailSkeleton";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import GoogleReviewDialogContent from "./BubblePlatform/GoogleReviewDialog";
+import WorryDialogContent from "./BubblePlatform/WorryDialogContent";
+import EmailPostFiveStarReview from "./BubblePlatform/EmailPostFiveStarReview";
+import RatingBubbleCard from "./BubblePlatform/RatingBubbleCard";
 
 const defaultCategories = [
   {
@@ -559,166 +526,45 @@ export default function FiveStarReviewBuilder({
     handleSaveReviewWithoutGenerate();
     setIsDialogOpen(false);
   };
-  if (isDialogOpen) {
-    if (rating > worryRating && !inStoreMode) {
-      return (
-        <Dialog
-          open={isDialogOpen}
-          onOpenChange={handleGoogleReviewDialogChange}
-        >
-          <DialogContent className="w-full">
-            <DialogHeader>
-              <DialogTitle className="text-center">
-                Your review is ready to take the spotlight! 🌟
-              </DialogTitle>
-              <DialogDescription className="text-center">
-                Feel free to edit this! Once it looks good, click the Google
-                icon below and it will copy the review for you to paste 🥳
-              </DialogDescription>
-
-              <Textarea
-                defaultValue={generatedReview}
-                className="w-full min-h-[400px]"
-                onChange={(e) => setGeneratedReview(e.target.value)}
-              />
-            </DialogHeader>
-            <DialogFooter className="flex justify-between items-center">
-              <Button
-                type="submit"
-                onClick={handlePostGeneratedReviewToGoogle}
-                variant="ghost"
-              >
-                <FcGoogle size={24} />
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      );
-    }
+  if (isDialogOpen && rating > worryRating && !inStoreMode) {
+    return (
+      <GoogleReviewDialogContent
+        isDialogOpen={isDialogOpen}
+        generatedReview={generatedReview}
+        setGeneratedReview={setGeneratedReview}
+        handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
+        handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+      />
+    );
   }
 
   if (isWorryDialogOpen && showEmailWorryDialog && !sendingEmail) {
     return (
-      <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex justify-center items-center">
-              {worryTitle}
-            </DialogTitle>
-            <DialogDescription>{worryBody}</DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name" className="text-left">
-                Name
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email" className="text-left">
-                Email
-              </Label>
-              <Input
-                id="email"
-                className="w-full"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-              />
-            </div>
-
-            {/* <div className="">
-              <Label htmlFor="text" className="text-right">
-                Personalized Feedback
-              </Label>
-              <Button
-                type="submit"
-                onClick={handleGenerateReview}
-                className="ml-auto"
-                variant="ghost"
-              >
-                <RiAiGenerate />
-              </Button>
-              <Textarea
-                defaultValue={generatedReview}
-                className="w-full"
-                rows={5}
-                onChange={(e) => setGeneratedReview(e.target.value)}
-              />
-            </div> */}
-          </div>
-          <DialogFooter className="flex justify-end">
-            <Button
-              type="submit"
-              onClick={sendEmail}
-              className="ml-auto"
-              variant="ghost"
-            >
-              <Mail />
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <WorryDialogContent
+        isWorryDialogOpen={isWorryDialogOpen}
+        worryTitle={worryTitle}
+        worryBody={worryBody}
+        userName={userName}
+        setUserName={setUserName}
+        userEmail={userEmail}
+        setUserEmail={setUserEmail}
+        handleWorryRatingDialog={handleWorryRatingDialog}
+        sendEmail={sendEmail}
+      />
     );
   }
 
   if (isEmailReviewDialogOpen) {
     return (
-      <Dialog
-        open={isEmailReviewDialogOpen}
-        onOpenChange={handleWorryRatingDialog}
-      >
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle className="flex justify-center items-center">
-              {"You're the best 🤩"}
-            </DialogTitle>
-            <DialogDescription>
-              {
-                "Go ahead and give us your name and email, and it'll be in your inbox soon! 💌"
-              }
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="name" className="text-left">
-                Name
-              </Label>
-              <Input
-                id="name"
-                className="col-span-3"
-                value={userName}
-                onChange={(e) => setUserName(e.target.value)}
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="email" className="text-left">
-                Email
-              </Label>
-              <Input
-                id="email"
-                className="w-full"
-                value={userEmail}
-                onChange={(e) => setUserEmail(e.target.value)}
-              />
-            </div>
-          </div>
-          <DialogFooter className="flex justify-end">
-            <Button
-              type="submit"
-              onClick={sendEmailToClientWithReview}
-              className="ml-auto"
-              variant="ghost"
-            >
-              <Mail />
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <EmailPostFiveStarReview
+        isEmailReviewDialogOpen={isEmailReviewDialogOpen}
+        userName={userName}
+        setUserName={setUserName}
+        userEmail={userEmail}
+        setUserEmail={setUserEmail}
+        handleWorryRatingDialog={handleWorryRatingDialog}
+        sendEmailToClientWithReview={sendEmailToClientWithReview}
+      />
     );
   }
 
@@ -726,126 +572,20 @@ export default function FiveStarReviewBuilder({
     <div className="flex items-center justify-center min-h-screen">
       {sendingEmail && <EmailSkeleton />}
       {!sendingEmail && (
-        <Card className="w-full max-w-3xl border-0">
-          <CardHeader>
-            <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-              {buisnessName}
-            </CardTitle>
-            <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-              {rating <= 4 && "Want to tell us why?"}
-              {rating == 5 &&
-                "We are so happy to hear that. 🥳 Want to tell us why?"}
-            </CardDescription>
-            <div className="flex items-center justify-center space-x-1">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-5 h-5 ${i < rating ? "text-black fill-black" : "text-gray-300"}`}
-                />
-              ))}
-            </div>
-          </CardHeader>
-          {isLoading ? (
-            // Loader for the Card content and more
-            <>
-              <CardContent>
-                <div className="flex items-center justify-center space-x-1 mb-6">
-                  {[...Array(5)].map((_, index) => (
-                    <div
-                      key={index}
-                      className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
-                    ></div>
-                  ))}
-                </div>
-                {[...Array(3)].map((_, index) => (
-                  <div key={index} className="mb-6">
-                    <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
-                    <div className="flex flex-wrap gap-2">
-                      {[...Array(5)].map((_, i) => (
-                        <div
-                          key={i}
-                          className="h-8 w-24 bg-gray-300 rounded animate-pulse"
-                        ></div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
-              </CardFooter>
-            </>
-          ) : (
-            <>
-              <CardContent>
-                {categories.map((category) => (
-                  <div key={category.name} className="mb-6">
-                    <h3 className="text-lg font-semibold mb-2">
-                      {category.name}
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {category.badges.map((badge) => (
-                        <Badge
-                          key={badge}
-                          variant={
-                            selectedBadges[category.name]?.includes(badge)
-                              ? "destructive"
-                              : "outline"
-                          }
-                          className={
-                            selectedBadges[category.name]?.includes(badge)
-                              ? rating < 4
-                                ? "bg-red-500 text-white hover:bg-red-500 hover:text-white cursor-pointer"
-                                : "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
-                              : "cursor-pointer transition-colors"
-                          }
-                          onClick={() => toggleBadge(category.name, badge)}
-                        >
-                          {badge}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-              <CardFooter className="flex justify-end">
-                <AlertDialog open={isAlertDialogOpen}>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        We've got your feedback, Thank You! 🙌🏼
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        {inStoreMode
-                          ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
-                          : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel
-                        onClick={handleSaveReviewWithoutGenerate}
-                      >
-                        No Thanks
-                      </AlertDialogCancel>
-                      <AlertDialogAction onClick={handleGenerateReview}>
-                        Let's do it
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-                <Button
-                  variant="ghost"
-                  disabled={Object.keys(selectedBadges).every(
-                    (key) => selectedBadges[key].length === 0,
-                  )}
-                  onClick={stopTimer}
-                >
-                  <Send />
-                </Button>
-              </CardFooter>
-            </>
-          )}
-        </Card>
+          <RatingBubbleCard
+            buisnessName={buisnessName}
+            rating={rating}
+            categories={categories}
+            selectedBadges={selectedBadges}
+            toggleBadge={toggleBadge}
+            isLoading={isLoading}
+            isAlertDialogOpen={isAlertDialogOpen}
+            handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+            handleGenerateReview={handleGenerateReview}
+            stopTimer={stopTimer}
+            sendingEmail={sendingEmail}
+            inStoreMode={inStoreMode}
+          />
       )}
     </div>
   );

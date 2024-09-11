@@ -1,0 +1,166 @@
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardDescription,
+    CardContent,
+    CardFooter,
+  } from "@/components/ui/card"; // Adjust path as necessary
+  import { Badge } from "@/components/ui/badge"; // Adjust path as necessary
+  import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"; // Adjust path as necessary
+  import { Star } from "lucide-react"; // Adjust path as necessary
+  import { Button } from "@/components/ui/button"; // Adjust path as necessary
+  import { Send } from "lucide-react"; // Adjust path as necessary
+  import { Mail } from "lucide-react"; // Adjust path as necessary
+  
+  interface RatingBubbleCardProps {
+    buisnessName: string;
+    rating: number;
+    categories: { name: string; badges: string[] }[];
+    selectedBadges: { [key: string]: string[] };
+    toggleBadge: (categoryName: string, badge: string) => void;
+    isLoading: boolean;
+    isAlertDialogOpen: boolean;
+    handleSaveReviewWithoutGenerate: () => void;
+    handleGenerateReview: () => void;
+    stopTimer: () => void;
+    sendingEmail: boolean;
+    inStoreMode?: boolean;
+  }
+  
+  const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
+    buisnessName,
+    rating,
+    categories,
+    selectedBadges,
+    toggleBadge,
+    isLoading,
+    isAlertDialogOpen,
+    handleSaveReviewWithoutGenerate,
+    handleGenerateReview,
+    stopTimer,
+    sendingEmail,
+    inStoreMode
+  }) => (
+    <Card className="w-full max-w-3xl border-0">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-center space-x-1 text-sm">
+          {buisnessName}
+        </CardTitle>
+        <CardDescription className="flex items-center justify-center space-x-1 mb-2">
+          {rating <= 4 && "Want to tell us why?"}
+          {rating === 5 &&
+            "We are so happy to hear that. 🥳 Want to tell us why?"}
+        </CardDescription>
+        <div className="flex items-center justify-center space-x-1">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-5 h-5 ${i < rating ? "text-black fill-black" : "text-gray-300"}`}
+            />
+          ))}
+        </div>
+      </CardHeader>
+      {isLoading ? (
+        <>
+          <CardContent>
+            <div className="flex items-center justify-center space-x-1 mb-6">
+              {[...Array(5)].map((_, index) => (
+                <div
+                  key={index}
+                  className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
+                ></div>
+              ))}
+            </div>
+            {[...Array(3)].map((_, index) => (
+              <div key={index} className="mb-6">
+                <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
+                <div className="flex flex-wrap gap-2">
+                  {[...Array(5)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-8 w-24 bg-gray-300 rounded animate-pulse"
+                    ></div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
+          </CardFooter>
+        </>
+      ) : (
+        <>
+          <CardContent>
+            {categories.map((category) => (
+              <div key={category.name} className="mb-6">
+                <h3 className="text-lg font-semibold mb-2">
+                  {category.name}
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {category.badges.map((badge) => (
+                    <Badge
+                      key={badge}
+                      variant={
+                        selectedBadges[category.name]?.includes(badge)
+                          ? "destructive"
+                          : "outline"
+                      }
+                      className={
+                        selectedBadges[category.name]?.includes(badge)
+                          ? rating < 4
+                            ? "bg-red-500 text-white hover:bg-red-500 hover:text-white cursor-pointer"
+                            : "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
+                          : "cursor-pointer transition-colors"
+                      }
+                      onClick={() => toggleBadge(category.name, badge)}
+                    >
+                      {badge}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <AlertDialog open={isAlertDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    We've got your feedback, Thank You! 🙌🏼
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {inStoreMode
+                      ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
+                      : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel
+                    onClick={handleSaveReviewWithoutGenerate}
+                  >
+                    No Thanks
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleGenerateReview}>
+                    Let's do it
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <Button
+              variant="ghost"
+              disabled={Object.keys(selectedBadges).every(
+                (key) => selectedBadges[key].length === 0,
+              )}
+              onClick={stopTimer}
+            >
+              <Send />
+            </Button>
+          </CardFooter>
+        </>
+      )}
+    </Card>
+  );
+  
+  export default RatingBubbleCard;
