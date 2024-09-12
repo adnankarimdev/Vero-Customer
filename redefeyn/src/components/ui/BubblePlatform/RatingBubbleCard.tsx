@@ -23,7 +23,7 @@ import { Send } from "lucide-react"; // Adjust path as necessary
 import { Mail } from "lucide-react"; // Adjust path as necessary
 
 interface RatingBubbleCardProps {
-  buisnessName: string;
+  businessName: string;
   rating: number;
   categories: { name: string; badges: string[] }[];
   selectedBadges: { [key: string]: string[] };
@@ -38,7 +38,7 @@ interface RatingBubbleCardProps {
 }
 
 const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
-  buisnessName,
+  businessName,
   rating,
   categories,
   selectedBadges,
@@ -54,7 +54,7 @@ const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
   <Card className="w-full max-w-3xl border-0">
     <CardHeader>
       <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-        {buisnessName}
+        {businessName}
       </CardTitle>
       <CardDescription className="flex items-center justify-center space-x-1 mb-2">
         {rating <= 4 && "Want to tell us why?"}

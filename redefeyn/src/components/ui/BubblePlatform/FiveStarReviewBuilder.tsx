@@ -13,6 +13,13 @@ import GoogleReviewDialogContent from "./GoogleReviewDialog";
 import WorryDialogContent from "./WorryDialogContent";
 import EmailPostFiveStarReview from "./EmailPostFiveStarReview";
 import RatingBubbleCard from "./RatingBubbleCard";
+import SpotifyPlatform from "../ExperimentalPlatforms/SpotifyBadgePlaylist";
+import AirbnbPlatform from "../ExperimentalPlatforms/AirbnbPlatform";
+import AmazonPlatform from "../ExperimentalPlatforms/AmazonPlatform";
+import DoorDashPlatform from "../ExperimentalPlatforms/DoorDashPlatform";
+import InstagramPlatform from "../ExperimentalPlatforms/InstagramPlatform";
+import DuolingoPlatform from "../ExperimentalPlatforms/DuolingoPlatform";
+import NetflixPlatform from "../ExperimentalPlatforms/NetflixPlatform";
 
 const defaultCategories = [
   {
@@ -573,7 +580,7 @@ export default function FiveStarReviewBuilder({
       {sendingEmail && <EmailSkeleton />}
       {!sendingEmail && (
         <RatingBubbleCard
-          buisnessName={buisnessName}
+          businessName={buisnessName}
           rating={rating}
           categories={categories}
           selectedBadges={selectedBadges}
@@ -584,8 +591,105 @@ export default function FiveStarReviewBuilder({
           handleGenerateReview={handleGenerateReview}
           stopTimer={stopTimer}
           sendingEmail={sendingEmail}
-          inStoreMode={inStoreMode}
-        />
+          inStoreMode={inStoreMode}/>
+
+        // <SpotifyPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode} />
+
+        // <AirbnbPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <AmazonPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <DoorDashPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <InstagramPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <DuolingoPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <NetflixPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
       )}
     </div>
   );
