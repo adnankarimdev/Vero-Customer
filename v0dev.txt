@@ -1,0 +1,9 @@
+
+
+....
+export default RatingBubbleCard;
+
+using the same logic, i just want the card style to be adjusted. The funationality should work exactly the same, but i want it to look like a coffee menu. Each category is the menu sub title, with each badge being the sub menu item
+
+
+TEH QUERY FOR v0.dev for all different platforms. Works so well!

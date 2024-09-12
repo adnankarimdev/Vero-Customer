@@ -20,6 +20,11 @@ import DoorDashPlatform from "../ExperimentalPlatforms/DoorDashPlatform";
 import InstagramPlatform from "../ExperimentalPlatforms/InstagramPlatform";
 import DuolingoPlatform from "../ExperimentalPlatforms/DuolingoPlatform";
 import NetflixPlatform from "../ExperimentalPlatforms/NetflixPlatform";
+import YouTubePlatform from "../ExperimentalPlatforms/YouTubePlatform";
+import NewYorkTimesPlatform from "../ExperimentalPlatforms/NewYorkTimesPlatform";
+import MediumPlatform from "../ExperimentalPlatforms/MediumPlatform";
+import PintrestPlatform from "../ExperimentalPlatforms/PintrestPlatform";
+import TinderPlatform from "../ExperimentalPlatforms/TinderPlatform";
 
 const defaultCategories = [
   {
@@ -592,6 +597,76 @@ export default function FiveStarReviewBuilder({
           stopTimer={stopTimer}
           sendingEmail={sendingEmail}
           inStoreMode={inStoreMode}/>
+
+        // <TinderPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <PintrestPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <MediumPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+        // <NewYorkTimesPlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
+
+          // <YouTubePlatform
+          // businessName={buisnessName}
+          // rating={rating}
+          // categories={categories}
+          // selectedBadges={selectedBadges}
+          // toggleBadge={toggleBadge}
+          // isLoading={isLoading}
+          // isAlertDialogOpen={isAlertDialogOpen}
+          // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+          // handleGenerateReview={handleGenerateReview}
+          // stopTimer={stopTimer}
+          // sendingEmail={sendingEmail}
+          // inStoreMode={inStoreMode}/>
 
         // <SpotifyPlatform
         // businessName={buisnessName}
