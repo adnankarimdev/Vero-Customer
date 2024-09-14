@@ -568,6 +568,7 @@ export default function FiveStarReviewBuilder({
 
   if (isEmailReviewDialogOpen) {
     return (
+      //put setDate, setTime here and get it from datetimepicker component within EmailPostFiveStarReview
       <EmailPostFiveStarReview
         isEmailReviewDialogOpen={isEmailReviewDialogOpen}
         userName={userName}
