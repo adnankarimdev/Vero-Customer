@@ -49,7 +49,7 @@ export default function DateTimePicker() {
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal",
+            "w-full justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
@@ -57,7 +57,7 @@ export default function DateTimePicker() {
           {formatDateTime(date, time)}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
         <Calendar
           mode="single"
           selected={date}
