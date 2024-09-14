@@ -81,7 +81,7 @@ const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
               ></div>
             ))}
           </div>
-          {[...Array(3)].map((_, index) => (
+          {[...Array(4)].map((_, index) => (
             <div key={index} className="mb-6">
               <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
               <div className="flex flex-wrap gap-2">

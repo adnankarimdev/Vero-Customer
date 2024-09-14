@@ -6,6 +6,7 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"; // adjust the path for shadcn components
+import DateTimePicker from "../shared/DateTimePicker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,12 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             value={userEmail}
             onChange={(e) => setUserEmail(e.target.value)}
           />
+        </div>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="email" className="text-left">
+            When at?
+          </Label>
+          <DateTimePicker/>
         </div>
       </div>
       <DialogFooter className="flex justify-end">
