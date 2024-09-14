@@ -113,7 +113,7 @@ export default function FiveStarReviewBuilder({
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const [isEmailReviewDialogOpen, setIsEmailReviewDialogOpen] = useState(false);
   const [worryDialog, setWorryDialog] = useState(false);
-  const [date, setDate] = useState<Date>(new Date())
+  const [date, setDate] = useState<Date>()
   const [time, setTime] = useState<string>("")
 
   const formatDate = (date: Date): string => {
@@ -128,6 +128,51 @@ export default function FiveStarReviewBuilder({
     };
 
     return new Intl.DateTimeFormat("en-US", options).format(date);
+  };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = (): boolean => {
+    if (!userName) {
+        toast({
+          title: "Please enter your name.",
+          duration: 2000,
+          variant: "destructive" 
+        });
+      return false;
+    }
+
+    if (!userEmail) {
+      toast({
+        title: "Please enter your email.",
+        duration: 2000,
+        variant: "destructive" 
+      });
+      return false;
+    }
+
+    if (!validateEmail(userEmail)) {
+      toast({
+        title: "Please enter a valid email.",
+        duration: 2000,
+        variant: "destructive" 
+      });
+      return false;
+    }
+
+    if (!date || !time) {
+      toast({
+        title: "Please select a date and time.",
+        duration: 2000,
+        variant: "destructive" 
+      });
+      return false;
+    }
+
+    return true;
   };
 
   const toggleBadge = (category: string, badge: string) => {
@@ -358,6 +403,10 @@ export default function FiveStarReviewBuilder({
   };
 
   const sendEmailToClientWithReview = async () => {
+    if (!validateForm())
+    {
+      return
+    }
     setIsSendingEmail(true);
     setIsEmailReviewDialogOpen(false);
     const allBadges: string[] = Object.values(selectedBadges).flat();
@@ -411,7 +460,7 @@ export default function FiveStarReviewBuilder({
         userNameToSend: userName,
         googleReviewUrl: reviewUrl,
         reviewUuid: dataToSave.reviewUuid,
-        date: date.toISOString(),
+        date: date?.toISOString(),
         time: time
       })
       .then((response) => {
@@ -420,7 +469,7 @@ export default function FiveStarReviewBuilder({
           className: cn(
             "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
           ),
-          title: `Email Will be sent at ${time} on ${date}!`,
+          title: `Email Will be sent at ${time} on ${date?.toDateString()}!`,
           description: "Thank you!",
           duration: 3000,
         });

@@ -7,12 +7,12 @@ import { Calendar as CalendarIcon, Sunrise, Sun, Moon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 
 interface DateTimePickerProps {
   setDate: (date: Date) => void;
@@ -27,6 +27,7 @@ export default function DateTimePicker({
   setTime,
   time
 }: DateTimePickerProps) {
+  const [isOpen, setIsOpen] = useState(false)
   const timeOptions = [
     "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
     "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", 
@@ -71,8 +72,8 @@ export default function DateTimePicker({
   }
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
+      <AlertDialogTrigger asChild>
         <Button
           variant={"outline"}
           className={cn(
@@ -86,10 +87,10 @@ export default function DateTimePicker({
           </span>
           {getTimeIcon(time)}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start" side="bottom" sideOffset={4}>
-        <div className="flex">
-          <div className="border-r border-border">
+      </AlertDialogTrigger>
+      <AlertDialogContent className="sm:max-w-[600px]">
+        <div className="flex flex-col sm:flex-row">
+          <div className="border-b sm:border-r border-border sm:pr-4">
             <Calendar
               mode="single"
               selected={date}
@@ -101,10 +102,10 @@ export default function DateTimePicker({
               initialFocus
             />
           </div>
-          <div className="p-3 w-[200px]">
+          <div className="p-3 w-full sm:w-[200px]">
             <div className="text-sm font-medium mb-2">Select a time:</div>
-            <ScrollArea className="h-[300px] w-full rounded-md border">
-              <div className="p-4">
+            <ScrollArea className="h-[200px] sm:h-[300px] w-full rounded-md border">
+              <div className="p-2">
                 <div className="grid grid-cols-2 gap-2">
                   {timeOptions.map((timeOption) => (
                     <Button
@@ -115,7 +116,10 @@ export default function DateTimePicker({
                         "text-xs",
                         time === timeOption && "bg-primary text-primary-foreground"
                       )}
-                      onClick={() => setTime(timeOption)}
+                      onClick={() => {
+                        setTime(timeOption)
+                        setIsOpen(false)
+                      }}
                     >
                       {timeOption}
                     </Button>
@@ -125,7 +129,7 @@ export default function DateTimePicker({
             </ScrollArea>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
