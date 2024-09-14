@@ -76,7 +76,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="email" className="text-left">
-            When at?
+          Email me on
           </Label>
           <DateTimePicker setDate={setDate} date={date} setTime={setTime} time={time}/>
         </div>
