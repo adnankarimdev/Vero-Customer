@@ -411,7 +411,7 @@ export default function FiveStarReviewBuilder({
         userNameToSend: userName,
         googleReviewUrl: reviewUrl,
         reviewUuid: dataToSave.reviewUuid,
-        date: date,
+        date: date.toISOString(),
         time: time
       })
       .then((response) => {
@@ -420,8 +420,8 @@ export default function FiveStarReviewBuilder({
           className: cn(
             "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
           ),
-          title: "Email Sent",
-          description: "Thank you for giving us a chance to make things right.",
+          title: `Email Will be sent at ${time} on ${date}!`,
+          description: "Thank you!",
           duration: 3000,
         });
         if (inStoreMode) {
