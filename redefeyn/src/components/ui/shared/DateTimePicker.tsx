@@ -20,9 +20,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-export default function DateTimePicker() {
-  const [date, setDate] = useState<Date>()
-  const [time, setTime] = useState<string>()
+interface DateTimePickerProps {
+    setDate: (date: Date) => void;
+    date?: Date;
+    setTime: (time: string) => void;
+    time?: string;
+  }
+export default function DateTimePicker({
+    setDate,
+    date,
+    setTime,
+    time
+  }: DateTimePickerProps) {
+
 
   const timeOptions = [
     "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM", 
@@ -61,7 +71,11 @@ export default function DateTimePicker() {
         <Calendar
           mode="single"
           selected={date}
-          onSelect={setDate}
+          onSelect={(selectedDate) => {
+            if (selectedDate) {
+              setDate(selectedDate); // Only set the date if it's not undefined
+            }
+          }}
           initialFocus
         />
         <div className="border-t border-border p-3">

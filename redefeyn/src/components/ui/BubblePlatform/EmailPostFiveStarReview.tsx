@@ -20,6 +20,10 @@ interface EmailPostFiveStarReviewProps {
   setUserEmail: (email: string) => void;
   handleWorryRatingDialog: (open: boolean) => void;
   sendEmailToClientWithReview: () => void;
+  setDate: (date: Date) => void;
+  date: Date;
+  setTime: (time: string) => void;
+  time: string;
 }
 
 const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
@@ -30,6 +34,10 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   setUserEmail,
   handleWorryRatingDialog,
   sendEmailToClientWithReview,
+  setDate,
+  date,
+  setTime,
+  time
 }) => (
   <Dialog open={isEmailReviewDialogOpen} onOpenChange={handleWorryRatingDialog}>
     <DialogContent className="sm:max-w-[425px]">
@@ -70,7 +78,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
           <Label htmlFor="email" className="text-left">
             When at?
           </Label>
-          <DateTimePicker/>
+          <DateTimePicker setDate={setDate} date={date} setTime={setTime} time={time}/>
         </div>
       </div>
       <DialogFooter className="flex justify-end">

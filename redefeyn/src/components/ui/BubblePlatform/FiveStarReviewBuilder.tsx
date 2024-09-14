@@ -113,6 +113,8 @@ export default function FiveStarReviewBuilder({
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const [isEmailReviewDialogOpen, setIsEmailReviewDialogOpen] = useState(false);
   const [worryDialog, setWorryDialog] = useState(false);
+  const [date, setDate] = useState<Date>(new Date())
+  const [time, setTime] = useState<string>("")
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -409,6 +411,8 @@ export default function FiveStarReviewBuilder({
         userNameToSend: userName,
         googleReviewUrl: reviewUrl,
         reviewUuid: dataToSave.reviewUuid,
+        date: date,
+        time: time
       })
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
@@ -577,6 +581,10 @@ export default function FiveStarReviewBuilder({
         setUserEmail={setUserEmail}
         handleWorryRatingDialog={handleWorryRatingDialog}
         sendEmailToClientWithReview={sendEmailToClientWithReview}
+        setDate={setDate}
+        date={date}
+        setTime={setTime}
+        time={time}
       />
     );
   }
