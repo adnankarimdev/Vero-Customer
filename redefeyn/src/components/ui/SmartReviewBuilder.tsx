@@ -402,6 +402,7 @@ const SmartReviewBuilder = ({
         userNameToSend: userName,
         userReviewToSend: userReviews,
         buisnessName: title,
+        placeId: id
       })
       .then((response) => {
         setIsSendingEmail(false);

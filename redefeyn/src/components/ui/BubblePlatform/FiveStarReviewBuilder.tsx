@@ -118,6 +118,7 @@ export default function FiveStarReviewBuilder({
   const [date, setDate] = useState<Date>()
   const [time, setTime] = useState<string>("")
   const [overallRating, setOverallRating] = useState(0)
+  const [sendEmailNow, setSendEmailNow] = useState(false)
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -474,7 +475,8 @@ export default function FiveStarReviewBuilder({
         googleReviewUrl: reviewUrl,
         reviewUuid: dataToSave.reviewUuid,
         date: date?.toISOString(),
-        time: time
+        time: time,
+        sendEmailNow: sendEmailNow
       })
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
@@ -550,6 +552,7 @@ export default function FiveStarReviewBuilder({
         userNameToSend: userName,
         userReviewToSend: userReviews,
         buisnessName: buisnessName,
+        placeId: placeId
       })
       .then((response) => {
         setIsSendingEmail(false);
@@ -673,6 +676,7 @@ const calculateAverageRating = (ratings: { [key: string]: number | null | undefi
         date={date}
         setTime={setTime}
         time={time}
+        setSendEmailNow = {setSendEmailNow}
       />
     );
   }

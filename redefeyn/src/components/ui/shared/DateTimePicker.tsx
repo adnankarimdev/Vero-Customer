@@ -18,16 +18,18 @@ interface DateTimePickerProps {
   date?: Date;
   setTime: (time: string) => void;
   time?: string;
+  setSendEmailNow: (emailNow: boolean) => void;
 }
 
 export default function DateTimePicker({
   setDate,
   date,
   setTime,
-  time
+  time,
+  setSendEmailNow
 }: DateTimePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
-  
+
   const now = new Date(); // Current date and time
   const timeOptions = [
     "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
@@ -117,6 +119,20 @@ export default function DateTimePicker({
             <ScrollArea className="h-[200px] sm:h-[300px] w-full rounded-md border">
               <div className="p-2">
                 <div className="grid grid-cols-2 gap-2">
+                  {/* Render "Send Now" button */}
+                  <Button
+                    variant="default"
+                    size="sm"
+                    className="text-xs bg-primary text-primary-foreground col-span-2"
+                    onClick={() => {
+                      setDate(now);  // Set current date
+                      setTime(format(now, "h:mm a"));  // Set current time
+                      setIsOpen(false);
+                      setSendEmailNow(true)
+                    }}
+                  >
+                    Send Now
+                  </Button>
                   {filteredTimeOptions.map((timeOption) => (
                     <Button
                       key={timeOption}

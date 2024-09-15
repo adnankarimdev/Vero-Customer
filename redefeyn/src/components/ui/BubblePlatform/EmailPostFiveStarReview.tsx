@@ -24,6 +24,7 @@ interface EmailPostFiveStarReviewProps {
   date?: Date;
   setTime: (time: string) => void;
   time: string;
+  setSendEmailNow: (emailNow: boolean) => void;
 }
 
 const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
@@ -37,7 +38,8 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   setDate,
   date,
   setTime,
-  time
+  time,
+  setSendEmailNow
 }) => (
   <Dialog open={isEmailReviewDialogOpen} onOpenChange={handleWorryRatingDialog}>
     <DialogContent className="sm:max-w-[425px]">
@@ -78,7 +80,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
           <Label htmlFor="email" className="text-left">
           Send On
           </Label>
-          <DateTimePicker setDate={setDate} date={date} setTime={setTime} time={time}/>
+          <DateTimePicker setDate={setDate} date={date} setTime={setTime} time={time} setSendEmailNow={setSendEmailNow}/>
         </div>
       </div>
       <DialogFooter className="flex justify-end">
