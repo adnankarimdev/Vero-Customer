@@ -191,6 +191,7 @@ const SmartReviewBuilder = ({
         );
         setTitle(reviewPlace.name);
         setIsLoading(false);
+        setShowRatingsPage(false)
       } catch (err) {
         console.error(err);
         setIsLoading(false);
@@ -653,18 +654,19 @@ const SmartReviewBuilder = ({
         </>
       )}
       {isLoading && !startRecording && <RatingCardSkeleton />}
-      {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
+      {/* {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
         <StarRating
           rating={rating}
           handleRating={handleRating}
           handleRatingToReview={handleRatingToReview}
         />
-      )}
+      )} */}
       {!showRatingsPage &&
         (useBubblePlatform || rating > worryRating || inStoreMode) && (
           <FiveStarReviewBuilder
             buisnessName={title}
             rating={rating}
+            setRating={setRating}
             placeId={id}
             keywords={keywords}
             worryBody={worryBody}

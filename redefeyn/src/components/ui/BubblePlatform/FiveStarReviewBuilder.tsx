@@ -66,6 +66,7 @@ type SelectedBadges = {
 interface FiveStarReviewBuilderProps {
   buisnessName: string;
   rating: number;
+  setRating: React.Dispatch<React.SetStateAction<number>>;
   placeId: string;
   keywords?: string[];
   worryRating: number;
@@ -80,6 +81,7 @@ export default function FiveStarReviewBuilder({
   buisnessName,
   placeId,
   rating,
+  setRating,
   keywords,
   worryBody,
   worryTitle,
@@ -115,6 +117,7 @@ export default function FiveStarReviewBuilder({
   const [worryDialog, setWorryDialog] = useState(false);
   const [date, setDate] = useState<Date>()
   const [time, setTime] = useState<string>("")
+  const [overallRating, setOverallRating] = useState(0)
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -190,7 +193,7 @@ export default function FiveStarReviewBuilder({
   };
 
   const handleGenerateReview = () => {
-    if (rating > worryRating && inStoreMode) {
+    if (overallRating > worryRating && inStoreMode) {
       setIsEmailReviewDialogOpen(true);
       return;
     }
@@ -235,7 +238,7 @@ export default function FiveStarReviewBuilder({
     const allBadges: string[] = Object.values(selectedBadges).flat();
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
-      rating: rating,
+      rating: overallRating,
       placeIdFromReview: placeId,
       badges: allBadges,
       postedToGoogleReview: false,
@@ -276,7 +279,9 @@ export default function FiveStarReviewBuilder({
     setIsWorryDialogOpen(false);
     setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
+    console.log(selectedBadges)
     const allBadges: string[] = Object.values(selectedBadges).flat();
+    console.log(allBadges)
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -328,7 +333,7 @@ export default function FiveStarReviewBuilder({
     const allBadges: string[] = Object.values(selectedBadges).flat();
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
-      rating: rating,
+      rating: overallRating,
       placeIdFromReview: placeId,
       badges: allBadges,
       postedToGoogleReview: true,
@@ -372,8 +377,11 @@ export default function FiveStarReviewBuilder({
 
       hasFetched.current = true;
 
-      const contextToSend =
-        "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
+      // const contextToSend =
+      //   "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
+        const contextToSend =
+        "Business Name: " + buisnessName + "\n"
+        console.log("bn in generate", contextToSend)
       axios
         .post("https://vero.ngrok.dev/backend/generate-categories/", {
           context: contextToSend,
@@ -384,6 +392,7 @@ export default function FiveStarReviewBuilder({
             .replace(/```/g, "");
           console.log(generatedCategories);
           const generatedCategoriesAsJson = JSON.parse(generatedCategories);
+          console.log("my categories", generatedCategoriesAsJson)
           setCategories(generatedCategoriesAsJson["categories"]);
           setIsLoading(false);
         })
@@ -413,7 +422,7 @@ export default function FiveStarReviewBuilder({
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
-      rating: rating,
+      rating: overallRating,
       placeIdFromReview: placeId,
       badges: allBadges,
       postedToGoogleReview: false,
@@ -496,7 +505,7 @@ export default function FiveStarReviewBuilder({
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
-      rating: rating,
+      rating: overallRating,
       placeIdFromReview: placeId,
       badges: allBadges,
       postedToGoogleReview: false,
@@ -566,7 +575,31 @@ export default function FiveStarReviewBuilder({
       });
   };
 
-  const stopTimer = () => {
+// Function to calculate average rating, excluding invalid ratings
+const calculateAverageRating = (ratings: { [key: string]: number | null | undefined }): number => {
+  // Filter out invalid ratings (null, undefined, or invalid numbers)
+  const validRatings = Object.values(ratings).filter(
+    (rating): rating is number => typeof rating === 'number' && rating != 0
+  );
+  
+  console.log("valid raings", validRatings)
+  // Calculate the sum of valid ratings
+  const sum = validRatings.reduce((total, rating) => total + rating, 0);
+  
+  // Calculate average
+  const average = validRatings.length ? sum / validRatings.length : 0;
+  console.log("my avg", average)
+  
+  return average;
+};
+
+
+  const stopTimer = (categoryRatings: { [key: string]: number }) => {
+    console.log(categoryRatings)
+    const localOverallRating = calculateAverageRating(categoryRatings)
+    setOverallRating(calculateAverageRating(categoryRatings))
+    // TODO: hacky way, we should just define overallRating, setOverallRating in SmartReviewBuilder
+    setRating(localOverallRating)
     if (startTimeRef.current === null) {
       console.log("Timer was not started");
       return;
@@ -575,10 +608,11 @@ export default function FiveStarReviewBuilder({
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
     console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
+    console.log("my overall rating", overallRating)
 
-    if (rating <= worryRating && showEmailWorryDialog) {
+    if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
-    } else if (rating > worryRating) {
+    } else if (localOverallRating > worryRating) {
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
@@ -645,8 +679,10 @@ export default function FiveStarReviewBuilder({
         <RatingBubbleCard
           businessName={buisnessName}
           rating={rating}
+          setRating={setRating}
           categories={categories}
           selectedBadges={selectedBadges}
+          setSelectedBadges={setSelectedBadges}
           toggleBadge={toggleBadge}
           isLoading={isLoading}
           isAlertDialogOpen={isAlertDialogOpen}

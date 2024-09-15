@@ -1,3 +1,6 @@
+"use client"
+
+import { useState } from 'react'
 import {
   Card,
   CardHeader,
@@ -5,8 +8,8 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from "@/components/ui/card"; // Adjust path as necessary
-import { Badge } from "@/components/ui/badge"; // Adjust path as necessary
+} from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
 import {
   AlertDialog,
   AlertDialogContent,
@@ -16,32 +19,34 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
   AlertDialogAction,
-} from "@/components/ui/alert-dialog"; // Adjust path as necessary
-import { Star } from "lucide-react"; // Adjust path as necessary
-import { Button } from "@/components/ui/button"; // Adjust path as necessary
-import { Send } from "lucide-react"; // Adjust path as necessary
-import { Mail } from "lucide-react"; // Adjust path as necessary
+} from "@/components/ui/alert-dialog"
+import { Star, Send } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface RatingBubbleCardProps {
   businessName: string;
   rating: number;
+  setRating: React.Dispatch<React.SetStateAction<number>>;
   categories: { name: string; badges: string[] }[];
   selectedBadges: { [key: string]: string[] };
+  setSelectedBadges: React.Dispatch<React.SetStateAction<{ [key: string]: string[] }>>;
   toggleBadge: (categoryName: string, badge: string) => void;
   isLoading: boolean;
   isAlertDialogOpen: boolean;
   handleSaveReviewWithoutGenerate: () => void;
   handleGenerateReview: () => void;
-  stopTimer: () => void;
+  stopTimer: (categoryRatings: { [key: string]: number }) => void;
   sendingEmail: boolean;
   inStoreMode?: boolean;
 }
 
-const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
+export default function RatingBubbleCard({
   businessName,
   rating,
+  setRating,
   categories,
   selectedBadges,
+  setSelectedBadges,
   toggleBadge,
   isLoading,
   isAlertDialogOpen,
@@ -50,122 +55,137 @@ const RatingBubbleCard: React.FC<RatingBubbleCardProps> = ({
   stopTimer,
   sendingEmail,
   inStoreMode,
-}) => (
-  <Card className="w-full max-w-3xl border-0">
-    <CardHeader>
-      <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-        {businessName}
-      </CardTitle>
-      <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-        {rating <= 4 && "Want to tell us why?"}
-        {rating === 5 &&
-          "We are so happy to hear that. 🥳 Want to tell us why?"}
-      </CardDescription>
-      <div className="flex items-center justify-center space-x-1">
-        {[...Array(5)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-5 h-5 ${i < rating ? "text-black fill-black" : "text-gray-300"}`}
-          />
-        ))}
-      </div>
-    </CardHeader>
-    {isLoading ? (
-      <>
+}: RatingBubbleCardProps) {
+  const [categoryRatings, setCategoryRatings] = useState<{ [key: string]: number }>(
+    Object.fromEntries(categories.map(category => [category.name, 0]))
+  )
+
+  const handleCategoryRating = (categoryName: string, newRating: number) => {
+    setCategoryRatings(prev => {
+      // If the rating has changed, clear the selected badges for this category
+      if (prev[categoryName] !== newRating) {
+        setSelectedBadges(prevBadges => ({
+          ...prevBadges,
+          [categoryName]: [] // Clear the badges for the category if rating changes
+        }));
+        console.log("cleared!")
+      }
+  
+      // Update the rating for the category
+      return { ...prev, [categoryName]: newRating };
+    });
+  };
+
+  const getBadgesForRating = (categoryName: string) => {
+    // Find the category by name
+    const category = categories.find(cat => cat.name === categoryName);
+    
+    // Get the rating from the state for the given category
+    const rating = categoryRatings[categoryName];
+    
+    // If the category and rating exist, find the matching badges for that rating
+    if (category) {
+      const matchedRating = category.badges.find(badgeSet => badgeSet["rating"] === rating);
+      // console.log(matchedRating)
+      return matchedRating ? matchedRating.badges : [];
+    }
+  
+    return [];
+  };
+  return (
+    <Card className="w-full max-w-3xl border-0">
+      <CardHeader>
+        <CardTitle className="flex items-center justify-center space-x-1 text-sm">
+          {businessName}
+        </CardTitle>
+        <CardDescription className="flex items-center justify-center space-x-1 mb-2">
+          { "How'd it go today?"}
+        </CardDescription>
+      </CardHeader>
+      {isLoading ? (
         <CardContent>
-          <div className="flex items-center justify-center space-x-1 mb-6">
-            {[...Array(5)].map((_, index) => (
-              <div
-                key={index}
-                className="h-8 w-8 bg-gray-300 rounded-full animate-pulse"
-              ></div>
+          <div className="space-y-6">
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="flex items-center space-x-4">
+                <div className="h-6 bg-muted rounded w-1/4 animate-pulse"></div>
+                <div className="flex space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <div key={i} className="h-5 w-5 bg-muted rounded-full animate-pulse"></div>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="mb-6">
-              <div className="h-6 bg-gray-300 rounded w-1/4 mb-2 animate-pulse"></div>
-              <div className="flex flex-wrap gap-2">
-                {[...Array(5)].map((_, i) => (
-                  <div
-                    key={i}
-                    className="h-8 w-24 bg-gray-300 rounded animate-pulse"
-                  ></div>
-                ))}
-              </div>
-            </div>
-          ))}
         </CardContent>
-        <CardFooter className="flex justify-end">
-          <div className="h-10 w-24 bg-gray-300 rounded animate-pulse"></div>
-        </CardFooter>
-      </>
-    ) : (
-      <>
-        <CardContent>
-          {categories.map((category) => (
-            <div key={category.name} className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">{category.name}</h3>
-              <div className="flex flex-wrap gap-2">
-                {category.badges.map((badge) => (
-                  <Badge
-                    key={badge}
-                    variant={
-                      selectedBadges[category.name]?.includes(badge)
-                        ? "destructive"
-                        : "outline"
-                    }
-                    className={
-                      selectedBadges[category.name]?.includes(badge)
-                        ? rating < 4
-                          ? "bg-red-500 text-white hover:bg-red-500 hover:text-white cursor-pointer"
-                          : "bg-green-500 text-white hover:bg-green-500 hover:text-white cursor-pointer"
-                        : "cursor-pointer transition-colors"
-                    }
-                    onClick={() => toggleBadge(category.name, badge)}
-                  >
-                    {badge}
-                  </Badge>
-                ))}
-              </div>
-            </div>
+      ) : (
+<CardContent>
+  {categories.map((category) => (
+    <div key={category.name} className="mb-6">
+      <div className="flex items-center justify-between mb-2">
+        <h3 className="text-lg font-semibold">{category.name}</h3>
+        <div className="flex items-center space-x-1">
+          {[...Array(5)].map((_, i) => (
+            <Star
+              key={i}
+              className={`w-5 h-5 cursor-pointer ${
+                i < categoryRatings[category.name] 
+                  ? "text-primary fill-primary" 
+                  : "text-muted stroke-muted-foreground"
+              }`}
+              onClick={() => handleCategoryRating(category.name, i + 1)}
+            />
           ))}
-        </CardContent>
-        <CardFooter className="flex justify-end">
-          <AlertDialog open={isAlertDialogOpen}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  We've got your feedback, Thank You! 🙌🏼
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {inStoreMode
-                    ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
-                    : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>
-                  No Thanks
-                </AlertDialogCancel>
-                <AlertDialogAction onClick={handleGenerateReview}>
-                  Let's do it
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Button
-            variant="ghost"
-            disabled={Object.keys(selectedBadges).every(
-              (key) => selectedBadges[key].length === 0,
-            )}
-            onClick={stopTimer}
+        </div>
+      </div>
+      
+      {/* Map badges only for the current category */}
+      <div className="flex flex-wrap gap-2">
+        {getBadgesForRating(category.name).map((badge) => (
+          <Badge
+            key={badge}
+            variant={selectedBadges[category.name]?.includes(badge) ? "default" : "outline"}
+            className={`cursor-pointer transition-colors ${
+              selectedBadges[category.name]?.includes(badge)
+                ? categoryRatings[category.name] < 4
+                  ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+                : ""
+            }`}
+            onClick={() => toggleBadge(category.name, badge)}
           >
-            <Send />
-          </Button>
-        </CardFooter>
-      </>
-    )}
-  </Card>
-);
-
-export default RatingBubbleCard;
+            {badge}
+          </Badge>
+        ))}
+      </div>
+    </div>
+  ))}
+</CardContent>
+      )}
+      <CardFooter className="flex justify-end">
+        <AlertDialog open={isAlertDialogOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>We've got your feedback, Thank You! 🙌🏼</AlertDialogTitle>
+              <AlertDialogDescription>
+                {inStoreMode
+                  ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
+                  : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>No Thanks</AlertDialogCancel>
+              <AlertDialogAction onClick={handleGenerateReview}>Let's do it</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+        <Button
+          variant="ghost"
+          disabled={Object.keys(selectedBadges).every((key) => selectedBadges[key].length === 0)}
+          onClick={() => stopTimer(categoryRatings)}
+        >
+          <Send className="h-4 w-4" />
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
