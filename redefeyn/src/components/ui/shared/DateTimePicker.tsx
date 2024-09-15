@@ -1,9 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { format, parse, set } from "date-fns"
+import { format, parse, set, isBefore, isSameDay } from "date-fns"
 import { Calendar as CalendarIcon, Sunrise, Sun, Moon } from "lucide-react"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
@@ -28,12 +27,22 @@ export default function DateTimePicker({
   time
 }: DateTimePickerProps) {
   const [isOpen, setIsOpen] = useState(false)
+  
+  const now = new Date(); // Current date and time
   const timeOptions = [
     "8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
     "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", 
-    "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:15 PM", "4:00 PM", "4:30 PM", 
+    "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", 
     "5:00 PM", "5:30 PM", "6:00 PM", "6:30 PM", "7:00 PM"
   ];
+
+  // Filter time options based on whether the selected date is today
+  const filteredTimeOptions = date && isSameDay(date, now)
+    ? timeOptions.filter((timeOption) => {
+        const timeDate = parse(timeOption, "h:mm a", new Date())
+        return isBefore(now, timeDate) || isSameDay(timeDate, now) // Only show future times if the date is today
+      })
+    : timeOptions
 
   const formatDateTime = (date: Date | undefined, time: string | undefined) => {
     if (!date) return "Pick a date and time"
@@ -95,10 +104,11 @@ export default function DateTimePicker({
               mode="single"
               selected={date}
               onSelect={(selectedDate) => {
-                if (selectedDate) {
+                if (selectedDate) {  // Prevent selecting past dates
                   setDate(selectedDate);
                 }
               }}
+              disabled={(selectedDate) => isBefore(selectedDate, now.setHours(0, 0, 0, 0))} // Disable past dates
               initialFocus
             />
           </div>
@@ -107,7 +117,7 @@ export default function DateTimePicker({
             <ScrollArea className="h-[200px] sm:h-[300px] w-full rounded-md border">
               <div className="p-2">
                 <div className="grid grid-cols-2 gap-2">
-                  {timeOptions.map((timeOption) => (
+                  {filteredTimeOptions.map((timeOption) => (
                     <Button
                       key={timeOption}
                       variant={time === timeOption ? "default" : "outline"}

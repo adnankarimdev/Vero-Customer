@@ -235,7 +235,8 @@ export default function FiveStarReviewBuilder({
   const handleSaveReviewWithoutGenerate = async () => {
     //send data to backend to process.
     setIsLoading(true);
-    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const allBadges: string[] = Object.entries(selectedBadges)
+  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
       rating: overallRating,
@@ -280,7 +281,8 @@ export default function FiveStarReviewBuilder({
     setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
     console.log(selectedBadges)
-    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const allBadges: string[] = Object.entries(selectedBadges)
+  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
     console.log(allBadges)
     //save data here
     const dataToSave: CustomerReviewInfo = {
@@ -330,7 +332,8 @@ export default function FiveStarReviewBuilder({
     console.log("rating", rating);
     console.log("worryrating", worryRating);
     setIsLoading(true);
-    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const allBadges: string[] = Object.entries(selectedBadges)
+  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
       rating: overallRating,
@@ -418,7 +421,8 @@ export default function FiveStarReviewBuilder({
     }
     setIsSendingEmail(true);
     setIsEmailReviewDialogOpen(false);
-    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const allBadges: string[] = Object.entries(selectedBadges)
+  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -501,7 +505,8 @@ export default function FiveStarReviewBuilder({
   };
   const sendEmail = async () => {
     setIsSendingEmail(true);
-    const allBadges: string[] = Object.values(selectedBadges).flat();
+    const allBadges: string[] = Object.entries(selectedBadges)
+  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
