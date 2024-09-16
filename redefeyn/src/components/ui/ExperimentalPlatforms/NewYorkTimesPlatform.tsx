@@ -1,12 +1,28 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { BookOpen, Search, User, Menu, ChevronRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Separator } from "@/components/ui/separator"
+import React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { BookOpen, Search, User, Menu, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 interface NewYorkTimesPlatformProps {
   businessName: string;
@@ -38,20 +54,33 @@ export default function NewYorkTimesPlatform({
   inStoreMode,
 }: NewYorkTimesPlatformProps) {
   const allSelectedBadges = Object.values(selectedBadges).flat();
-  const currentDate = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const currentDate = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <Card className="w-full max-w-6xl border-0 bg-white text-gray-900 shadow-lg rounded-none overflow-hidden">
       <CardHeader className="bg-white p-4 border-b border-gray-200">
         <div className="flex flex-col items-center space-y-2">
-          <CardTitle className="text-4xl font-serif font-bold">{businessName} Times</CardTitle>
-          <CardDescription className="text-sm font-serif">{currentDate}</CardDescription>
+          <CardTitle className="text-4xl font-serif font-bold">
+            {businessName} Times
+          </CardTitle>
+          <CardDescription className="text-sm font-serif">
+            {currentDate}
+          </CardDescription>
         </div>
         <div className="flex items-center justify-between mt-4">
           <div className="flex items-center space-x-4">
             <Menu className="h-6 w-6 text-gray-600" />
-            <Button variant="ghost" className="text-sm font-serif">Today's Paper</Button>
-            <Button variant="ghost" className="text-sm font-serif">Sections</Button>
+            <Button variant="ghost" className="text-sm font-serif">
+              Today's Paper
+            </Button>
+            <Button variant="ghost" className="text-sm font-serif">
+              Sections
+            </Button>
           </div>
           <div className="flex items-center space-x-4">
             <div className="relative">
@@ -68,7 +97,8 @@ export default function NewYorkTimesPlatform({
       </CardHeader>
       <CardContent className="p-6">
         <CardDescription className="text-gray-600 mb-6 font-serif italic">
-          Browse and select your favorite articles to create your personalized review edition!
+          Browse and select your favorite articles to create your personalized
+          review edition!
         </CardDescription>
         {isLoading ? (
           <div className="space-y-8">
@@ -93,13 +123,17 @@ export default function NewYorkTimesPlatform({
           <div className="space-y-8">
             {categories.map((category) => (
               <div key={category.name}>
-                <h3 className="text-xl font-serif font-bold mb-4 pb-2 border-b border-gray-300">{category.name}</h3>
+                <h3 className="text-xl font-serif font-bold mb-4 pb-2 border-b border-gray-300">
+                  {category.name}
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {category.badges.map((badge) => (
                     <div
                       key={badge}
                       className={`flex cursor-pointer ${
-                        selectedBadges[category.name]?.includes(badge) ? 'bg-gray-100' : ''
+                        selectedBadges[category.name]?.includes(badge)
+                          ? "bg-gray-100"
+                          : ""
                       }`}
                       onClick={() => toggleBadge(category.name, badge)}
                     >
@@ -111,13 +145,22 @@ export default function NewYorkTimesPlatform({
                         />
                       </div>
                       <div className="flex-1">
-                        <h4 className="text-lg font-serif font-semibold mb-2">{badge}</h4>
+                        <h4 className="text-lg font-serif font-semibold mb-2">
+                          {badge}
+                        </h4>
                         <p className="text-sm text-gray-600 mb-2">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                          Lorem ipsum dolor sit amet, consectetur adipiscing
+                          elit. Sed do eiusmod tempor incididunt ut labore et
+                          dolore magna aliqua.
                         </p>
                         <div className="flex items-center text-xs text-gray-500">
-                          <span>{Math.floor(Math.random() * 10) + 1} min read</span>
-                          <Separator orientation="vertical" className="mx-2 h-4" />
+                          <span>
+                            {Math.floor(Math.random() * 10) + 1} min read
+                          </span>
+                          <Separator
+                            orientation="vertical"
+                            className="mx-2 h-4"
+                          />
                           <span>{businessName} Times</span>
                         </div>
                         {selectedBadges[category.name]?.includes(badge) && (
@@ -143,7 +186,9 @@ export default function NewYorkTimesPlatform({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent className="bg-white text-gray-900 border border-gray-300">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl font-serif font-bold">Ready to publish your review? 📰</AlertDialogTitle>
+              <AlertDialogTitle className="text-2xl font-serif font-bold">
+                Ready to publish your review? 📰
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-gray-600">
                 {inStoreMode
                   ? "Would you like to create a review based on your article selections? We'll email it to you along with a link to post it!"
@@ -151,10 +196,16 @@ export default function NewYorkTimesPlatform({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-200 text-gray-800 hover:bg-gray-300">
+              <AlertDialogCancel
+                onClick={handleSaveReviewWithoutGenerate}
+                className="bg-gray-200 text-gray-800 hover:bg-gray-300"
+              >
                 Not Now
               </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview} className="bg-gray-800 text-white hover:bg-gray-700">
+              <AlertDialogAction
+                onClick={handleGenerateReview}
+                className="bg-gray-800 text-white hover:bg-gray-700"
+              >
                 Create Review
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -170,12 +221,15 @@ export default function NewYorkTimesPlatform({
             <BookOpen className="h-4 w-4 mr-2" />
             Read Review Edition
           </Button>
-          <Button variant="outline" className="bg-white text-gray-800 border-gray-300 hover:bg-gray-100">
+          <Button
+            variant="outline"
+            className="bg-white text-gray-800 border-gray-300 hover:bg-gray-100"
+          >
             Subscribe
             <ChevronRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

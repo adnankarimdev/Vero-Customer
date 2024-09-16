@@ -191,7 +191,7 @@ const SmartReviewBuilder = ({
         );
         setTitle(reviewPlace.name);
         setIsLoading(false);
-        setShowRatingsPage(false)
+        setShowRatingsPage(false);
       } catch (err) {
         console.error(err);
         setIsLoading(false);
@@ -402,7 +402,7 @@ const SmartReviewBuilder = ({
         userNameToSend: userName,
         userReviewToSend: userReviews,
         buisnessName: title,
-        placeId: id
+        placeId: id,
       })
       .then((response) => {
         setIsSendingEmail(false);

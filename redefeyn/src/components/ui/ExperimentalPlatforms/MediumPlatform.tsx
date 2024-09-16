@@ -1,12 +1,36 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { BookOpen, Search, User, Bell, Bookmark, ThumbsUp, MessageSquare } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import {
+  BookOpen,
+  Search,
+  User,
+  Bell,
+  Bookmark,
+  ThumbsUp,
+  MessageSquare,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface MediumPlatformProps {
   businessName: string;
@@ -57,7 +81,8 @@ export default function MediumPlatform({
       </CardHeader>
       <CardContent className="p-6">
         <CardDescription className="text-xl font-semibold mb-6">
-          Browse and select your favorite stories to create your personalized review collection!
+          Browse and select your favorite stories to create your personalized
+          review collection!
         </CardDescription>
         {isLoading ? (
           <div className="space-y-8">
@@ -88,23 +113,32 @@ export default function MediumPlatform({
                     <div
                       key={badge}
                       className={`flex cursor-pointer ${
-                        selectedBadges[category.name]?.includes(badge) ? 'bg-gray-50' : ''
+                        selectedBadges[category.name]?.includes(badge)
+                          ? "bg-gray-50"
+                          : ""
                       }`}
                       onClick={() => toggleBadge(category.name, badge)}
                     >
                       <Avatar className="w-12 h-12 mr-4">
-                        <AvatarImage src={`/placeholder.svg?text=${encodeURIComponent(badge[0])}`} alt={badge} />
+                        <AvatarImage
+                          src={`/placeholder.svg?text=${encodeURIComponent(badge[0])}`}
+                          alt={badge}
+                        />
                         <AvatarFallback>{badge[0]}</AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <h4 className="text-xl font-bold mb-2">{badge}</h4>
                         <p className="text-gray-600 mb-2">
-                          A captivating story about {badge.toLowerCase()}. Discover the insights and experiences related to this topic.
+                          A captivating story about {badge.toLowerCase()}.
+                          Discover the insights and experiences related to this
+                          topic.
                         </p>
                         <div className="flex items-center text-sm text-gray-500">
                           <span>{businessName}</span>
                           <span className="mx-1">·</span>
-                          <span>{Math.floor(Math.random() * 10) + 1} min read</span>
+                          <span>
+                            {Math.floor(Math.random() * 10) + 1} min read
+                          </span>
                           <span className="mx-1">·</span>
                           <span>{new Date().toLocaleDateString()}</span>
                         </div>
@@ -131,7 +165,9 @@ export default function MediumPlatform({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent className="bg-white text-gray-900 border border-gray-300">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl font-bold">Ready to publish your review? 📝</AlertDialogTitle>
+              <AlertDialogTitle className="text-2xl font-bold">
+                Ready to publish your review? 📝
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-gray-600">
                 {inStoreMode
                   ? "Would you like to create a review based on your story selections? We'll email it to you along with a link to post it!"
@@ -139,10 +175,16 @@ export default function MediumPlatform({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+              <AlertDialogCancel
+                onClick={handleSaveReviewWithoutGenerate}
+                className="bg-gray-100 text-gray-800 hover:bg-gray-200"
+              >
                 Not Now
               </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview} className="bg-green-600 text-white hover:bg-green-700">
+              <AlertDialogAction
+                onClick={handleGenerateReview}
+                className="bg-green-600 text-white hover:bg-green-700"
+              >
                 Create Review
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -161,5 +203,5 @@ export default function MediumPlatform({
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

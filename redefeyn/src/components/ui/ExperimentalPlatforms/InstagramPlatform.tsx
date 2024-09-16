@@ -1,10 +1,26 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { Star, Heart, MessageCircle, Send, Image, Smile } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import { Star, Heart, MessageCircle, Send, Image, Smile } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface InstagramPlatformProps {
   businessName: string;
@@ -46,8 +62,12 @@ export default function InstagramPlatform({
             <AvatarFallback>{businessName[0]}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="text-sm font-semibold">{businessName}</CardTitle>
-            <CardDescription className="text-xs text-gray-500">Sponsored</CardDescription>
+            <CardTitle className="text-sm font-semibold">
+              {businessName}
+            </CardTitle>
+            <CardDescription className="text-xs text-gray-500">
+              Sponsored
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -57,8 +77,14 @@ export default function InstagramPlatform({
       <CardContent className="p-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex space-x-4">
-            <Button variant="ghost" size="icon" className="text-gray-700 hover:text-red-500">
-              <Heart className={`h-6 w-6 ${rating > 3 ? 'fill-red-500 text-red-500' : ''}`} />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-gray-700 hover:text-red-500"
+            >
+              <Heart
+                className={`h-6 w-6 ${rating > 3 ? "fill-red-500 text-red-500" : ""}`}
+              />
             </Button>
             <Button variant="ghost" size="icon" className="text-gray-700">
               <MessageCircle className="h-6 w-6" />
@@ -76,7 +102,9 @@ export default function InstagramPlatform({
             ))}
           </div>
         </div>
-        <p className="text-sm font-semibold mb-1">{allSelectedBadges.length} reactions</p>
+        <p className="text-sm font-semibold mb-1">
+          {allSelectedBadges.length} reactions
+        </p>
         <p className="text-sm text-gray-700 mb-2">
           How was your experience with {businessName}? React to this post!
         </p>
@@ -85,7 +113,10 @@ export default function InstagramPlatform({
             {[...Array(3)].map((_, index) => (
               <div key={index} className="flex flex-wrap gap-2 animate-pulse">
                 {[...Array(4)].map((_, i) => (
-                  <div key={i} className="h-8 w-20 bg-gray-200 rounded-full"></div>
+                  <div
+                    key={i}
+                    className="h-8 w-20 bg-gray-200 rounded-full"
+                  ></div>
                 ))}
               </div>
             ))}
@@ -94,17 +125,24 @@ export default function InstagramPlatform({
           <div className="space-y-4">
             {categories.map((category) => (
               <div key={category.name}>
-                <h3 className="text-sm font-semibold mb-2 text-gray-800">{category.name}</h3>
+                <h3 className="text-sm font-semibold mb-2 text-gray-800">
+                  {category.name}
+                </h3>
                 <div className="flex flex-wrap gap-2">
                   {category.badges.map((badge) => (
                     <Badge
                       key={badge}
-                      variant={selectedBadges[category.name]?.includes(badge) ? "secondary" : "outline"}
+                      variant={
+                        selectedBadges[category.name]?.includes(badge)
+                          ? "secondary"
+                          : "outline"
+                      }
                       className={`
                         text-xs py-1 px-2 rounded-full cursor-pointer transition-colors
-                        ${selectedBadges[category.name]?.includes(badge)
-                          ? "bg-blue-500 text-white hover:bg-blue-600"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        ${
+                          selectedBadges[category.name]?.includes(badge)
+                            ? "bg-blue-500 text-white hover:bg-blue-600"
+                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                         }
                       `}
                       onClick={() => toggleBadge(category.name, badge)}
@@ -130,7 +168,9 @@ export default function InstagramPlatform({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent className="bg-white">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-xl font-bold text-gray-800">Thanks for your reactions! 📸</AlertDialogTitle>
+              <AlertDialogTitle className="text-xl font-bold text-gray-800">
+                Thanks for your reactions! 📸
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-gray-600">
                 {inStoreMode
                   ? "Would you like to share your experience as a post? We'll email you a draft along with a link to post it!"
@@ -138,10 +178,16 @@ export default function InstagramPlatform({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-100 text-gray-800 hover:bg-gray-200">
+              <AlertDialogCancel
+                onClick={handleSaveReviewWithoutGenerate}
+                className="bg-gray-100 text-gray-800 hover:bg-gray-200"
+              >
                 No, thanks
               </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview} className="bg-blue-500 text-white hover:bg-blue-600">
+              <AlertDialogAction
+                onClick={handleGenerateReview}
+                className="bg-blue-500 text-white hover:bg-blue-600"
+              >
                 Yes, create post!
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -157,5 +203,5 @@ export default function InstagramPlatform({
         </Button>
       </CardFooter>
     </Card>
-  )
+  );
 }

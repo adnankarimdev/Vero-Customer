@@ -1,11 +1,37 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { Play, ThumbsUp, Star, Clock, Share2, Menu, Search, Bell, User } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
+import React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import {
+  Play,
+  ThumbsUp,
+  Star,
+  Clock,
+  Share2,
+  Menu,
+  Search,
+  Bell,
+  User,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
 
 interface YouTubePlatformProps {
   businessName: string;
@@ -88,13 +114,17 @@ export default function YouTubePlatform({
           <div className="space-y-8">
             {categories.map((category) => (
               <div key={category.name}>
-                <h3 className="text-lg font-semibold mb-3 text-white/90">{category.name}</h3>
+                <h3 className="text-lg font-semibold mb-3 text-white/90">
+                  {category.name}
+                </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {category.badges.map((badge) => (
                     <div
                       key={badge}
                       className={`flex-shrink-0 relative group cursor-pointer ${
-                        selectedBadges[category.name]?.includes(badge) ? 'ring-2 ring-red-600 rounded-lg' : ''
+                        selectedBadges[category.name]?.includes(badge)
+                          ? "ring-2 ring-red-600 rounded-lg"
+                          : ""
                       }`}
                       onClick={() => toggleBadge(category.name, badge)}
                     >
@@ -108,9 +138,12 @@ export default function YouTubePlatform({
                           <Play className="h-12 w-12 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                         </div>
                       </div>
-                      <h4 className="text-sm font-semibold line-clamp-2">{badge}</h4>
+                      <h4 className="text-sm font-semibold line-clamp-2">
+                        {badge}
+                      </h4>
                       <p className="text-xs text-gray-400 flex items-center mt-1">
-                        {businessName} • {Math.floor(Math.random() * 1000)}K views • {Math.floor(Math.random() * 12) + 1} months ago
+                        {businessName} • {Math.floor(Math.random() * 1000)}K
+                        views • {Math.floor(Math.random() * 12) + 1} months ago
                       </p>
                       {selectedBadges[category.name]?.includes(badge) && (
                         <Badge className="absolute top-2 right-2 bg-red-600 text-white">
@@ -134,7 +167,9 @@ export default function YouTubePlatform({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent className="bg-[#0F0F0F] text-white border border-gray-700">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl font-bold">Ready to share your playlist? 🎥</AlertDialogTitle>
+              <AlertDialogTitle className="text-2xl font-bold">
+                Ready to share your playlist? 🎥
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-white/70">
                 {inStoreMode
                   ? "Would you like to create a review based on your video selections? We'll email it to you along with a link to post it!"
@@ -142,10 +177,16 @@ export default function YouTubePlatform({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-800 text-white hover:bg-gray-700">
+              <AlertDialogCancel
+                onClick={handleSaveReviewWithoutGenerate}
+                className="bg-gray-800 text-white hover:bg-gray-700"
+              >
                 Not Now
               </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview} className="bg-red-600 text-white hover:bg-red-700">
+              <AlertDialogAction
+                onClick={handleGenerateReview}
+                className="bg-red-600 text-white hover:bg-red-700"
+              >
                 Create Review
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -161,12 +202,15 @@ export default function YouTubePlatform({
             <Play className="h-4 w-4 mr-2" />
             Play Review Playlist
           </Button>
-          <Button variant="outline" className="bg-transparent text-white border-gray-600 hover:bg-gray-800">
+          <Button
+            variant="outline"
+            className="bg-transparent text-white border-gray-600 hover:bg-gray-800"
+          >
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

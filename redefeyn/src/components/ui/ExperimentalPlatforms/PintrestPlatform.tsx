@@ -1,12 +1,38 @@
-import React from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { Search, Bell, MessageCircle, User, Plus, ChevronDown, Heart, Upload, ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import React from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import {
+  Search,
+  Bell,
+  MessageCircle,
+  User,
+  Plus,
+  ChevronDown,
+  Heart,
+  Upload,
+  ExternalLink,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface PintrestPlatformProps {
   businessName: string;
@@ -43,10 +69,23 @@ export default function PintrestPlatform({
     <Card className="w-full max-w-7xl border-0 bg-white text-gray-900 shadow-none rounded-none overflow-hidden">
       <CardHeader className="bg-white p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-3xl font-bold text-[#E60023]">{businessName}</CardTitle>
+          <CardTitle className="text-3xl font-bold text-[#E60023]">
+            {businessName}
+          </CardTitle>
           <div className="flex items-center space-x-4">
-            <Button variant="ghost" className="text-black hover:bg-gray-100 rounded-full">Home</Button>
-            <Button variant="ghost" className="text-black hover:bg-gray-100 rounded-full">Create<ChevronDown className="ml-1 h-4 w-4" /></Button>
+            <Button
+              variant="ghost"
+              className="text-black hover:bg-gray-100 rounded-full"
+            >
+              Home
+            </Button>
+            <Button
+              variant="ghost"
+              className="text-black hover:bg-gray-100 rounded-full"
+            >
+              Create
+              <ChevronDown className="ml-1 h-4 w-4" />
+            </Button>
             <div className="relative">
               <Input
                 type="text"
@@ -67,7 +106,8 @@ export default function PintrestPlatform({
       </CardHeader>
       <CardContent className="p-6">
         <CardDescription className="text-xl font-semibold mb-6 text-center">
-          Pin your favorite experiences to create your personalized review board!
+          Pin your favorite experiences to create your personalized review
+          board!
         </CardDescription>
         {isLoading ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
@@ -95,8 +135,13 @@ export default function PintrestPlatform({
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 flex items-center justify-center">
-                      <Button variant="secondary" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        {selectedBadges[category.name]?.includes(badge) ? 'Unpin' : 'Pin'}
+                      <Button
+                        variant="secondary"
+                        className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      >
+                        {selectedBadges[category.name]?.includes(badge)
+                          ? "Unpin"
+                          : "Pin"}
                       </Button>
                     </div>
                   </div>
@@ -104,21 +149,27 @@ export default function PintrestPlatform({
                   <p className="text-xs text-gray-500">{category.name}</p>
                   <div className="absolute top-2 left-2">
                     {selectedBadges[category.name]?.includes(badge) && (
-                      <Badge className="bg-red-500 text-white">
-                        Pinned
-                      </Badge>
+                      <Badge className="bg-red-500 text-white">Pinned</Badge>
                     )}
                   </div>
                   <div className="absolute bottom-2 right-2 flex space-x-1">
-                    <Button size="sm" variant="ghost" className="rounded-full bg-white bg-opacity-80 hover:bg-opacity-100">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="rounded-full bg-white bg-opacity-80 hover:bg-opacity-100"
+                    >
                       <Upload className="h-4 w-4" />
                     </Button>
-                    <Button size="sm" variant="ghost" className="rounded-full bg-white bg-opacity-80 hover:bg-opacity-100">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="rounded-full bg-white bg-opacity-80 hover:bg-opacity-100"
+                    >
                       <ExternalLink className="h-4 w-4" />
                     </Button>
                   </div>
                 </div>
-              ))
+              )),
             )}
           </div>
         )}
@@ -132,7 +183,9 @@ export default function PintrestPlatform({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent className="bg-white text-gray-900 border border-gray-300 rounded-lg">
             <AlertDialogHeader>
-              <AlertDialogTitle className="text-2xl font-bold">Ready to share your board? 📌</AlertDialogTitle>
+              <AlertDialogTitle className="text-2xl font-bold">
+                Ready to share your board? 📌
+              </AlertDialogTitle>
               <AlertDialogDescription className="text-gray-600">
                 {inStoreMode
                   ? "Would you like to create a review based on your pinned experiences? We'll email it to you along with a link to post it!"
@@ -140,10 +193,16 @@ export default function PintrestPlatform({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full">
+              <AlertDialogCancel
+                onClick={handleSaveReviewWithoutGenerate}
+                className="bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full"
+              >
                 Not Now
               </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview} className="bg-red-500 text-white hover:bg-red-600 rounded-full">
+              <AlertDialogAction
+                onClick={handleGenerateReview}
+                className="bg-red-500 text-white hover:bg-red-600 rounded-full"
+              >
                 Create Review
               </AlertDialogAction>
             </AlertDialogFooter>
@@ -162,5 +221,5 @@ export default function PintrestPlatform({
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

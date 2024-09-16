@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+  CardDescription,
+} from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Plus, X, Music, Send, Star } from "lucide-react";
 import {
@@ -26,7 +33,7 @@ interface SpotifyReviewPlatformProps {
   handleGenerateReview: () => void;
   stopTimer: () => void;
   sendingEmail: boolean;
-  inStoreMode?:boolean;
+  inStoreMode?: boolean;
 }
 
 const SpotifyReviewPlatform: React.FC<SpotifyReviewPlatformProps> = ({
@@ -41,7 +48,7 @@ const SpotifyReviewPlatform: React.FC<SpotifyReviewPlatformProps> = ({
   handleGenerateReview,
   stopTimer,
   sendingEmail,
-  inStoreMode
+  inStoreMode,
 }) => {
   const [playlist, setPlaylist] = useState<string[]>([]);
 
@@ -63,26 +70,26 @@ const SpotifyReviewPlatform: React.FC<SpotifyReviewPlatformProps> = ({
   return (
     <div className="flex flex-col md:flex-row gap-6 p-6  text-white min-h-screen">
       <div className="w-full md:w-2/3 space-y-6">
-      <Card className="w-full max-w-3xl border-0 bg-[#181818]">
-    <CardHeader>
-      <CardTitle className="flex items-center justify-center space-x-1 text-sm text-white">
-        {buisnessName}
-      </CardTitle>
-      <CardDescription className="flex items-center justify-center space-x-1 mb-2 text-white">
-        {rating  && rating <= 4 && "Want to tell us why?"}
-        {rating === 5 &&
-          "We are so happy to hear that. 🥳 Want to tell us why?"}
-      </CardDescription>
-      <div className="flex items-center justify-center space-x-1 text-[#1DB954]">
-        {[...Array(rating)].map((_, i) => (
-          <Star
-            key={i}
-            className={`w-5 h-5 ${rating && i < rating ? "text-black fill-[#1DB954]" : "text-gray-300"}`}
-          />
-        ))}
-      </div>
-    </CardHeader>
-    </Card>
+        <Card className="w-full max-w-3xl border-0 bg-[#181818]">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-center space-x-1 text-sm text-white">
+              {buisnessName}
+            </CardTitle>
+            <CardDescription className="flex items-center justify-center space-x-1 mb-2 text-white">
+              {rating && rating <= 4 && "Want to tell us why?"}
+              {rating === 5 &&
+                "We are so happy to hear that. 🥳 Want to tell us why?"}
+            </CardDescription>
+            <div className="flex items-center justify-center space-x-1 text-[#1DB954]">
+              {[...Array(rating)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`w-5 h-5 ${rating && i < rating ? "text-black fill-[#1DB954]" : "text-gray-300"}`}
+                />
+              ))}
+            </div>
+          </CardHeader>
+        </Card>
         {isLoading ? (
           <>
             {[...Array(3)].map((_, index) => (
@@ -109,68 +116,76 @@ const SpotifyReviewPlatform: React.FC<SpotifyReviewPlatformProps> = ({
         ) : (
           <>
             <Card className=" bg-[#181818] border-none w-full max-w-3xl border-0">
-            <CardHeader>
-            {categories.map((category, index) => (
-              <Card key={index} className="bg-[#181818] border-none">
-                <CardHeader>
-                  <CardTitle className="text-white">{category.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap gap-2">
-                    {category.badges.map((badge, badgeIndex) => (
-                      <Button
-                        key={badgeIndex}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleBadgeClick(category.name, badge)}
-                        className={`bg-[#282828] text-white ${
-                          (selectedBadges[category.name] || []).includes(badge)
-                            ? "bg-[#1DB954] hover:text-black"
-                            : "hover:bg-[#1DB954] hover:text-black"
-                        }`}
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        {badge}
-                      </Button>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardFooter className="flex justify-end">
-                  <AlertDialog open={isAlertDialogOpen}>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          We've got your feedback, Thank You! 🙌🏼
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                        {inStoreMode
-                    ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
-                    : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>
-                          No Thanks
-                        </AlertDialogCancel>
-                        <AlertDialogAction onClick={handleGenerateReview}>
-                          Let's do it
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </CardFooter>
-              </Card>
-            ))}
-            </CardHeader>
-            <CardFooter className="flex justify-end">
-            <Button
-                    variant="ghost"
-                    disabled={Object.values(selectedBadges).flat().length === 0}
-                    onClick={stopTimer}
-                  >
-                    <Send className="h-5 w-5 text-[#1DB954]"/>
-                  </Button>
-            </CardFooter>
+              <CardHeader>
+                {categories.map((category, index) => (
+                  <Card key={index} className="bg-[#181818] border-none">
+                    <CardHeader>
+                      <CardTitle className="text-white">
+                        {category.name}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex flex-wrap gap-2">
+                        {category.badges.map((badge, badgeIndex) => (
+                          <Button
+                            key={badgeIndex}
+                            variant="outline"
+                            size="sm"
+                            onClick={() =>
+                              handleBadgeClick(category.name, badge)
+                            }
+                            className={`bg-[#282828] text-white ${
+                              (selectedBadges[category.name] || []).includes(
+                                badge,
+                              )
+                                ? "bg-[#1DB954] hover:text-black"
+                                : "hover:bg-[#1DB954] hover:text-black"
+                            }`}
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {badge}
+                          </Button>
+                        ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="flex justify-end">
+                      <AlertDialog open={isAlertDialogOpen}>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              We've got your feedback, Thank You! 🙌🏼
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              {inStoreMode
+                                ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
+                                : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel
+                              onClick={handleSaveReviewWithoutGenerate}
+                            >
+                              No Thanks
+                            </AlertDialogCancel>
+                            <AlertDialogAction onClick={handleGenerateReview}>
+                              Let's do it
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </CardHeader>
+              <CardFooter className="flex justify-end">
+                <Button
+                  variant="ghost"
+                  disabled={Object.values(selectedBadges).flat().length === 0}
+                  onClick={stopTimer}
+                >
+                  <Send className="h-5 w-5 text-[#1DB954]" />
+                </Button>
+              </CardFooter>
             </Card>
           </>
         )}

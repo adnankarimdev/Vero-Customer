@@ -115,10 +115,11 @@ export default function FiveStarReviewBuilder({
   const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
   const [isEmailReviewDialogOpen, setIsEmailReviewDialogOpen] = useState(false);
   const [worryDialog, setWorryDialog] = useState(false);
-  const [date, setDate] = useState<Date>()
-  const [time, setTime] = useState<string>("")
-  const [overallRating, setOverallRating] = useState(0)
-  const [sendEmailNow, setSendEmailNow] = useState(false)
+  const [date, setDate] = useState<Date>();
+  const [time, setTime] = useState<string>("");
+  const [overallRating, setOverallRating] = useState(0);
+  const [sendEmailNow, setSendEmailNow] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("+1");
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -141,37 +142,40 @@ export default function FiveStarReviewBuilder({
 
   const validateForm = (): boolean => {
     if (!userName) {
+      toast({
+        title: "Please enter your name.",
+        duration: 2000,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (!phoneNumber) {
+      // If no phone number, perform email validation
+      if (!userEmail) {
         toast({
-          title: "Please enter your name.",
+          title: "Please enter your email.",
           duration: 2000,
-          variant: "destructive" 
+          variant: "destructive",
         });
-      return false;
-    }
+        return false;
+      }
 
-    if (!userEmail) {
-      toast({
-        title: "Please enter your email.",
-        duration: 2000,
-        variant: "destructive" 
-      });
-      return false;
-    }
-
-    if (!validateEmail(userEmail)) {
-      toast({
-        title: "Please enter a valid email.",
-        duration: 2000,
-        variant: "destructive" 
-      });
-      return false;
+      if (!validateEmail(userEmail)) {
+        toast({
+          title: "Please enter a valid email.",
+          duration: 2000,
+          variant: "destructive",
+        });
+        return false;
+      }
     }
 
     if (!date || !time) {
       toast({
         title: "Please select a date and time.",
         duration: 2000,
-        variant: "destructive" 
+        variant: "destructive",
       });
       return false;
     }
@@ -236,8 +240,9 @@ export default function FiveStarReviewBuilder({
   const handleSaveReviewWithoutGenerate = async () => {
     //send data to backend to process.
     setIsLoading(true);
-    const allBadges: string[] = Object.entries(selectedBadges)
-  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
+    const allBadges: string[] = Object.entries(selectedBadges).flatMap(
+      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+    );
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
       rating: overallRating,
@@ -281,10 +286,11 @@ export default function FiveStarReviewBuilder({
     setIsWorryDialogOpen(false);
     setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
-    console.log(selectedBadges)
-    const allBadges: string[] = Object.entries(selectedBadges)
-  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
-    console.log(allBadges)
+    console.log(selectedBadges);
+    const allBadges: string[] = Object.entries(selectedBadges).flatMap(
+      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+    );
+    console.log(allBadges);
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -333,8 +339,9 @@ export default function FiveStarReviewBuilder({
     console.log("rating", rating);
     console.log("worryrating", worryRating);
     setIsLoading(true);
-    const allBadges: string[] = Object.entries(selectedBadges)
-  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
+    const allBadges: string[] = Object.entries(selectedBadges).flatMap(
+      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+    );
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
       rating: overallRating,
@@ -383,9 +390,8 @@ export default function FiveStarReviewBuilder({
 
       // const contextToSend =
       //   "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
-        const contextToSend =
-        "Business Name: " + buisnessName + "\n"
-        console.log("bn in generate", contextToSend)
+      const contextToSend = "Business Name: " + buisnessName + "\n";
+      console.log("bn in generate", contextToSend);
       axios
         .post("https://vero.ngrok.dev/backend/generate-categories/", {
           context: contextToSend,
@@ -396,7 +402,7 @@ export default function FiveStarReviewBuilder({
             .replace(/```/g, "");
           console.log(generatedCategories);
           const generatedCategoriesAsJson = JSON.parse(generatedCategories);
-          console.log("my categories", generatedCategoriesAsJson)
+          console.log("my categories", generatedCategoriesAsJson);
           setCategories(generatedCategoriesAsJson["categories"]);
           setIsLoading(false);
         })
@@ -416,14 +422,14 @@ export default function FiveStarReviewBuilder({
   };
 
   const sendEmailToClientWithReview = async () => {
-    if (!validateForm())
-    {
-      return
+    if (!validateForm()) {
+      return;
     }
     setIsSendingEmail(true);
     setIsEmailReviewDialogOpen(false);
-    const allBadges: string[] = Object.entries(selectedBadges)
-  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
+    const allBadges: string[] = Object.entries(selectedBadges).flatMap(
+      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+    );
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -476,7 +482,8 @@ export default function FiveStarReviewBuilder({
         reviewUuid: dataToSave.reviewUuid,
         date: date?.toISOString(),
         time: time,
-        sendEmailNow: sendEmailNow
+        sendEmailNow: sendEmailNow,
+        phoneNumber: phoneNumber,
       })
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
@@ -507,8 +514,9 @@ export default function FiveStarReviewBuilder({
   };
   const sendEmail = async () => {
     setIsSendingEmail(true);
-    const allBadges: string[] = Object.entries(selectedBadges)
-  .flatMap(([category, badges]) => badges.map(badge => `${category}: ${badge}`));
+    const allBadges: string[] = Object.entries(selectedBadges).flatMap(
+      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+    );
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -552,7 +560,7 @@ export default function FiveStarReviewBuilder({
         userNameToSend: userName,
         userReviewToSend: userReviews,
         buisnessName: buisnessName,
-        placeId: placeId
+        placeId: placeId,
       })
       .then((response) => {
         setIsSendingEmail(false);
@@ -583,31 +591,32 @@ export default function FiveStarReviewBuilder({
       });
   };
 
-// Function to calculate average rating, excluding invalid ratings
-const calculateAverageRating = (ratings: { [key: string]: number | null | undefined }): number => {
-  // Filter out invalid ratings (null, undefined, or invalid numbers)
-  const validRatings = Object.values(ratings).filter(
-    (rating): rating is number => typeof rating === 'number' && rating != 0
-  );
-  
-  console.log("valid raings", validRatings)
-  // Calculate the sum of valid ratings
-  const sum = validRatings.reduce((total, rating) => total + rating, 0);
-  
-  // Calculate average
-  const average = validRatings.length ? sum / validRatings.length : 0;
-  console.log("my avg", average)
-  
-  return average;
-};
+  // Function to calculate average rating, excluding invalid ratings
+  const calculateAverageRating = (ratings: {
+    [key: string]: number | null | undefined;
+  }): number => {
+    // Filter out invalid ratings (null, undefined, or invalid numbers)
+    const validRatings = Object.values(ratings).filter(
+      (rating): rating is number => typeof rating === "number" && rating != 0,
+    );
 
+    console.log("valid raings", validRatings);
+    // Calculate the sum of valid ratings
+    const sum = validRatings.reduce((total, rating) => total + rating, 0);
+
+    // Calculate average
+    const average = validRatings.length ? sum / validRatings.length : 0;
+    console.log("my avg", average);
+
+    return average;
+  };
 
   const stopTimer = (categoryRatings: { [key: string]: number }) => {
-    console.log(categoryRatings)
-    const localOverallRating = calculateAverageRating(categoryRatings)
-    setOverallRating(calculateAverageRating(categoryRatings))
+    console.log(categoryRatings);
+    const localOverallRating = calculateAverageRating(categoryRatings);
+    setOverallRating(calculateAverageRating(categoryRatings));
     // TODO: hacky way, we should just define overallRating, setOverallRating in SmartReviewBuilder
-    setRating(localOverallRating)
+    setRating(localOverallRating);
     if (startTimeRef.current === null) {
       console.log("Timer was not started");
       return;
@@ -616,7 +625,7 @@ const calculateAverageRating = (ratings: { [key: string]: number | null | undefi
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
     console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
-    console.log("my overall rating", overallRating)
+    console.log("my overall rating", overallRating);
 
     if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
@@ -676,7 +685,9 @@ const calculateAverageRating = (ratings: { [key: string]: number | null | undefi
         date={date}
         setTime={setTime}
         time={time}
-        setSendEmailNow = {setSendEmailNow}
+        setSendEmailNow={setSendEmailNow}
+        setPhoneNumber={setPhoneNumber}
+        phoneNumber={phoneNumber}
       />
     );
   }
@@ -699,7 +710,8 @@ const calculateAverageRating = (ratings: { [key: string]: number | null | undefi
           handleGenerateReview={handleGenerateReview}
           stopTimer={stopTimer}
           sendingEmail={sendingEmail}
-          inStoreMode={inStoreMode}/>
+          inStoreMode={inStoreMode}
+        />
 
         // <TinderPlatform
         // businessName={buisnessName}
@@ -757,19 +769,19 @@ const calculateAverageRating = (ratings: { [key: string]: number | null | undefi
         // sendingEmail={sendingEmail}
         // inStoreMode={inStoreMode}/>
 
-          // <YouTubePlatform
-          // businessName={buisnessName}
-          // rating={rating}
-          // categories={categories}
-          // selectedBadges={selectedBadges}
-          // toggleBadge={toggleBadge}
-          // isLoading={isLoading}
-          // isAlertDialogOpen={isAlertDialogOpen}
-          // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
-          // handleGenerateReview={handleGenerateReview}
-          // stopTimer={stopTimer}
-          // sendingEmail={sendingEmail}
-          // inStoreMode={inStoreMode}/>
+        // <YouTubePlatform
+        // businessName={buisnessName}
+        // rating={rating}
+        // categories={categories}
+        // selectedBadges={selectedBadges}
+        // toggleBadge={toggleBadge}
+        // isLoading={isLoading}
+        // isAlertDialogOpen={isAlertDialogOpen}
+        // handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+        // handleGenerateReview={handleGenerateReview}
+        // stopTimer={stopTimer}
+        // sendingEmail={sendingEmail}
+        // inStoreMode={inStoreMode}/>
 
         // <SpotifyPlatform
         // businessName={buisnessName}

@@ -1,10 +1,34 @@
-import React, { useState } from 'react'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { AlertDialog, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog"
-import { Flame, X, Heart, Star, MessageCircle, User, Settings } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { motion, AnimatePresence } from "framer-motion"
+import React, { useState } from "react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import {
+  Flame,
+  X,
+  Heart,
+  Star,
+  MessageCircle,
+  User,
+  Settings,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TinderPlatformProps {
   businessName: string;
@@ -35,16 +59,19 @@ export default function TinderPlatform({
   sendingEmail,
   inStoreMode,
 }: TinderPlatformProps) {
-  const allBadges = categories.flatMap(category => 
-    category.badges.map(badge => ({ category: category.name, badge }))
+  const allBadges = categories.flatMap((category) =>
+    category.badges.map((badge) => ({ category: category.name, badge })),
   );
   const [currentBadgeIndex, setCurrentBadgeIndex] = useState(0);
-  const [direction, setDirection] = useState<'left' | 'right' | null>(null);
+  const [direction, setDirection] = useState<"left" | "right" | null>(null);
 
-  const handleSwipe = (swipeDirection: 'left' | 'right') => {
+  const handleSwipe = (swipeDirection: "left" | "right") => {
     setDirection(swipeDirection);
-    if (swipeDirection === 'right') {
-      toggleBadge(allBadges[currentBadgeIndex].category, allBadges[currentBadgeIndex].badge);
+    if (swipeDirection === "right") {
+      toggleBadge(
+        allBadges[currentBadgeIndex].category,
+        allBadges[currentBadgeIndex].badge,
+      );
     }
     setTimeout(() => {
       setCurrentBadgeIndex((prevIndex) => (prevIndex + 1) % allBadges.length);
@@ -81,9 +108,10 @@ export default function TinderPlatform({
             <motion.div
               key={currentBadgeIndex}
               initial={{ x: 0, opacity: 1 }}
-              animate={{ 
-                x: direction === 'left' ? -300 : direction === 'right' ? 300 : 0,
-                opacity: direction ? 0 : 1
+              animate={{
+                x:
+                  direction === "left" ? -300 : direction === "right" ? 300 : 0,
+                opacity: direction ? 0 : 1,
               }}
               exit={{ x: 0 }}
               transition={{ duration: 0.3 }}
@@ -95,10 +123,16 @@ export default function TinderPlatform({
                 className="w-full h-full object-cover"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
-                <h3 className="text-2xl font-bold text-white mb-1">{allBadges[currentBadgeIndex].badge}</h3>
-                <p className="text-sm text-gray-200">{allBadges[currentBadgeIndex].category}</p>
+                <h3 className="text-2xl font-bold text-white mb-1">
+                  {allBadges[currentBadgeIndex].badge}
+                </h3>
+                <p className="text-sm text-gray-200">
+                  {allBadges[currentBadgeIndex].category}
+                </p>
               </div>
-              {selectedBadges[allBadges[currentBadgeIndex].category]?.includes(allBadges[currentBadgeIndex].badge) && (
+              {selectedBadges[allBadges[currentBadgeIndex].category]?.includes(
+                allBadges[currentBadgeIndex].badge,
+              ) && (
                 <Badge className="absolute top-4 right-4 bg-green-500 text-white">
                   Matched
                 </Badge>
@@ -112,7 +146,7 @@ export default function TinderPlatform({
           variant="outline"
           size="icon"
           className="h-14 w-14 rounded-full border-2 border-gray-300 text-gray-500 hover:border-gray-400 hover:text-gray-600"
-          onClick={() => handleSwipe('left')}
+          onClick={() => handleSwipe("left")}
         >
           <X className="h-8 w-8" />
         </Button>
@@ -120,7 +154,7 @@ export default function TinderPlatform({
           variant="outline"
           size="icon"
           className="h-16 w-16 rounded-full border-2 border-[#FD297B] text-[#FD297B] hover:bg-[#FD297B] hover:text-white"
-          onClick={() => handleSwipe('right')}
+          onClick={() => handleSwipe("right")}
         >
           <Heart className="h-10 w-10" />
         </Button>
@@ -141,7 +175,9 @@ export default function TinderPlatform({
           <AlertDialog open={isAlertDialogOpen}>
             <AlertDialogContent className="bg-white text-gray-900 border border-gray-300 rounded-lg">
               <AlertDialogHeader>
-                <AlertDialogTitle className="text-2xl font-bold">It's a match! 💖</AlertDialogTitle>
+                <AlertDialogTitle className="text-2xl font-bold">
+                  It's a match! 💖
+                </AlertDialogTitle>
                 <AlertDialogDescription className="text-gray-600">
                   {inStoreMode
                     ? "Would you like to create a review based on your matches? We'll email it to you along with a link to post it!"
@@ -149,10 +185,16 @@ export default function TinderPlatform({
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate} className="bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full">
+                <AlertDialogCancel
+                  onClick={handleSaveReviewWithoutGenerate}
+                  className="bg-gray-100 text-gray-800 hover:bg-gray-200 rounded-full"
+                >
                   Not Now
                 </AlertDialogCancel>
-                <AlertDialogAction onClick={handleGenerateReview} className="bg-[#FD297B] text-white hover:bg-[#FF5864] rounded-full">
+                <AlertDialogAction
+                  onClick={handleGenerateReview}
+                  className="bg-[#FD297B] text-white hover:bg-[#FF5864] rounded-full"
+                >
                   Create Review
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -165,5 +207,5 @@ export default function TinderPlatform({
         </div>
       </div>
     </Card>
-  )
+  );
 }
