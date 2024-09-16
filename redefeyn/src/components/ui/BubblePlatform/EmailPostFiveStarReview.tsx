@@ -7,6 +7,15 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog"; // adjust the path for shadcn components
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import DateTimePicker from "../shared/DateTimePicker";
 import { Input } from "@/components/ui/input";
@@ -32,6 +41,9 @@ interface EmailPostFiveStarReviewProps {
   setSendEmailNow: (emailNow: boolean) => void;
   setPhoneNumber: (phone: string) => void;
   phoneNumber?: string;
+  positiveTones: string[];
+  tone: string;
+  setTone: (tone: string) => void;
 }
 
 const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
@@ -50,6 +62,9 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   setSendEmailNow,
   setPhoneNumber,
   phoneNumber,
+  positiveTones,
+  tone,
+  setTone,
 }) => {
   const [method, setMethod] = useState<"email" | "phone" | null>(null); // State for selected method
 
@@ -142,6 +157,28 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             </div>
           )}
 
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="email" className="text-left">
+              Review Tone
+            </Label>
+            <Select onValueChange={(value) => setTone(value)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue
+                  placeholder="Select a tone"
+                  defaultValue={positiveTones[0]}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {positiveTones.map((tone) => (
+                    <SelectItem key={tone} value={tone}>
+                      {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
           {/* DateTimePicker */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="email" className="text-left">

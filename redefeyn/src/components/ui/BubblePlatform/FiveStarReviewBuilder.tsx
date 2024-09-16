@@ -120,7 +120,22 @@ export default function FiveStarReviewBuilder({
   const [overallRating, setOverallRating] = useState(0);
   const [sendEmailNow, setSendEmailNow] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+1");
+  const [tone, setTone] = useState("friendly");
   let globalRating = 0;
+  const positiveTones = [
+    "friendly 🤗",
+    "positive 😊",
+    "Local Guide 🦮",
+    "enthusiastic 😃",
+    "grateful 🙏",
+    "hopeful 🌟",
+    "excited 🎉",
+    "informative 📝",
+    "happy 😄",
+    "satisfied 😌",
+    "appreciative 💖",
+    "cheerful 😁",
+  ];
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -463,6 +478,7 @@ export default function FiveStarReviewBuilder({
         // setIsLoading(false);
       });
 
+    console.log("MY TONE", tone);
     const contextToSend =
       "Business Name:\n" +
       buisnessName +
@@ -474,7 +490,10 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(selectedBadges) +
       "\n" +
       "Keywords:\n" +
-      JSON.stringify(keywords);
+      JSON.stringify(keywords) +
+      "\n" +
+      "Review Tone:\n" +
+      tone;
 
     axios
       .post("https://vero.ngrok.dev/backend/send-email-to-post-later/", {
@@ -487,6 +506,7 @@ export default function FiveStarReviewBuilder({
         time: time,
         sendEmailNow: sendEmailNow,
         phoneNumber: phoneNumber,
+        tone: tone,
       })
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
@@ -695,6 +715,9 @@ export default function FiveStarReviewBuilder({
         setSendEmailNow={setSendEmailNow}
         setPhoneNumber={setPhoneNumber}
         phoneNumber={phoneNumber}
+        positiveTones={positiveTones}
+        setTone={setTone}
+        tone={tone}
       />
     );
   }

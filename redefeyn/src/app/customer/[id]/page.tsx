@@ -23,6 +23,7 @@ export default function AtHomeCustomerReview() {
   const [generatedReview, setGeneratedReview] = useState("");
   const [googleUrl, setGoogleUrl] = useState("");
   const [reviewUuidFromUrl, setReviewUuidFromUrl] = useState("");
+  const [tone, setTone] = useState("");
   const { toast } = useToast();
   const pathname = usePathname();
   const router = useRouter();
@@ -44,6 +45,7 @@ export default function AtHomeCustomerReview() {
         }
         setGeneratedReview(reviewResponse.data.review_body);
         setGoogleUrl(reviewResponse.data.google_review_url);
+        setTone(reviewResponse.data.tone);
       } catch (err) {
         console.error(err);
       } finally {
@@ -95,6 +97,12 @@ export default function AtHomeCustomerReview() {
               <CardDescription className="text-center">
                 Feel free to edit this! Once it looks good, click the Google
                 icon below and it will copy the review for you to paste 🥳
+                <p className="text-gray-500 text-xs mt-2">
+                  Tone at Time of Selection:{" "}
+                  <span className="font-bold">
+                    {tone.charAt(0).toUpperCase() + tone.slice(1)}
+                  </span>
+                </p>
               </CardDescription>
 
               <Textarea
