@@ -241,9 +241,9 @@ export default function FiveStarReviewBuilder({
   const handleSaveReviewWithoutGenerate = async () => {
     //send data to backend to process.
     setIsLoading(true);
-    setIsWorryDialogOpen(false)
-    setIsAlertDialogOpen(false)
-    setIsEmailReviewDialogOpen(false)
+    setIsWorryDialogOpen(false);
+    setIsAlertDialogOpen(false);
+    setIsEmailReviewDialogOpen(false);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
     );
@@ -293,7 +293,7 @@ export default function FiveStarReviewBuilder({
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
     );
-    console.log("global rating", globalRating)
+    console.log("global rating", globalRating);
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -617,8 +617,8 @@ export default function FiveStarReviewBuilder({
   const stopTimer = (categoryRatings: { [key: string]: number }) => {
     console.log(categoryRatings);
     const localOverallRating = calculateAverageRating(categoryRatings);
-    globalRating = localOverallRating
-    console.log("GLOBALLL", globalRating)
+    globalRating = localOverallRating;
+    console.log("GLOBALLL", globalRating);
     setOverallRating(calculateAverageRating(categoryRatings));
     // TODO: hacky way, we should just define overallRating, setOverallRating in SmartReviewBuilder
     setRating(localOverallRating);

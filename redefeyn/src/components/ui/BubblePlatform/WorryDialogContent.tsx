@@ -36,7 +36,10 @@ const WorryDialogContent: React.FC<WorryDialogContentProps> = ({
   handleSaveReviewWithoutGenerate,
   sendEmail,
 }) => (
-  <Dialog open={isWorryDialogOpen} onOpenChange={handleSaveReviewWithoutGenerate}>
+  <Dialog
+    open={isWorryDialogOpen}
+    onOpenChange={handleSaveReviewWithoutGenerate}
+  >
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle className="flex justify-center items-center">
