@@ -23,6 +23,7 @@ interface EmailPostFiveStarReviewProps {
   userEmail: string;
   setUserEmail: (email: string) => void;
   handleWorryRatingDialog: (open: boolean) => void;
+  handleSaveReviewWithoutGenerate: () => void;
   sendEmailToClientWithReview: () => void;
   setDate: (date: Date) => void;
   date?: Date;
@@ -40,6 +41,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   userEmail,
   setUserEmail,
   handleWorryRatingDialog,
+  handleSaveReviewWithoutGenerate,
   sendEmailToClientWithReview,
   setDate,
   date,
@@ -54,7 +56,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   return (
     <Dialog
       open={isEmailReviewDialogOpen}
-      onOpenChange={handleWorryRatingDialog}
+      onOpenChange={handleSaveReviewWithoutGenerate}
     >
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

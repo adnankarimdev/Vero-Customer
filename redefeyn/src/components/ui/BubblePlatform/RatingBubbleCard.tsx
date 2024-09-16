@@ -181,7 +181,7 @@ export default function RatingBubbleCard({
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {inStoreMode
-                  ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll email you it along with the review link!"
+                  ? "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll send you it along with the review link!"
                   : "If you want, we can build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! You'll just have to paste it!"}
               </AlertDialogDescription>
             </AlertDialogHeader>

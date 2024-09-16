@@ -20,6 +20,7 @@ interface WorryDialogContentProps {
   userEmail: string;
   setUserEmail: (email: string) => void;
   handleWorryRatingDialog: (open: boolean) => void;
+  handleSaveReviewWithoutGenerate: () => void;
   sendEmail: () => void;
 }
 
@@ -32,9 +33,10 @@ const WorryDialogContent: React.FC<WorryDialogContentProps> = ({
   userEmail,
   setUserEmail,
   handleWorryRatingDialog,
+  handleSaveReviewWithoutGenerate,
   sendEmail,
 }) => (
-  <Dialog open={isWorryDialogOpen} onOpenChange={handleWorryRatingDialog}>
+  <Dialog open={isWorryDialogOpen} onOpenChange={handleSaveReviewWithoutGenerate}>
     <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
         <DialogTitle className="flex justify-center items-center">

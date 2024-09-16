@@ -120,6 +120,7 @@ export default function FiveStarReviewBuilder({
   const [overallRating, setOverallRating] = useState(0);
   const [sendEmailNow, setSendEmailNow] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+1");
+  let globalRating = 0;
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -240,6 +241,9 @@ export default function FiveStarReviewBuilder({
   const handleSaveReviewWithoutGenerate = async () => {
     //send data to backend to process.
     setIsLoading(true);
+    setIsWorryDialogOpen(false)
+    setIsAlertDialogOpen(false)
+    setIsEmailReviewDialogOpen(false)
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
     );
@@ -286,15 +290,14 @@ export default function FiveStarReviewBuilder({
     setIsWorryDialogOpen(false);
     setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
-    console.log(selectedBadges);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
     );
-    console.log(allBadges);
+    console.log("global rating", globalRating)
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
-      rating: rating,
+      rating: globalRating,
       placeIdFromReview: placeId,
       badges: allBadges,
       postedToGoogleReview: false,
@@ -614,6 +617,8 @@ export default function FiveStarReviewBuilder({
   const stopTimer = (categoryRatings: { [key: string]: number }) => {
     console.log(categoryRatings);
     const localOverallRating = calculateAverageRating(categoryRatings);
+    globalRating = localOverallRating
+    console.log("GLOBALLL", globalRating)
     setOverallRating(calculateAverageRating(categoryRatings));
     // TODO: hacky way, we should just define overallRating, setOverallRating in SmartReviewBuilder
     setRating(localOverallRating);
@@ -661,6 +666,7 @@ export default function FiveStarReviewBuilder({
         worryTitle={worryTitle}
         worryBody={worryBody}
         userName={userName}
+        handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
         setUserName={setUserName}
         userEmail={userEmail}
         setUserEmail={setUserEmail}
@@ -680,6 +686,7 @@ export default function FiveStarReviewBuilder({
         userEmail={userEmail}
         setUserEmail={setUserEmail}
         handleWorryRatingDialog={handleWorryRatingDialog}
+        handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
         sendEmailToClientWithReview={sendEmailToClientWithReview}
         setDate={setDate}
         date={date}
