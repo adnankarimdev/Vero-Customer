@@ -103,7 +103,7 @@ export default function RatingBubbleCard({
           {businessName}
         </CardTitle>
         <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-          {"How'd it go today?"}
+          {"How did we do? 🤔"}
         </CardDescription>
       </CardHeader>
       {isLoading ? (
