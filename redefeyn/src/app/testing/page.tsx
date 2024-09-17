@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import TypingEffect from "@/components/ui/TypingEffect";
-import TinderFiveStarReviewBuilder from "@/components/ui/ExperimentalPlatforms/TinderPlatform";
 
 export default function ThankYouPage() {
   const [showSecondComponent, setShowSecondComponent] = useState(false);
@@ -30,12 +29,6 @@ export default function ThankYouPage() {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
-      <TinderFiveStarReviewBuilder
-        businessName=""
-        rating={5}
-        placeId="123"
-        worryRating={2}
-      />
     </div>
   );
 }

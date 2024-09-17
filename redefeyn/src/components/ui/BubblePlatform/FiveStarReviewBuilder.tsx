@@ -24,7 +24,6 @@ import YouTubePlatform from "../ExperimentalPlatforms/YouTubePlatform";
 import NewYorkTimesPlatform from "../ExperimentalPlatforms/NewYorkTimesPlatform";
 import MediumPlatform from "../ExperimentalPlatforms/MediumPlatform";
 import PintrestPlatform from "../ExperimentalPlatforms/PintrestPlatform";
-import TinderPlatform from "../ExperimentalPlatforms/TinderPlatform";
 
 const defaultCategories = [
   {
