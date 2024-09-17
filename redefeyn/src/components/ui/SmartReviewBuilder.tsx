@@ -51,6 +51,7 @@ import RatingCardSkeleton from "./Skeletons/RatingCardSkeleton";
 import RecordingLoader from "./Skeletons/RecordingLoader";
 import { Separator } from "./separator";
 import StarRating from "./StarRating/StarRating";
+import ReviewPageLoader from "./Skeletons/ReviewPageLoader";
 
 const categories = [
   {
@@ -654,7 +655,7 @@ const SmartReviewBuilder = ({
           {/* <RecordingLoader/> */}
         </>
       )}
-      {isLoading && !startRecording && <RatingCardSkeleton />}
+      {/* {isLoading && !startRecording && <ReviewPageLoader />} */}
       {/* {!isLoading && !alertDialogDone && showRatingsPage && !startRecording && (
         <StarRating
           rating={rating}
