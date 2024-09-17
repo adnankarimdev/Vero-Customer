@@ -129,7 +129,7 @@ export default function RatingBubbleCard({
           {categories.map((category) => (
             <div key={category.name} className="mb-6">
               <div className="flex items-center mb-2">
-                <h3 className="text-lg font-semibold">{category.name}</h3>
+                <h3 className="text-sm font-semibold">{category.name}</h3>
                 <div className="flex items-center space-x-1 ml-3">
                   {[...Array(5)].map((_, i) => (
                     <Star

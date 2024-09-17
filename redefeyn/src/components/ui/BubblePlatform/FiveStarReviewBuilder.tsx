@@ -405,23 +405,10 @@ export default function FiveStarReviewBuilder({
       if (hasFetched.current) return;
 
       hasFetched.current = true;
-
-      // const contextToSend =
-      //   "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
-      const contextToSend = "Business Name: " + buisnessName + "\n";
-      console.log("bn in generate", contextToSend);
-      axios
-        .post("https://vero.ngrok.dev/backend/generate-categories/", {
-          context: contextToSend,
-        })
+      const clientCategories = await axios
+        .get(`https://vero.ngrok.dev/backend/get-client-categories/${placeId}/`)
         .then((response) => {
-          const generatedCategories = response.data["content"]
-            .replace(/```json/g, "")
-            .replace(/```/g, "");
-          console.log(generatedCategories);
-          const generatedCategoriesAsJson = JSON.parse(generatedCategories);
-          console.log("my categories", generatedCategoriesAsJson);
-          setCategories(generatedCategoriesAsJson["categories"]);
+          setCategories(response.data.categories);
           setIsLoading(false);
         })
         .catch((error) => {
