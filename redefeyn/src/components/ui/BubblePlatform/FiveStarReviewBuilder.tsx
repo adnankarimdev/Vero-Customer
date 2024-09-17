@@ -418,7 +418,7 @@ export default function FiveStarReviewBuilder({
     };
 
     fetchCategories();
-  }, []);
+  }, [placeId]);
 
   const startTimer = () => {
     startTimeRef.current = Date.now();

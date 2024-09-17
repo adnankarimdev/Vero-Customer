@@ -28,7 +28,6 @@ export default function ThankYouPage() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
-    </div>
+    <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4"></div>
   );
 }

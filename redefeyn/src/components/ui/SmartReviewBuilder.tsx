@@ -51,7 +51,6 @@ import RatingCardSkeleton from "./Skeletons/RatingCardSkeleton";
 import RecordingLoader from "./Skeletons/RecordingLoader";
 import { Separator } from "./separator";
 import StarRating from "./StarRating/StarRating";
-import ReviewPageLoader from "./Skeletons/ReviewPageLoader";
 
 const categories = [
   {

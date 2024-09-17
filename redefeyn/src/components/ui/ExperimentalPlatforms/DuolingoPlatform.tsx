@@ -75,11 +75,7 @@ export default function DuolingoPlatform({
         <CardDescription className="text-white/90 mb-4 text-center text-lg">
           Complete the lesson to share your experience!
         </CardDescription>
-        <Progress
-          value={progress}
-          className="mb-6 bg-[#1C4477] h-3"
-          indicatorClassName="bg-[#58CC02]"
-        />
+        <Progress value={progress} className="mb-6 bg-[#1C4477] h-3" />
         {isLoading ? (
           <div className="space-y-4">
             {[...Array(3)].map((_, index) => (

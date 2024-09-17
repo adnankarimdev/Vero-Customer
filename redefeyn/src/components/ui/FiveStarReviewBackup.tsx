@@ -369,7 +369,7 @@ export default function FiveStarReviewBuilder({
     };
 
     fetchCategories();
-  }, []);
+  }, [buisnessName, rating]);
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
@@ -813,7 +813,7 @@ export default function FiveStarReviewBuilder({
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>
-                        We've got your feedback, Thank You! 🙌🏼
+                        {"We've got your feedback, Thank You! 🙌🏼"}
                       </AlertDialogTitle>
                       <AlertDialogDescription>
                         {inStoreMode
@@ -825,10 +825,10 @@ export default function FiveStarReviewBuilder({
                       <AlertDialogCancel
                         onClick={handleSaveReviewWithoutGenerate}
                       >
-                        No Thanks
+                        {"No Thanks"}
                       </AlertDialogCancel>
                       <AlertDialogAction onClick={handleGenerateReview}>
-                        Let's do it
+                        {"Let's do it"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

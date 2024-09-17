@@ -88,10 +88,10 @@ export default function RatingBubbleCard({
     // If the category and rating exist, find the matching badges for that rating
     if (category) {
       const matchedRating = category.badges.find(
-        (badgeSet) => badgeSet["rating"] === rating,
+        (badgeSet) => (badgeSet as any)["rating"] === rating,
       );
       // console.log(matchedRating)
-      return matchedRating ? matchedRating.badges : [];
+      return matchedRating ? (matchedRating as any).badges : [];
     }
 
     return [];
@@ -147,7 +147,7 @@ export default function RatingBubbleCard({
 
               {/* Map badges only for the current category */}
               <div className="flex flex-wrap gap-2">
-                {getBadgesForRating(category.name).map((badge) => (
+                {getBadgesForRating(category.name).map((badge: any) => (
                   <Badge
                     key={badge}
                     variant={
@@ -177,7 +177,7 @@ export default function RatingBubbleCard({
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>
-                We've got your feedback, Thank You! 🙌🏼
+                {"We've got your feedback, Thank You! 🙌🏼"}
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {inStoreMode
@@ -187,10 +187,10 @@ export default function RatingBubbleCard({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>
-                No Thanks
+                {"No Thanks"}
               </AlertDialogCancel>
               <AlertDialogAction onClick={handleGenerateReview}>
-                Let's do it
+                {"Let's do it"}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

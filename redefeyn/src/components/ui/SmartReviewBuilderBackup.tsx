@@ -750,6 +750,7 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       {!showRatingsPage && (useBubblePlatform || rating > worryRating) && (
         <FiveStarReviewBuilder
           buisnessName={title}
+          setRating={setRating}
           rating={rating}
           placeId={id}
           keywords={keywords}
