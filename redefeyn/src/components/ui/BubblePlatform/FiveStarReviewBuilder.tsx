@@ -296,7 +296,6 @@ export default function FiveStarReviewBuilder({
         }
       })
       .catch((error) => {
-        console.log(error);
         //  setIsLoading(false);
       });
   };
@@ -307,7 +306,6 @@ export default function FiveStarReviewBuilder({
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
     );
-    console.log("global rating", globalRating);
     //save data here
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -343,7 +341,6 @@ export default function FiveStarReviewBuilder({
         }
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
   };
@@ -353,8 +350,6 @@ export default function FiveStarReviewBuilder({
     // Also, don't open a new tab. Direct them straight there.
     // Saves us having to reload the page again. so all good!
     copy(generatedReview);
-    console.log("rating", rating);
-    console.log("worryrating", worryRating);
     setIsLoading(true);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
@@ -384,7 +379,6 @@ export default function FiveStarReviewBuilder({
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
       });
 
@@ -411,7 +405,6 @@ export default function FiveStarReviewBuilder({
           setIsLoading(false);
         })
         .catch((error) => {
-          console.log(error);
           setCategories(defaultCategories);
           setIsLoading(false);
         });
@@ -422,7 +415,6 @@ export default function FiveStarReviewBuilder({
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
-    console.log("Timer started");
   };
 
   const sendEmailToClientWithReview = async () => {
@@ -460,11 +452,9 @@ export default function FiveStarReviewBuilder({
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
 
-    console.log("MY TONE", tone);
     const contextToSend =
       "Business Name:\n" +
       buisnessName +
@@ -551,7 +541,6 @@ export default function FiveStarReviewBuilder({
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
     const context =
@@ -609,34 +598,27 @@ export default function FiveStarReviewBuilder({
       (rating): rating is number => typeof rating === "number" && rating != 0,
     );
 
-    console.log("valid raings", validRatings);
     // Calculate the sum of valid ratings
     const sum = validRatings.reduce((total, rating) => total + rating, 0);
 
     // Calculate average
     const average = validRatings.length ? sum / validRatings.length : 0;
-    console.log("my avg", average);
 
     return average;
   };
 
   const stopTimer = (categoryRatings: { [key: string]: number }) => {
-    console.log(categoryRatings);
     const localOverallRating = calculateAverageRating(categoryRatings);
     globalRating = localOverallRating;
-    console.log("GLOBALLL", globalRating);
     setOverallRating(calculateAverageRating(categoryRatings));
     // TODO: hacky way, we should just define overallRating, setOverallRating in SmartReviewBuilder
     setRating(localOverallRating);
     if (startTimeRef.current === null) {
-      console.log("Timer was not started");
       return;
     }
     endTimeRef.current = Date.now();
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
-    console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
-    console.log("my overall rating", overallRating);
 
     if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);

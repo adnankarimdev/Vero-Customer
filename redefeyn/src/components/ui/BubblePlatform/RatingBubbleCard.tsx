@@ -70,7 +70,6 @@ export default function RatingBubbleCard({
           ...prevBadges,
           [categoryName]: [], // Clear the badges for the category if rating changes
         }));
-        console.log("cleared!");
       }
 
       // Update the rating for the category
@@ -90,7 +89,6 @@ export default function RatingBubbleCard({
       const matchedRating = category.badges.find(
         (badgeSet) => (badgeSet as any)["rating"] === rating,
       );
-      // console.log(matchedRating)
       return matchedRating ? (matchedRating as any).badges : [];
     }
 
