@@ -232,7 +232,7 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(keywords);
 
     axios
-      .post("https://vero.ngrok.dev/backend/generate-five-star-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-five-star-review/`, {
         context: contextToSend,
       })
       .then((response) => {
@@ -278,7 +278,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -326,7 +326,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -377,7 +377,7 @@ export default function FiveStarReviewBuilder({
     };
 
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -405,7 +405,7 @@ export default function FiveStarReviewBuilder({
 
       hasFetched.current = true;
       const clientCategories = await axios
-        .get(`https://vero.ngrok.dev/backend/get-client-categories/${placeId}/`)
+        .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-client-categories/${placeId}/`)
         .then((response) => {
           setCategories(response.data.categories);
           setIsLoading(false);
@@ -453,7 +453,7 @@ export default function FiveStarReviewBuilder({
       pendingGoogleReview: true,
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -482,7 +482,7 @@ export default function FiveStarReviewBuilder({
       tone;
 
     axios
-      .post("https://vero.ngrok.dev/backend/send-email-to-post-later/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`, {
         context: contextToSend,
         userEmailToSend: userEmail,
         userNameToSend: userName,
@@ -544,7 +544,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -564,7 +564,7 @@ export default function FiveStarReviewBuilder({
     const userReviews =
       context + "User Review Selected Badges:\n" + allBadges.join("\n");
     axios
-      .post("https://vero.ngrok.dev/backend/send-email/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email/`, {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,

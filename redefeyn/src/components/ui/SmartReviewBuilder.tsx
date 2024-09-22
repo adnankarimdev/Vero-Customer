@@ -176,7 +176,7 @@ const SmartReviewBuilder = ({
     const fetchReviewSettings = async (placeId = id) => {
       try {
         const response = await axios.get(
-          `https://vero.ngrok.dev/backend/get-review-questions/${placeId}/`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-questions/${placeId}/`,
         );
         console.log("my questions", response.data);
         setQuestions(response.data.questions);
@@ -256,7 +256,7 @@ const SmartReviewBuilder = ({
       questions[rating - 1].questions.join("\n") +
       "\n";
     axios
-      .post("https://vero.ngrok.dev/backend/generate-review-template/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-review-template/`, {
         context: contextToSend,
       })
       .then((response) => {
@@ -297,7 +297,7 @@ const SmartReviewBuilder = ({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -337,7 +337,7 @@ const SmartReviewBuilder = ({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -378,7 +378,7 @@ const SmartReviewBuilder = ({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post("https://vero.ngrok.dev/backend/save-customer-review/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
         data: dataToSave,
       })
       .then((response) => {
@@ -397,7 +397,7 @@ const SmartReviewBuilder = ({
       "\n";
     const userReviews = context + "User Review Body:\n" + reviews.join("\n");
     axios
-      .post("https://vero.ngrok.dev/backend/send-email/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email/`, {
         userEmailToSend: userEmail,
         userNameToSend: userName,
         userReviewToSend: userReviews,

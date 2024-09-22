@@ -37,7 +37,7 @@ export default function AtHomeCustomerReview() {
       try {
         // Fetch the review data
         const reviewResponse = await axios.get(
-          `https://vero.ngrok.dev/backend/get-review-by-uuid/${reviewUuid}/`,
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-by-uuid/${reviewUuid}/`,
         );
         console.log(reviewResponse.data);
         if (reviewResponse.data.posted_to_google) {
@@ -61,7 +61,7 @@ export default function AtHomeCustomerReview() {
     setIsLoading(true);
 
     await axios
-      .post("https://vero.ngrok.dev/backend/update-review-data/", {
+      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/update-review-data/`, {
         reviewUuid: reviewUuidFromUrl,
         finalReviewBody: generatedReview,
       })
