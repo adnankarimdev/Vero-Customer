@@ -232,9 +232,12 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(keywords);
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-five-star-review/`, {
-        context: contextToSend,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-five-star-review/`,
+        {
+          context: contextToSend,
+        },
+      )
       .then((response) => {
         setGeneratedReview(response.data.content);
         setInitialGeneratedReviewBody(response.data.content);
@@ -278,9 +281,12 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         //  setIsLoading(false);
         if (inStoreMode) {
@@ -324,9 +330,12 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         if (inStoreMode) {
           toast({
@@ -372,9 +381,12 @@ export default function FiveStarReviewBuilder({
     };
 
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         setIsLoading(false);
       })
@@ -399,7 +411,9 @@ export default function FiveStarReviewBuilder({
 
       hasFetched.current = true;
       const clientCategories = await axios
-        .get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-client-categories/${placeId}/`)
+        .get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-client-categories/${placeId}/`,
+        )
         .then((response) => {
           setCategories(response.data.categories);
           setIsLoading(false);
@@ -445,9 +459,12 @@ export default function FiveStarReviewBuilder({
       pendingGoogleReview: true,
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         // setIsLoading(false);
       })
@@ -472,18 +489,21 @@ export default function FiveStarReviewBuilder({
       tone;
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`, {
-        context: contextToSend,
-        userEmailToSend: userEmail,
-        userNameToSend: userName,
-        googleReviewUrl: reviewUrl,
-        reviewUuid: dataToSave.reviewUuid,
-        date: date?.toISOString(),
-        time: time,
-        sendEmailNow: sendEmailNow,
-        phoneNumber: phoneNumber,
-        tone: tone,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`,
+        {
+          context: contextToSend,
+          userEmailToSend: userEmail,
+          userNameToSend: userName,
+          googleReviewUrl: reviewUrl,
+          reviewUuid: dataToSave.reviewUuid,
+          date: date?.toISOString(),
+          time: time,
+          sendEmailNow: sendEmailNow,
+          phoneNumber: phoneNumber,
+          tone: tone,
+        },
+      )
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
         toast({
@@ -534,9 +554,12 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         // setIsLoading(false);
       })

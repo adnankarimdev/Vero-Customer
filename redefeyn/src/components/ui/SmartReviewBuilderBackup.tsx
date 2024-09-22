@@ -170,7 +170,6 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-questions/${placeId}/`,
         );
-        console.log("my questions", response.data);
         setQuestions(response.data.questions);
         setWorryRating(response.data.worryRating);
         setWorryDialog(response.data.showWorryDialog);
@@ -201,17 +200,14 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
-    console.log("Timer started");
   };
 
   const stopTimer = () => {
     if (startTimeRef.current === null) {
-      console.log("Timer was not started");
       return;
     }
     endTimeRef.current = Date.now();
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
-    console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
   };
 
@@ -247,9 +243,12 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       questions[rating - 1].questions.join("\n") +
       "\n";
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-review-template/`, {
-        context: contextToSend,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-review-template/`,
+        {
+          context: contextToSend,
+        },
+      )
       .then((response) => {
         handleReviewChange(response.data.content);
         setIsReviewTemplateLoading(false);
@@ -369,16 +368,18 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
   };
@@ -400,16 +401,18 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
   };
@@ -431,14 +434,16 @@ const SmartReviewBuilder = ({ onChange, id }: SmartReviewProps) => {
       postedWithBubbleRatingPlatform: useBubblePlatform,
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
     const context =

@@ -39,7 +39,6 @@ export default function AtHomeCustomerReview() {
         const reviewResponse = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-by-uuid/${reviewUuid}/`,
         );
-        console.log(reviewResponse.data);
         if (reviewResponse.data.posted_to_google) {
           router.push("/duplicatereview");
         }
@@ -61,13 +60,15 @@ export default function AtHomeCustomerReview() {
     setIsLoading(true);
 
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/update-review-data/`, {
-        reviewUuid: reviewUuidFromUrl,
-        finalReviewBody: generatedReview,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/update-review-data/`,
+        {
+          reviewUuid: reviewUuidFromUrl,
+          finalReviewBody: generatedReview,
+        },
+      )
       .then((response) => {})
       .catch((error) => {
-        console.log(error);
         //  setIsLoading(false);
       });
     // Simulate processing delay if needed

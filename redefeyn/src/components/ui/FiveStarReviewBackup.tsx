@@ -183,9 +183,12 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(keywords);
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-five-star-review/`, {
-        context: contextToSend,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-five-star-review/`,
+        {
+          context: contextToSend,
+        },
+      )
       .then((response) => {
         setGeneratedReview(response.data.content);
         setInitialGeneratedReviewBody(response.data.content);
@@ -224,9 +227,12 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         //  setIsLoading(false);
         if (inStoreMode) {
@@ -242,7 +248,6 @@ export default function FiveStarReviewBuilder({
         }
       })
       .catch((error) => {
-        console.log(error);
         //  setIsLoading(false);
       });
   };
@@ -269,9 +274,12 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         if (inStoreMode) {
           toast({
@@ -286,7 +294,6 @@ export default function FiveStarReviewBuilder({
         }
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
   };
@@ -296,8 +303,6 @@ export default function FiveStarReviewBuilder({
     // Also, don't open a new tab. Direct them straight there.
     // Saves us having to reload the page again. so all good!
     copy(generatedReview);
-    console.log("rating", rating);
-    console.log("worryrating", worryRating);
     setIsLoading(true);
     const allBadges: string[] = Object.values(selectedBadges).flat();
     const dataToSave: CustomerReviewInfo = {
@@ -318,14 +323,16 @@ export default function FiveStarReviewBuilder({
     };
 
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         setIsLoading(false);
       });
 
@@ -349,20 +356,21 @@ export default function FiveStarReviewBuilder({
       const contextToSend =
         "Business Name: " + buisnessName + "\n" + "User Rating: " + rating;
       axios
-        .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-categories/`, {
-          context: contextToSend,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/generate-categories/`,
+          {
+            context: contextToSend,
+          },
+        )
         .then((response) => {
           const generatedCategories = response.data["content"]
             .replace(/```json/g, "")
             .replace(/```/g, "");
-          console.log(generatedCategories);
           const generatedCategoriesAsJson = JSON.parse(generatedCategories);
           setCategories(generatedCategoriesAsJson["categories"]);
           setIsLoading(false);
         })
         .catch((error) => {
-          console.log(error);
           setCategories(defaultCategories);
           setIsLoading(false);
         });
@@ -373,7 +381,6 @@ export default function FiveStarReviewBuilder({
 
   const startTimer = () => {
     startTimeRef.current = Date.now();
-    console.log("Timer started");
   };
 
   const sendEmailToClientWithReview = async () => {
@@ -399,14 +406,16 @@ export default function FiveStarReviewBuilder({
       pendingGoogleReview: true,
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
 
@@ -424,13 +433,16 @@ export default function FiveStarReviewBuilder({
       JSON.stringify(keywords);
 
     axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`, {
-        context: contextToSend,
-        userEmailToSend: userEmail,
-        userNameToSend: userName,
-        googleReviewUrl: reviewUrl,
-        reviewUuid: dataToSave.reviewUuid,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`,
+        {
+          context: contextToSend,
+          userEmailToSend: userEmail,
+          userNameToSend: userName,
+          googleReviewUrl: reviewUrl,
+          reviewUuid: dataToSave.reviewUuid,
+        },
+      )
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
         toast({
@@ -479,14 +491,16 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
     };
     await axios
-      .post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`, {
-        data: dataToSave,
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
+        {
+          data: dataToSave,
+        },
+      )
       .then((response) => {
         // setIsLoading(false);
       })
       .catch((error) => {
-        console.log(error);
         // setIsLoading(false);
       });
     const context =
@@ -536,12 +550,10 @@ export default function FiveStarReviewBuilder({
 
   const stopTimer = () => {
     if (startTimeRef.current === null) {
-      console.log("Timer was not started");
       return;
     }
     endTimeRef.current = Date.now();
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
-    console.log(`Timer stopped after ${duration} seconds`);
     setTimeTakenToWriteReview(duration);
 
     if (rating <= worryRating && showEmailWorryDialog) {
