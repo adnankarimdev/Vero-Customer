@@ -646,6 +646,9 @@ export default function FiveStarReviewBuilder({
     if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
     } else if (localOverallRating > worryRating) {
+
+      //this dialog here opens the immediate posting to google.
+      // setIsDialogOpen(true)
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
@@ -658,7 +661,11 @@ export default function FiveStarReviewBuilder({
     handleSaveReviewWithoutGenerate();
     setIsDialogOpen(false);
   };
-  if (isDialogOpen && rating > worryRating && !inStoreMode) {
+
+  //This is the google dialog for immediate rating. 
+  if (isDialogOpen && rating > worryRating) {
+    //this will be needed to generate the review 
+    //axios call to backend.
     return (
       <GoogleReviewDialogContent
         isDialogOpen={isDialogOpen}
