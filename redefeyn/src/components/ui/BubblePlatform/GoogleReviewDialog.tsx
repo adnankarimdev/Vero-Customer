@@ -35,7 +35,7 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
           Your review is ready to take the spotlight! 🌟
         </DialogTitle>
         <DialogDescription className="text-center">
-          Feel free to edit this! Once it looks good, click the Google icon
+          Feel free to edit this! Once it looks good, click the button
           below and it will copy the review for you to paste 🥳
         </DialogDescription>
 
@@ -49,9 +49,9 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
         <Button
           type="submit"
           onClick={handlePostGeneratedReviewToGoogle}
-          variant="ghost"
+          variant="default"
         >
-          <FcGoogle size={24} />
+          Copy & Paste
         </Button>
       </DialogFooter>
     </DialogContent>
