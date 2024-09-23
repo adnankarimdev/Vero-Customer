@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { format, parse, set, isBefore, isSameDay } from "date-fns";
-import { Calendar as CalendarIcon, Sunrise, Sun, Moon } from "lucide-react";
+import {
+  Calendar as CalendarIcon,
+  Sunrise,
+  Sun,
+  Moon,
+  HandHeart,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -70,6 +76,11 @@ export default function DateTimePicker({
     if (!date) return "Pick a date and time";
     const dateStr = format(date, "PPP");
     if (!time) return dateStr;
+
+    // Have this hot fix for send now, Date picker is getting annoying
+    if (time === "12:00 AM") {
+      return "Send Now";
+    }
     const timeDate = parse(time, "h:mm a", new Date());
     const fullDate = set(date, {
       hours: timeDate.getHours(),
@@ -80,6 +91,11 @@ export default function DateTimePicker({
 
   function getTimeIcon(timeStr?: string) {
     if (!timeStr) return <></>;
+
+    // Have this hot fix for send now, Date picker is getting annoying
+    if (timeStr === "12:00 AM") {
+      return <HandHeart className="text-muted-foreground" size={16} />;
+    }
     const [time, modifier] = timeStr.split(" ");
     let [hours, minutes] = time.split(":").map(Number);
 
