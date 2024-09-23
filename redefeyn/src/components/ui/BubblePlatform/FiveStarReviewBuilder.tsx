@@ -213,10 +213,12 @@ export default function FiveStarReviewBuilder({
   };
 
   const handleGenerateReview = () => {
-    if (overallRating > worryRating && inStoreMode) {
-      setIsEmailReviewDialogOpen(true);
-      return;
-    }
+    // Keep Note of this: for the kiosk mode.
+    // if (overallRating > worryRating && inStoreMode) {
+    //   setIsEmailReviewDialogOpen(true);
+    //   return;
+    // }
+    setIsAlertDialogOpen(false)
     setIsLoading(true);
     const contextToSend =
       "Business Name:\n" +
@@ -647,8 +649,6 @@ export default function FiveStarReviewBuilder({
       setIsWorryDialogOpen(true);
     } else if (localOverallRating > worryRating) {
 
-      //this dialog here opens the immediate posting to google.
-      // setIsDialogOpen(true)
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
@@ -664,8 +664,6 @@ export default function FiveStarReviewBuilder({
 
   //This is the google dialog for immediate rating. 
   if (isDialogOpen && rating > worryRating) {
-    //this will be needed to generate the review 
-    //axios call to backend.
     return (
       <GoogleReviewDialogContent
         isDialogOpen={isDialogOpen}
@@ -696,27 +694,36 @@ export default function FiveStarReviewBuilder({
 
   if (isEmailReviewDialogOpen) {
     return (
+      <GoogleReviewDialogContent
+      isDialogOpen={isDialogOpen}
+      generatedReview={generatedReview}
+      setGeneratedReview={setGeneratedReview}
+      handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
+      handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+    />
+      // WE'll have to add a condition here, if its kiosk mode, open this component. Otherwise, open the above. 
+      // For now, leave it commented it out. 
       //put setDate, setTime here and get it from datetimepicker component within EmailPostFiveStarReview
-      <EmailPostFiveStarReview
-        isEmailReviewDialogOpen={isEmailReviewDialogOpen}
-        userName={userName}
-        setUserName={setUserName}
-        userEmail={userEmail}
-        setUserEmail={setUserEmail}
-        handleWorryRatingDialog={handleWorryRatingDialog}
-        handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
-        sendEmailToClientWithReview={sendEmailToClientWithReview}
-        setDate={setDate}
-        date={date}
-        setTime={setTime}
-        time={time}
-        setSendEmailNow={setSendEmailNow}
-        setPhoneNumber={setPhoneNumber}
-        phoneNumber={phoneNumber}
-        positiveTones={positiveTones}
-        setTone={setTone}
-        tone={tone}
-      />
+      // <EmailPostFiveStarReview
+      //   isEmailReviewDialogOpen={isEmailReviewDialogOpen}
+      //   userName={userName}
+      //   setUserName={setUserName}
+      //   userEmail={userEmail}
+      //   setUserEmail={setUserEmail}
+      //   handleWorryRatingDialog={handleWorryRatingDialog}
+      //   handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+      //   sendEmailToClientWithReview={handleGenerateReview}
+      //   setDate={setDate}
+      //   date={date}
+      //   setTime={setTime}
+      //   time={time}
+      //   setSendEmailNow={setSendEmailNow}
+      //   setPhoneNumber={setPhoneNumber}
+      //   phoneNumber={phoneNumber}
+      //   positiveTones={positiveTones}
+      //   setTone={setTone}
+      //   tone={tone}
+      // />
     );
   }
 
