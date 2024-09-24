@@ -263,8 +263,9 @@ export default function FiveStarReviewBuilder({
     setIsWorryDialogOpen(false);
     setIsAlertDialogOpen(false);
     setIsEmailReviewDialogOpen(false);
+    console.log(selectedBadges);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
-      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+      ([category, badges]) => badges.map((badge) => `${badge}`),
     );
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -312,7 +313,7 @@ export default function FiveStarReviewBuilder({
     setIsEmailReviewDialogOpen(false);
     setIsSendingEmail(true);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
-      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+      ([category, badges]) => badges.map((badge) => `${badge}`),
     );
     //save data here
     const dataToSave: CustomerReviewInfo = {
@@ -363,7 +364,7 @@ export default function FiveStarReviewBuilder({
     copy(generatedReview);
     setIsLoading(true);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
-      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+      ([category, badges]) => badges.map((badge) => `${badge}`),
     );
     const dataToSave: CustomerReviewInfo = {
       location: buisnessName,
@@ -440,7 +441,7 @@ export default function FiveStarReviewBuilder({
     setIsSendingEmail(true);
     setIsEmailReviewDialogOpen(false);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
-      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+      ([category, badges]) => badges.map((badge) => `${badge}`),
     );
     //save data here
     const dataToSave: CustomerReviewInfo = {
@@ -536,7 +537,7 @@ export default function FiveStarReviewBuilder({
   const sendEmail = async () => {
     setIsSendingEmail(true);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
-      ([category, badges]) => badges.map((badge) => `${category}: ${badge}`),
+      ([category, badges]) => badges.map((badge) => `${badge}`),
     );
     //save data here
     const dataToSave: CustomerReviewInfo = {

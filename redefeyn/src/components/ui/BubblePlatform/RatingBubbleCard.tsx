@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Star, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -64,38 +65,63 @@ export default function RatingBubbleCard({
     [key: string]: number;
   }>(Object.fromEntries(categories.map((category) => [category.name, 0])));
 
+  const [editingCategory, setEditingCategory] = useState<string | null>(null);
+  const [newBadge, setNewBadge] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (editingCategory && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [editingCategory]);
+
   const handleCategoryRating = (categoryName: string, newRating: number) => {
     setCategoryRatings((prev) => {
-      // If the rating has changed, clear the selected badges for this category
       if (prev[categoryName] !== newRating) {
         setSelectedBadges((prevBadges) => ({
           ...prevBadges,
-          [categoryName]: [], // Clear the badges for the category if rating changes
+          [categoryName]: [],
         }));
       }
-
-      // Update the rating for the category
       return { ...prev, [categoryName]: newRating };
     });
   };
 
   const getBadgesForRating = (categoryName: string) => {
-    // Find the category by name
     const category = categories.find((cat) => cat.name === categoryName);
-
-    // Get the rating from the state for the given category
     const rating = categoryRatings[categoryName];
-
-    // If the category and rating exist, find the matching badges for that rating
     if (category) {
       const matchedRating = category.badges.find(
         (badgeSet) => (badgeSet as any)["rating"] === rating,
       );
       return matchedRating ? (matchedRating as any).badges : [];
     }
-
     return [];
   };
+
+  const handleOtherBadgeClick = (categoryName: string) => {
+    setEditingCategory(categoryName);
+    setNewBadge("");
+  };
+
+  const handleSaveCustomBadge = (categoryName: string) => {
+    if (
+      newBadge.trim() &&
+      !selectedBadges[categoryName]?.includes(newBadge.trim())
+    ) {
+      setSelectedBadges((prevBadges) => ({
+        ...prevBadges,
+        [categoryName]: [...(prevBadges[categoryName] || []), newBadge.trim()],
+      }));
+      setNewBadge("");
+    }
+    setEditingCategory(null);
+  };
+
+  const handleToggleBadge = (categoryName: string, badge: string) => {
+    toggleBadge(categoryName, badge);
+  };
+
   return (
     <Card className="w-full max-w-3xl border-0">
       <CardHeader>
@@ -129,13 +155,7 @@ export default function RatingBubbleCard({
           {categories.map((category) => (
             <div key={category.name} className="mb-6">
               <div className="flex flex-col items-center mb-2">
-                {" "}
-                {/* Center items vertically */}
-                {/* Uncomment this line if you want to display the category name */}
-                {/* <h3 className="text-sm font-semibold">{category.name}</h3> */}
                 <div className="flex items-center space-x-1 justify-center">
-                  {" "}
-                  {/* Center stars horizontally */}
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -150,9 +170,8 @@ export default function RatingBubbleCard({
                 </div>
               </div>
 
-              {/* Map badges only for the current category */}
               <div className="flex flex-wrap gap-2">
-                {getBadgesForRating(category.name).map((badge: any) => (
+                {getBadgesForRating(category.name).map((badge: string) => (
                   <Badge
                     key={badge}
                     variant={
@@ -167,11 +186,59 @@ export default function RatingBubbleCard({
                           : "bg-green-500 text-green-foreground hover:bg-green-400"
                         : ""
                     }`}
-                    onClick={() => toggleBadge(category.name, badge)}
+                    onClick={() => handleToggleBadge(category.name, badge)}
                   >
                     {badge}
                   </Badge>
                 ))}
+                {selectedBadges[category.name]
+                  ?.filter(
+                    (badge) =>
+                      !getBadgesForRating(category.name).includes(badge),
+                  )
+                  .map((customBadge) => (
+                    <Badge
+                      key={customBadge}
+                      variant="default"
+                      className="cursor-pointer transition-colors bg-blue-500 text-blue-foreground hover:bg-blue-400"
+                      onClick={() =>
+                        handleToggleBadge(category.name, customBadge)
+                      }
+                    >
+                      {customBadge}
+                    </Badge>
+                  ))}
+                {editingCategory === category.name ? (
+                  <div className="flex items-center">
+                    <Input
+                      ref={inputRef}
+                      value={newBadge}
+                      onChange={(e) => setNewBadge(e.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          handleSaveCustomBadge(category.name);
+                        }
+                      }}
+                      className="w-32 h-8 text-sm"
+                    />
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => handleSaveCustomBadge(category.name)}
+                      className="ml-1"
+                    >
+                      Save
+                    </Button>
+                  </div>
+                ) : categoryRatings[category.name] > 0 ? (
+                  <Badge
+                    variant="outline"
+                    className="cursor-pointer"
+                    onClick={() => handleOtherBadgeClick(category.name)}
+                  >
+                    Other
+                  </Badge>
+                ) : null}
               </div>
             </div>
           ))}
