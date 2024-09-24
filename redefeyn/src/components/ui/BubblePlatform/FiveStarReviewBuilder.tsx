@@ -296,9 +296,10 @@ export default function FiveStarReviewBuilder({
             title: "Thank you for your feedback!",
             duration: 1000,
           });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          router.push("/thankyou");
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
         } else {
           router.push("/thankyou");
         }
@@ -597,9 +598,10 @@ export default function FiveStarReviewBuilder({
           duration: 3000,
         });
         if (inStoreMode) {
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          router.push("/thankyou");
+          // setTimeout(() => {
+          //   window.location.reload();
+          // }, 2000);
         } else {
           router.push("/thankyou");
         }
