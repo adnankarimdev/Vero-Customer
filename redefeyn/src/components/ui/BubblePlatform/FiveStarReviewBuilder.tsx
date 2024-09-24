@@ -263,7 +263,6 @@ export default function FiveStarReviewBuilder({
     setIsWorryDialogOpen(false);
     setIsAlertDialogOpen(false);
     setIsEmailReviewDialogOpen(false);
-    console.log(selectedBadges);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${badge}`),
     );
