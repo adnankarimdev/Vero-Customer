@@ -214,10 +214,10 @@ export default function FiveStarReviewBuilder({
 
   const handleGenerateReview = () => {
     // Keep Note of this: for the kiosk mode.
-    // if (overallRating > worryRating && inStoreMode) {
-    //   setIsEmailReviewDialogOpen(true);
-    //   return;
-    // }
+    if (overallRating > worryRating && inStoreMode) {
+      setIsEmailReviewDialogOpen(true);
+      return;
+    }
     setIsAlertDialogOpen(false);
     setIsLoading(true);
     const contextToSend =
@@ -296,10 +296,9 @@ export default function FiveStarReviewBuilder({
             title: "Thank you for your feedback!",
             duration: 1000,
           });
-          router.push("/thankyou");
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         } else {
           router.push("/thankyou");
         }
@@ -598,10 +597,9 @@ export default function FiveStarReviewBuilder({
           duration: 3000,
         });
         if (inStoreMode) {
-          router.push("/thankyou");
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 2000);
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
         } else {
           router.push("/thankyou");
         }
@@ -694,38 +692,40 @@ export default function FiveStarReviewBuilder({
   }
 
   if (isEmailReviewDialogOpen) {
-    return (
-      <GoogleReviewDialogContent
-        isDialogOpen={isDialogOpen}
-        generatedReview={generatedReview}
-        setGeneratedReview={setGeneratedReview}
-        handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
-        handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
-      />
-      // WE'll have to add a condition here, if its kiosk mode, open this component. Otherwise, open the above.
-      // For now, leave it commented it out.
-      //put setDate, setTime here and get it from datetimepicker component within EmailPostFiveStarReview
-      // <EmailPostFiveStarReview
-      //   isEmailReviewDialogOpen={isEmailReviewDialogOpen}
-      //   userName={userName}
-      //   setUserName={setUserName}
-      //   userEmail={userEmail}
-      //   setUserEmail={setUserEmail}
-      //   handleWorryRatingDialog={handleWorryRatingDialog}
-      //   handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
-      //   sendEmailToClientWithReview={handleGenerateReview}
-      //   setDate={setDate}
-      //   date={date}
-      //   setTime={setTime}
-      //   time={time}
-      //   setSendEmailNow={setSendEmailNow}
-      //   setPhoneNumber={setPhoneNumber}
-      //   phoneNumber={phoneNumber}
-      //   positiveTones={positiveTones}
-      //   setTone={setTone}
-      //   tone={tone}
-      // />
-    );
+    if (!inStoreMode) {
+      return (
+        <GoogleReviewDialogContent
+          isDialogOpen={isDialogOpen}
+          generatedReview={generatedReview}
+          setGeneratedReview={setGeneratedReview}
+          handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
+          handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+        />
+      );
+    } else {
+      return (
+        <EmailPostFiveStarReview
+          isEmailReviewDialogOpen={isEmailReviewDialogOpen}
+          userName={userName}
+          setUserName={setUserName}
+          userEmail={userEmail}
+          setUserEmail={setUserEmail}
+          handleWorryRatingDialog={handleWorryRatingDialog}
+          handleSaveReviewWithoutGenerate={handleSaveReviewWithoutGenerate}
+          sendEmailToClientWithReview={sendEmailToClientWithReview}
+          setDate={setDate}
+          date={date}
+          setTime={setTime}
+          time={time}
+          setSendEmailNow={setSendEmailNow}
+          setPhoneNumber={setPhoneNumber}
+          phoneNumber={phoneNumber}
+          positiveTones={positiveTones}
+          setTone={setTone}
+          tone={tone}
+        />
+      );
+    }
   }
 
   return (
