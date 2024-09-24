@@ -35,8 +35,8 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
           Your review is ready to take the spotlight! 🌟
         </DialogTitle>
         <DialogDescription className="text-center">
-          Feel free to edit this! Once it looks good, click the button
-          below and it will copy the review for you to paste 🥳
+          Feel free to edit this! Once it looks good, click the button below and
+          it will copy the review for you to paste 🥳
         </DialogDescription>
 
         <Textarea

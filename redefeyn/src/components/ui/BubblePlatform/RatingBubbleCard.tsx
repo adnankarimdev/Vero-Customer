@@ -40,6 +40,7 @@ interface RatingBubbleCardProps {
   stopTimer: (categoryRatings: { [key: string]: number }) => void;
   sendingEmail: boolean;
   inStoreMode?: boolean;
+  worryRating: number;
 }
 
 export default function RatingBubbleCard({
@@ -57,6 +58,7 @@ export default function RatingBubbleCard({
   stopTimer,
   sendingEmail,
   inStoreMode,
+  worryRating,
 }: RatingBubbleCardProps) {
   const [categoryRatings, setCategoryRatings] = useState<{
     [key: string]: number;
@@ -126,9 +128,14 @@ export default function RatingBubbleCard({
         <CardContent>
           {categories.map((category) => (
             <div key={category.name} className="mb-6">
-              <div className="flex items-center mb-2">
-                <h3 className="text-sm font-semibold">{category.name}</h3>
-                <div className="flex items-center space-x-1 ml-3">
+              <div className="flex flex-col items-center mb-2">
+                {" "}
+                {/* Center items vertically */}
+                {/* Uncomment this line if you want to display the category name */}
+                {/* <h3 className="text-sm font-semibold">{category.name}</h3> */}
+                <div className="flex items-center space-x-1 justify-center">
+                  {" "}
+                  {/* Center stars horizontally */}
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
@@ -155,9 +162,9 @@ export default function RatingBubbleCard({
                     }
                     className={`cursor-pointer transition-colors ${
                       selectedBadges[category.name]?.includes(badge)
-                        ? categoryRatings[category.name] < 4
+                        ? categoryRatings[category.name] <= worryRating
                           ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          : "bg-primary text-primary-foreground hover:bg-primary/90"
+                          : "bg-green-500 text-green-foreground hover:bg-green-400"
                         : ""
                     }`}
                     onClick={() => toggleBadge(category.name, badge)}

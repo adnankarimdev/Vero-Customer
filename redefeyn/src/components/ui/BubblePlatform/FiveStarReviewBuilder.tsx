@@ -218,7 +218,7 @@ export default function FiveStarReviewBuilder({
     //   setIsEmailReviewDialogOpen(true);
     //   return;
     // }
-    setIsAlertDialogOpen(false)
+    setIsAlertDialogOpen(false);
     setIsLoading(true);
     const contextToSend =
       "Business Name:\n" +
@@ -648,7 +648,6 @@ export default function FiveStarReviewBuilder({
     if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
     } else if (localOverallRating > worryRating) {
-
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
@@ -662,7 +661,7 @@ export default function FiveStarReviewBuilder({
     setIsDialogOpen(false);
   };
 
-  //This is the google dialog for immediate rating. 
+  //This is the google dialog for immediate rating.
   if (isDialogOpen && rating > worryRating) {
     return (
       <GoogleReviewDialogContent
@@ -695,14 +694,14 @@ export default function FiveStarReviewBuilder({
   if (isEmailReviewDialogOpen) {
     return (
       <GoogleReviewDialogContent
-      isDialogOpen={isDialogOpen}
-      generatedReview={generatedReview}
-      setGeneratedReview={setGeneratedReview}
-      handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
-      handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
-    />
-      // WE'll have to add a condition here, if its kiosk mode, open this component. Otherwise, open the above. 
-      // For now, leave it commented it out. 
+        isDialogOpen={isDialogOpen}
+        generatedReview={generatedReview}
+        setGeneratedReview={setGeneratedReview}
+        handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
+        handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+      />
+      // WE'll have to add a condition here, if its kiosk mode, open this component. Otherwise, open the above.
+      // For now, leave it commented it out.
       //put setDate, setTime here and get it from datetimepicker component within EmailPostFiveStarReview
       // <EmailPostFiveStarReview
       //   isEmailReviewDialogOpen={isEmailReviewDialogOpen}
@@ -746,6 +745,7 @@ export default function FiveStarReviewBuilder({
           stopTimer={stopTimer}
           sendingEmail={sendingEmail}
           inStoreMode={inStoreMode}
+          worryRating={worryRating}
         />
 
         // <TinderPlatform
