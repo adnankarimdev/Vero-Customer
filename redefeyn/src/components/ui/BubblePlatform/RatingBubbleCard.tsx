@@ -154,7 +154,16 @@ export default function RatingBubbleCard({
         <CardContent>
           {categories.map((category) => (
             <div key={category.name} className="mb-6">
-              <div className="flex flex-col items-center mb-2">
+              <div
+                className={
+                  categories.length > 1
+                    ? "flex items-center mb-2 justify-between"
+                    : "flex items-center mb-2 justify-center"
+                }
+              >
+                {categories.length > 1 && (
+                  <h3 className="text-lg font-semibold">{category.name}</h3>
+                )}
                 <div className="flex items-center space-x-1 justify-center">
                   {[...Array(5)].map((_, i) => (
                     <Star
