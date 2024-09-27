@@ -664,7 +664,7 @@ export default function FiveStarReviewBuilder({
     setIsDialogOpen(false);
   };
 
-  //This is the google dialog for immediate rating.
+  //This is the google dialog for immediate rating. I think unused.
   if (isDialogOpen && rating > worryRating) {
     return (
       <GoogleReviewDialogContent
