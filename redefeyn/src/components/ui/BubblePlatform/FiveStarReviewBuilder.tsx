@@ -451,8 +451,8 @@ export default function FiveStarReviewBuilder({
       postedToGoogleReview: false,
       generatedReviewBody: initialGeneratedRevieBody,
       finalReviewBody: generatedReview,
-      emailSentToCompany: phoneNumber != '' ? false:true,
-      textSentForReview: phoneNumber != '' ? true:false,
+      emailSentToCompany: phoneNumber != "" ? false : true,
+      textSentForReview: phoneNumber != "" ? true : false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
@@ -505,7 +505,8 @@ export default function FiveStarReviewBuilder({
           sendEmailNow: sendEmailNow,
           phoneNumber: phoneNumber,
           tone: tone,
-          buisnessName: buisnessName
+          buisnessName: buisnessName,
+          badges: allBadges,
         },
       )
       .then((response) => {
@@ -672,6 +673,9 @@ export default function FiveStarReviewBuilder({
         setGeneratedReview={setGeneratedReview}
         handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
         handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+        allBadges={Object.entries(selectedBadges).flatMap(
+          ([category, badges]) => badges.map((badge) => `${badge}`),
+        )}
       />
     );
   }
@@ -702,6 +706,9 @@ export default function FiveStarReviewBuilder({
           setGeneratedReview={setGeneratedReview}
           handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
           handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+          allBadges={Object.entries(selectedBadges).flatMap(
+            ([category, badges]) => badges.map((badge) => `${badge}`),
+          )}
         />
       );
     } else {
