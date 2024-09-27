@@ -42,33 +42,28 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
           Feel free to edit this! Once it looks good, click the button below and
           it will copy the review for you to paste 🥳
         </DialogDescription>
-        <div className="flex space-x-4">
-          {" "}
-          {/* Add flex container with spacing */}
-          <ScrollArea className="max-h-72 w-48 rounded-md border flex-none border-none">
-            {" "}
-            {/* Keep fixed width for the scroll area */}
-            <div className="p-4">
-              <p className="mb-4 text-xs font-medium leading-none text-center">
-                {"Selected Badges"}
-              </p>
-              {allBadges &&
-                allBadges.length > 0 &&
-                allBadges.map((badge) => (
-                  <>
-                    {" "}
-                    {/* Use React.Fragment for proper key */}
-                    <Badge variant="outline">{badge}</Badge>
-                    <Separator className="my-2 border-none" />
-                  </>
-                ))}
-            </div>
-          </ScrollArea>
+        <div className="flex flex-col w-full h-full min-h-[400px]">
           <Textarea
-            defaultValue={generatedReview}
-            className="w-full min-h-[400px] flex-1" // Allow the textarea to grow and fill available space
+            value={generatedReview}
             onChange={(e) => setGeneratedReview(e.target.value)}
+            className="flex-grow resize-none mb-2"
+            placeholder="Your generated review will appear here..."
           />
+          <div className="bg-background border rounded-md p-2">
+            <p className="text-xs font-medium text-center mb-2">
+              Selected Badges at Time of Selection
+            </p>
+            <ScrollArea className="h-24">
+              <div className="flex flex-wrap gap-2 justify-center">
+                {allBadges &&
+                  allBadges.map((badge, index) => (
+                    <Badge key={index} variant="outline">
+                      {badge}
+                    </Badge>
+                  ))}
+              </div>
+            </ScrollArea>
+          </div>
         </div>
       </DialogHeader>
       <DialogFooter className="flex justify-between items-center">
