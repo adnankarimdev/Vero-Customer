@@ -116,6 +116,7 @@ export default function AtHomeCustomerReview() {
                   value={generatedReview}
                   onChange={(e) => setGeneratedReview(e.target.value)}
                   className="flex-grow resize-none mb-2"
+                  rows={20}
                   placeholder="Your generated review will appear here..."
                 />
                 <div className="bg-background border rounded-md p-2">

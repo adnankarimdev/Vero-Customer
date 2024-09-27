@@ -46,6 +46,7 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
           <Textarea
             value={generatedReview}
             onChange={(e) => setGeneratedReview(e.target.value)}
+            rows={20}
             className="flex-grow resize-none mb-2"
             placeholder="Your generated review will appear here..."
           />
