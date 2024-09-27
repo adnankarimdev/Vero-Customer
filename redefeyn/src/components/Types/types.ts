@@ -22,6 +22,7 @@ export interface CustomerReviewInfo {
   generatedReviewBody?: string; // Defaults to empty string
   finalReviewBody?: string; // Defaults to empty string
   emailSentToCompany?: boolean; // Defaults to false
+  textSentForReview?: boolean;
   timeTakenToWriteReview?: number;
   reviewDate?: string;
   postedWithBubbleRatingPlatform?: boolean;

@@ -451,7 +451,8 @@ export default function FiveStarReviewBuilder({
       postedToGoogleReview: false,
       generatedReviewBody: initialGeneratedRevieBody,
       finalReviewBody: generatedReview,
-      emailSentToCompany: true,
+      emailSentToCompany: phoneNumber != '' ? false:true,
+      textSentForReview: phoneNumber != '' ? true:false,
       timeTakenToWriteReview: timeTakenToWriteReview,
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform:
@@ -504,6 +505,7 @@ export default function FiveStarReviewBuilder({
           sendEmailNow: sendEmailNow,
           phoneNumber: phoneNumber,
           tone: tone,
+          buisnessName: buisnessName
         },
       )
       .then((response) => {
