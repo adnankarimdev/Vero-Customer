@@ -40,7 +40,7 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
         </DialogTitle>
         <DialogDescription className="text-center">
           Feel free to edit this! Once it looks good, click the button below and
-          it will copy the review for you to paste 🥳
+          it will copy the review for you to paste to Google 🥳
         </DialogDescription>
         <div className="flex flex-col w-full h-full min-h-[400px]">
           <Textarea

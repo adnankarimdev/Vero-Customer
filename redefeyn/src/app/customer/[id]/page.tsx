@@ -102,7 +102,7 @@ export default function AtHomeCustomerReview() {
               </CardTitle>
               <CardDescription className="text-center">
                 Feel free to edit this! Once it looks good, click the button
-                below and it will copy the review for you to paste 🥳
+                below and it will copy the review for you to paste to Google 🥳
                 <p className="text-gray-500 text-xs mt-2">
                   Tone at Time of Selection:{" "}
                   <span className="font-bold">
