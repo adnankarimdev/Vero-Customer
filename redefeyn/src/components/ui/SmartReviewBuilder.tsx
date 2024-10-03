@@ -66,12 +66,14 @@ interface SmartReviewProps {
   title?: string;
   id: string;
   inStoreMode?: boolean;
+  onlineBusinessMode?: boolean;
 }
 
 const SmartReviewBuilder = ({
   onChange,
   id,
   inStoreMode,
+  onlineBusinessMode,
 }: SmartReviewProps) => {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
@@ -681,6 +683,7 @@ const SmartReviewBuilder = ({
             bubbleRatingPlatform={useBubblePlatform}
             showEmailWorryDialog={worryDialog}
             inStoreMode={inStoreMode}
+            onlineBusinessMode={onlineBusinessMode}
           />
         )}
       {!showRatingsPage &&

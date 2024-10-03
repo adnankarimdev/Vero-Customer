@@ -74,6 +74,7 @@ interface FiveStarReviewBuilderProps {
   bubbleRatingPlatform?: boolean;
   showEmailWorryDialog?: boolean;
   inStoreMode?: boolean;
+  onlineBusinessMode?: boolean;
 }
 
 export default function FiveStarReviewBuilder({
@@ -88,6 +89,7 @@ export default function FiveStarReviewBuilder({
   showEmailWorryDialog,
   worryRating,
   inStoreMode,
+  onlineBusinessMode,
 }: FiveStarReviewBuilderProps) {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
@@ -648,7 +650,10 @@ export default function FiveStarReviewBuilder({
     const duration = (endTimeRef.current - startTimeRef.current) / 1000;
     setTimeTakenToWriteReview(duration);
 
-    if (localOverallRating <= worryRating && showEmailWorryDialog) {
+    //Online business mode? go directly to end of review
+    if (onlineBusinessMode) {
+      handleWorryRatingDialog();
+    } else if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
     } else if (localOverallRating > worryRating) {
       setIsAlertDialogOpen(true);
