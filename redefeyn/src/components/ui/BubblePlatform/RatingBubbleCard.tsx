@@ -52,6 +52,7 @@ interface RatingBubbleCardProps {
   inStoreMode?: boolean;
   worryRating: number;
   translateLanguage?: (language: string) => void;
+  cardDescription?: string;
 }
 
 export default function RatingBubbleCard({
@@ -71,6 +72,7 @@ export default function RatingBubbleCard({
   inStoreMode,
   worryRating,
   translateLanguage,
+  cardDescription,
 }: RatingBubbleCardProps) {
   const [categoryRatings, setCategoryRatings] = useState<{
     [key: string]: number;
@@ -155,7 +157,7 @@ export default function RatingBubbleCard({
           {businessName}
         </CardTitle>
         <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-          {"How did we do? 🤔"}
+          {cardDescription}
         </CardDescription>
       </CardHeader>
       {isLoading ? (

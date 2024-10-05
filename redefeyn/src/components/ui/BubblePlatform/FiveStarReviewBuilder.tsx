@@ -121,6 +121,7 @@ export default function FiveStarReviewBuilder({
   const [overallRating, setOverallRating] = useState(0);
   const [sendEmailNow, setSendEmailNow] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+1");
+  const [cardDescription, setCardDescription] = useState("");
   const [tone, setTone] = useState("friendly");
   let globalRating = 0;
   const positiveTones = [
@@ -420,6 +421,7 @@ export default function FiveStarReviewBuilder({
         )
         .then((response) => {
           setCategories(response.data.categories);
+          setCardDescription(response.data.card_description);
           setIsLoading(false);
         })
         .catch((error) => {
@@ -795,6 +797,7 @@ export default function FiveStarReviewBuilder({
           inStoreMode={inStoreMode}
           worryRating={worryRating}
           translateLanguage={translateLanguage}
+          cardDescription={cardDescription}
         />
 
         // <TinderPlatform
