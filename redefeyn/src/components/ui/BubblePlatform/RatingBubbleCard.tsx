@@ -9,6 +9,15 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
@@ -42,6 +51,7 @@ interface RatingBubbleCardProps {
   sendingEmail: boolean;
   inStoreMode?: boolean;
   worryRating: number;
+  translateLanguage?: (language: string) => void;
 }
 
 export default function RatingBubbleCard({
@@ -60,6 +70,7 @@ export default function RatingBubbleCard({
   sendingEmail,
   inStoreMode,
   worryRating,
+  translateLanguage,
 }: RatingBubbleCardProps) {
   const [categoryRatings, setCategoryRatings] = useState<{
     [key: string]: number;
@@ -68,6 +79,18 @@ export default function RatingBubbleCard({
   const [editingCategory, setEditingCategory] = useState<string | null>(null);
   const [newBadge, setNewBadge] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const languageOptions = [
+    { value: "english", label: "English" },
+    { value: "french", label: "French" },
+    { value: "spanish", label: "Spanish" },
+    { value: "punjabi", label: "Punjabi" },
+    { value: "bengali", label: "Bengali" },
+    { value: "pashto", label: "Pashto" },
+    { value: "mandarin", label: "Mandarin" },
+    // { value: "online-business", label: "Social Media Business 🧑‍💻" },
+    // { value: "influencer", label: "Social Media Icon ⭐️" },
+  ];
 
   useEffect(() => {
     if (editingCategory && inputRef.current) {
@@ -253,7 +276,7 @@ export default function RatingBubbleCard({
           ))}
         </CardContent>
       )}
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-between">
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
@@ -276,6 +299,33 @@ export default function RatingBubbleCard({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+        {translateLanguage && (
+          <>
+            <Select
+              onValueChange={(value) => {
+                translateLanguage(value);
+                setSelectedLanguage(value);
+              }} // Capture the selected value and pass it
+              defaultValue={selectedLanguage}
+              disabled={isLoading}
+            >
+              <SelectTrigger className="w-1/6">
+                <SelectValue placeholder="Select a language" />
+              </SelectTrigger>
+              <SelectContent className="overflow-y-auto max-h-[10rem]">
+                <SelectGroup>
+                  <SelectLabel>Language</SelectLabel>
+
+                  {languageOptions.map((type) => (
+                    <SelectItem key={type.value} value={type.value}>
+                      {type.label}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </>
+        )}
         <Button
           variant="ghost"
           disabled={Object.keys(selectedBadges).every(

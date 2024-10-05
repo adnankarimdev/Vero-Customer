@@ -435,6 +435,38 @@ export default function FiveStarReviewBuilder({
     startTimeRef.current = Date.now();
   };
 
+  const translateLanguage = async (language: string) => {
+    setIsLoading(true);
+    axios
+      .post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/translate-language/`,
+        {
+          context: categories,
+          language: language,
+        },
+      )
+      .then((response) => {
+        const generatedQuestions = response.data["content"]
+          .replace(/```json/g, "")
+          .replace(/```/g, "");
+        const translatedBadgesAsJson = JSON.parse(generatedQuestions);
+        setCategories(translatedBadgesAsJson["categories"]);
+        toast({
+          title: "Success",
+          description: "Badges translated.",
+          duration: 1000,
+        });
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        toast({
+          title: "Failed to generate",
+          description: "try again",
+          duration: 1000,
+        });
+      });
+  };
   const sendEmailToClientWithReview = async () => {
     if (!validateForm()) {
       return;
@@ -762,6 +794,7 @@ export default function FiveStarReviewBuilder({
           sendingEmail={sendingEmail}
           inStoreMode={inStoreMode}
           worryRating={worryRating}
+          translateLanguage={translateLanguage}
         />
 
         // <TinderPlatform
