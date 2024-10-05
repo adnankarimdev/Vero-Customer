@@ -309,7 +309,7 @@ export default function RatingBubbleCard({
               defaultValue={selectedLanguage}
               disabled={isLoading}
             >
-              <SelectTrigger className="w-1/6">
+              <SelectTrigger className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
                 <SelectValue placeholder="Select a language" />
               </SelectTrigger>
               <SelectContent className="overflow-y-auto max-h-[10rem]">
