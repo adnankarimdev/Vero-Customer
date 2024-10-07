@@ -15,6 +15,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -23,6 +24,7 @@ import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 
 export default function AtHomeCustomerReview() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isChecked, setIsChecked] = useState(false); // state to track checkbox
   const [generatedReview, setGeneratedReview] = useState("");
   const [googleUrl, setGoogleUrl] = useState("");
   const [reviewUuidFromUrl, setReviewUuidFromUrl] = useState("");
@@ -116,7 +118,7 @@ export default function AtHomeCustomerReview() {
                   value={generatedReview}
                   onChange={(e) => setGeneratedReview(e.target.value)}
                   className="flex-grow resize-none mb-2"
-                  rows={20}
+                  rows={generatedReview.split("\n").length + 10}
                   placeholder="Your generated review will appear here..."
                 />
                 <div className="bg-background border rounded-md p-2">
@@ -135,14 +137,34 @@ export default function AtHomeCustomerReview() {
                 </div>
               </div>
             </CardHeader>
-            <CardFooter className="flex justify-end items-center">
-              <Button
-                type="submit"
-                onClick={handlePostGeneratedReviewToGoogle}
-                variant="default"
-              >
-                Copy & Paste
-              </Button>
+            <CardFooter className="flex flex-col justify-between items-center">
+              <div className="flex flex-col  justify-center items-center h-full w-full">
+                <div className="flex items-center">
+                  <Checkbox
+                    id="terms"
+                    checked={isChecked}
+                    onCheckedChange={(checked) =>
+                      setIsChecked(checked === true)
+                    }
+                    className="mr-4"
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    I confirm this reflects my experience.
+                  </label>
+                </div>
+                <Button
+                  type="submit"
+                  onClick={handlePostGeneratedReviewToGoogle}
+                  variant="default"
+                  className="mt-4"
+                  disabled={!isChecked} // Disable the button if checkbox is not checked
+                >
+                  Copy & Paste
+                </Button>
+              </div>
             </CardFooter>
           </CardContent>
         </Card>
