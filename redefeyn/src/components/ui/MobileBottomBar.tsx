@@ -7,7 +7,7 @@ import {
   Settings,
   LogOut,
   BadgeDollarSign,
-  HandHeart
+  HandHeart,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -26,8 +26,8 @@ export default function MobileBottomBar() {
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
-    localStorage.removeItem("userEmail");
-    router.push("/");
+    localStorage.removeItem("customerEmail");
+    router.push("/authentication");
   };
 
   return (
@@ -39,10 +39,10 @@ export default function MobileBottomBar() {
             href={item.href}
             className={cn(
               "flex flex-col items-center justify-center w-full h-full",
-              "hover:text-primary"
+              "hover:text-primary",
             )}
           >
-            <item.icon className="h-5 w-5" strokeWidth={2}/>
+            <item.icon className="h-5 w-5" strokeWidth={2} />
             <span className="text-xs mt-1">{item.label}</span>
           </Link>
         ))}
@@ -50,11 +50,11 @@ export default function MobileBottomBar() {
           variant="ghost"
           className={cn(
             "flex flex-col items-center justify-center w-full h-full",
-            "hover:text-primary"
+            "hover:text-primary",
           )}
           onClick={handleLogout}
         >
-          <LogOut className="h-5 w-5" strokeWidth={2}/>
+          <LogOut className="h-5 w-5" strokeWidth={2} />
           <span className="text-xs mt-1">Logout</span>
         </Button>
       </div>
