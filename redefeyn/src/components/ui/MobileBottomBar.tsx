@@ -38,7 +38,7 @@ export default function MobileBottomBar() {
             href={item.href}
             className={cn(
               "flex flex-col items-center justify-center w-full h-full",
-              "text-muted-foreground hover:text-primary"
+              "hover:text-primary"
             )}
           >
             <item.icon className="h-5 w-5" />
@@ -49,7 +49,7 @@ export default function MobileBottomBar() {
           variant="ghost"
           className={cn(
             "flex flex-col items-center justify-center w-full h-full",
-            "text-muted-foreground hover:text-primary"
+            "hover:text-primary"
           )}
           onClick={handleLogout}
         >
