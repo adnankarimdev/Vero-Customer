@@ -7,6 +7,7 @@ import {
   Settings,
   LogOut,
   BadgeDollarSign,
+  HandHeart
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,8 +16,8 @@ import { Button } from "@/components/ui/button";
 
 const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/dashboard" },
-  { icon: Star, label: "Your Reviews", href: "/reviews" },
-  { icon: BadgeDollarSign, label: "Rewards", href: "/respond" },
+  { icon: Star, label: "Reviews", href: "/reviews" },
+  { icon: HandHeart, label: "Rewards", href: "/respond" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
@@ -41,7 +42,7 @@ export default function MobileBottomBar() {
               "hover:text-primary"
             )}
           >
-            <item.icon className="h-5 w-5" />
+            <item.icon className="h-5 w-5" strokeWidth={2}/>
             <span className="text-xs mt-1">{item.label}</span>
           </Link>
         ))}
@@ -53,7 +54,7 @@ export default function MobileBottomBar() {
           )}
           onClick={handleLogout}
         >
-          <LogOut className="h-5 w-5" />
+          <LogOut className="h-5 w-5" strokeWidth={2}/>
           <span className="text-xs mt-1">Logout</span>
         </Button>
       </div>
