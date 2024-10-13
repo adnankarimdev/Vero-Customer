@@ -1,93 +1,59 @@
 "use client";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import FlipCards from "@/components/ui/FlipCards";
+import { useToast } from "@/hooks/use-toast";
+import TypingEffect from "@/components/ui/TypingEffect";
+import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
+import SearchBar from "@/components/ui/SearchBar";
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import SmartReviewBuilder from "@/components/ui/SmartReviewBuilder";
+// so we will create a new component here to open home page.
+// we will get the data from the table backend_customerreviewinfo. Ideally, we will handle all the data processing in the backend.
 
-import TutorialSteps from "@/components/ui/TutorialSteps";
-// import SmartReviewBuilderNew from "@/components/ui/SmartReviewBuilderNew";
+export default function DuplicateReviewPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [locationData, setLocationData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setIsLoading(true);
+    const fetchData = async () => {
+      try {
+        const reviewSettingsResponse = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-data-customer/`,
+        );
+        console.log(reviewSettingsResponse.data);
+        setLocationData(reviewSettingsResponse.data);
+        const email = localStorage.getItem("customerEmail");
+        if (!email) {
+          toast({
+            title: "Please sign in.",
+            duration: 3000,
+          });
+          router.push("/authentication");
+          console.error("Email not found in localStorage");
+          return;
+        }
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
+        console.error(err);
+        false;
+      }
+    };
 
-export default function Dashboard() {
-  const [showReviewPlatform, setShowReviewPlatform] = useState(false);
-
-  const steps = [
-    {
-      title: "Step 1: Share Your Thoughts",
-      description:
-        "Quickly jot down your answers to questions by Phil & Sebastian, using your own unique style.",
-      emoji: "✏️",
-    },
-    {
-      title: "Step 2: Vero",
-      description:
-        "If you want, Vero will enhance your response, making sure it's the best it can be based on what you wrote!",
-      emoji: "✨",
-    },
-    {
-      title: "Step 3: Submit Your Review",
-      description:
-        "Once you're happy with it, send off your polished Google review!",
-      emoji: "🚀",
-    },
-  ];
-
-  const [searchQuery, setSearchQuery] = useState<string>("");
-  const [searchQueryGpt, setSearchQueryGpt] = useState<string>("");
-  const [selectedLocation, setSelectedLocation] = useState<string>("");
-  const [returnedGraph, setReturnedGraph] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const handleGoToGoogleReview = () => {
-    window.open(
-      "https://search.google.com/local/writereview?placeid=ChIJzd0u2lRlcVMRoSTjaEEDL_E",
-      "_blank",
-      "noopener,noreferrer",
-    );
-  };
-
-  const goToVero = () => {
-    setShowReviewPlatform(true);
-  };
-
+    fetchData();
+  }, []);
   return (
-    <div className="container mx-auto p-4">
-      {!showReviewPlatform && (
-        <div className="flex flex-col items-center justify-center min-h-screen space-y-4">
-          {/* Tutorial Steps Component */}
-          {/* <TutorialSteps steps={steps} /> */}
-
-          {/* Card Component */}
-          <Card className="w-auto max-w-2xl mx-auto mt-10">
-            <CardHeader>
-              <TutorialSteps steps={steps} />
-              <CardTitle className="text-center">
-                <Button
-                  onClick={() => goToVero()}
-                  className="w-full"
-                  variant="link"
-                >
-                  Continue to Vero
-                </Button>
-                <Button
-                  onClick={handleGoToGoogleReview}
-                  className="w-full"
-                  variant="link"
-                >
-                  Go Directly to Google Review
-                </Button>
-              </CardTitle>
-            </CardHeader>
-          </Card>
-        </div>
+    <div className="space-y-8">
+      {isLoading && <RecordingLoader />}
+      {!isLoading && (
+        <>
+          <SearchBar />
+          <FlipCards locations={locationData} />
+        </>
       )}
-      {showReviewPlatform && <SmartReviewBuilder id={"123"} />}
     </div>
   );
 }

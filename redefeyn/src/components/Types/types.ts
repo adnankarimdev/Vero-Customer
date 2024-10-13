@@ -30,3 +30,16 @@ export interface CustomerReviewInfo {
   reviewUuid?: string;
   pendingGoogleReview?: boolean;
 }
+
+export interface RatingSummary {
+  rating: number;
+  badges: string[];
+  reviews: string[];
+}
+
+export interface LocationDataInfo {
+  location: string;
+  average_rating: number;
+  total_reviews: number;
+  ratings_summary: RatingSummary[];
+}
