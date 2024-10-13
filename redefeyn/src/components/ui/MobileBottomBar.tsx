@@ -18,7 +18,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/dashboard" },
   { icon: Star, label: "Reviews", href: "/reviews" },
   { icon: HandHeart, label: "Rewards", href: "/respond" },
-  { icon: Settings, label: "Settings", href: "/settings" },
+  // { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
 export default function MobileBottomBar() {

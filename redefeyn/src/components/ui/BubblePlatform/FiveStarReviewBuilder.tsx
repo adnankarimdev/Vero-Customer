@@ -123,6 +123,7 @@ export default function FiveStarReviewBuilder({
   const [phoneNumber, setPhoneNumber] = useState("+1");
   const [cardDescription, setCardDescription] = useState("");
   const [tone, setTone] = useState("friendly");
+  const [customerEmail, setCustomerEmail] = useState("");
   let globalRating = 0;
   const positiveTones = [
     "friendly 🤗",
@@ -284,6 +285,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(
@@ -333,6 +335,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(
@@ -383,6 +386,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
 
     await axios
@@ -411,6 +415,11 @@ export default function FiveStarReviewBuilder({
   };
   useEffect(() => {
     startTimer();
+    const email = localStorage.getItem("customerEmail");
+    if (email) {
+      setCustomerEmail(email);
+    }
+
     const fetchCategories = async () => {
       if (hasFetched.current) return;
 
@@ -496,6 +505,7 @@ export default function FiveStarReviewBuilder({
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
       pendingGoogleReview: true,
+      customerEmail: customerEmail,
     };
     await axios
       .post(
@@ -593,6 +603,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(

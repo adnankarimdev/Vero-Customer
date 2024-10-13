@@ -159,6 +159,7 @@ const SmartReviewBuilder = ({
     useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [startRecording, setStartRecording] = useState(false);
+  const [customerEmail, setCustomerEmail] = useState("");
 
   const formatDate = (date: Date): string => {
     const options: Intl.DateTimeFormatOptions = {
@@ -174,6 +175,10 @@ const SmartReviewBuilder = ({
     return new Intl.DateTimeFormat("en-US", options).format(date);
   };
   useEffect(() => {
+    const email = localStorage.getItem("customerEmail");
+    if (email) {
+      setCustomerEmail(email);
+    }
     setIsLoading(true);
     const fetchReviewSettings = async (placeId = id) => {
       try {
@@ -296,6 +301,7 @@ const SmartReviewBuilder = ({
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform: useBubblePlatform,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(
@@ -338,6 +344,7 @@ const SmartReviewBuilder = ({
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform: useBubblePlatform,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(
@@ -381,6 +388,7 @@ const SmartReviewBuilder = ({
       reviewDate: formatDate(new Date()),
       postedWithBubbleRatingPlatform: useBubblePlatform,
       reviewUuid: uuidv4(),
+      customerEmail: customerEmail,
     };
     await axios
       .post(

@@ -29,6 +29,7 @@ export interface CustomerReviewInfo {
   postedWithInStoreMode?: boolean;
   reviewUuid?: string;
   pendingGoogleReview?: boolean;
+  customerEmail?: string;
 }
 
 export interface RatingSummary {
@@ -41,5 +42,6 @@ export interface LocationDataInfo {
   location: string;
   average_rating: number;
   total_reviews: number;
+  place_id: string;
   ratings_summary: RatingSummary[];
 }

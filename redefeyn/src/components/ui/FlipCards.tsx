@@ -3,13 +3,19 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import { LocationDataInfo, RatingSummary } from "../Types/types";
 
-function LocationCard({ location }: { location: LocationDataInfo }) {
+function LocationCard({
+  location,
+  placeReviewed,
+}: {
+  location: LocationDataInfo;
+  placeReviewed?: boolean;
+}) {
   const [isFlipped, setIsFlipped] = useState(false);
-
   return (
     <div
       className="w-full h-[400px] perspective-1000 cursor-pointer"
@@ -28,20 +34,21 @@ function LocationCard({ location }: { location: LocationDataInfo }) {
                 {location.location}
               </CardTitle>
               <div className="flex flex-col items-center justify-center mb-2">
-                <span className="ml-2">{location.average_rating}/5</span>
-                {/* {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`w-5 h-5 ${
-                  i < location.average_rating
-                    ? "text-primary fill-primary"
-                    : "text-muted"
-                }`}
-              />
-            ))} */}
+                <span className="ml-2">
+                  {location.average_rating.toFixed(1)} / 5.0
+                </span>
                 <span className="ml-2">
                   {location.total_reviews} Vero Reviews
                 </span>
+                {placeReviewed == true && (
+                  <Badge
+                    className={cn(
+                      "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
+                    )}
+                  >
+                    {"Reviewed"}
+                  </Badge>
+                )}
               </div>
             </CardHeader>
             <Separator className="mb-4" />
@@ -106,14 +113,22 @@ function LocationCard({ location }: { location: LocationDataInfo }) {
 
 export default function FlipCards({
   locations,
+  customerLocationsReviewed,
 }: {
   locations: LocationDataInfo[];
+  customerLocationsReviewed?: string[];
 }) {
   return (
     <div className="container mx-auto p-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {locations.map((location, id) => (
-          <LocationCard key={id} location={location} />
+          <LocationCard
+            key={id}
+            location={location}
+            placeReviewed={customerLocationsReviewed?.includes(
+              location.place_id,
+            )}
+          />
         ))}
       </div>
     </div>

@@ -16,6 +16,9 @@ export default function DuplicateReviewPage() {
   const { toast } = useToast();
   const [locationData, setLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [customerLocationsReviewed, setCustomerLocationsReviewed] = useState(
+    [],
+  );
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
@@ -25,6 +28,7 @@ export default function DuplicateReviewPage() {
         );
         console.log(reviewSettingsResponse.data);
         setLocationData(reviewSettingsResponse.data);
+
         const email = localStorage.getItem("customerEmail");
         if (!email) {
           toast({
@@ -35,6 +39,10 @@ export default function DuplicateReviewPage() {
           console.error("Email not found in localStorage");
           return;
         }
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-customer-reviewed-places/${email}/`,
+        );
+        setCustomerLocationsReviewed(response.data.data);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -51,7 +59,10 @@ export default function DuplicateReviewPage() {
       {!isLoading && (
         <>
           <SearchBar />
-          <FlipCards locations={locationData} />
+          <FlipCards
+            locations={locationData}
+            customerLocationsReviewed={customerLocationsReviewed}
+          />
         </>
       )}
     </div>
