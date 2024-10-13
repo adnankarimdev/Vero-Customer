@@ -25,16 +25,6 @@ export default function DuplicateReviewPage() {
         );
         console.log(reviewSettingsResponse.data);
         setLocationData(reviewSettingsResponse.data);
-        const email = localStorage.getItem("customerEmail");
-        if (!email) {
-          toast({
-            title: "Please sign in.",
-            duration: 3000,
-          });
-          router.push("/authentication");
-          console.error("Email not found in localStorage");
-          return;
-        }
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
