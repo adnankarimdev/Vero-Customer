@@ -45,3 +45,24 @@ export interface LocationDataInfo {
   place_id: string;
   ratings_summary: RatingSummary[];
 }
+
+export interface PersonalReviewInfoFromSerializer {
+  analyzed_review_details: object;
+  badges: string; // This will be a JSON string initially
+  email_sent_to_company: boolean;
+  final_review_body: string;
+  generated_review_body: string;
+  id: number;
+  location: string;
+  place_id_from_review: string;
+  posted_to_google_review: boolean;
+  rating: number;
+  time_taken_to_write_review_in_seconds: number;
+  review_date?: string;
+  internal_google_key_words?: string[];
+  posted_with_bubble_rating_platform?: boolean;
+  posted_with_in_store_mode?: boolean;
+  pending_google_review?: boolean;
+  posted_to_google_after_email_sent?: boolean;
+  score_received?: number;
+}
