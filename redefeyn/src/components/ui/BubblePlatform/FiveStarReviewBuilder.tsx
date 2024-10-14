@@ -124,6 +124,7 @@ export default function FiveStarReviewBuilder({
   const [cardDescription, setCardDescription] = useState("");
   const [tone, setTone] = useState("friendly");
   const [customerEmail, setCustomerEmail] = useState("");
+  const [alreadyPostedToGoogle, setAlreadyPostedToGoogle] = useState(false);
   let globalRating = 0;
   const positiveTones = [
     "friendly 🤗",
@@ -437,6 +438,21 @@ export default function FiveStarReviewBuilder({
           setCategories(defaultCategories);
           setIsLoading(false);
         });
+
+      await axios
+        .post(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/already-posted-to-google/`,
+          {
+            customerEmail: email,
+            placeId: placeId,
+          },
+        )
+        .then((response) => {
+          setAlreadyPostedToGoogle(response.data.data);
+        })
+        .catch((error) => {
+          setAlreadyPostedToGoogle(false);
+        });
     };
 
     fetchCategories();
@@ -700,7 +716,7 @@ export default function FiveStarReviewBuilder({
       handleWorryRatingDialog();
     } else if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
-    } else if (localOverallRating > worryRating) {
+    } else if (localOverallRating > worryRating && !alreadyPostedToGoogle) {
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
