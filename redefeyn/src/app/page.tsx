@@ -37,28 +37,27 @@ export default function DuplicateReviewPage() {
     fetchData();
   }, []);
 
-  const onGetStarted = () =>
-  {
-    router.push("/authentication")
-  }
+  const onGetStarted = () => {
+    router.push("/authentication");
+  };
   return (
-<div className="space-y-8">
-  {isLoading && <RecordingLoader />}
-  {!isLoading && (
-    <>
-      <div className="flex justify-between items-center">
-        <SearchBar />
-        <Button
-          variant="default"
-          className="hidden md:inline-flex mr-2"
-          onClick={onGetStarted}
-        >
-          Login
-        </Button>
-      </div>
-      <FlipCards locations={locationData} />
-    </>
-  )}
-</div>
+    <div className="space-y-8">
+      {isLoading && <RecordingLoader />}
+      {!isLoading && (
+        <>
+          <div className="flex justify-between items-center">
+            <SearchBar />
+            <Button
+              variant="default"
+              className="hidden md:inline-flex mr-2"
+              onClick={onGetStarted}
+            >
+              Login
+            </Button>
+          </div>
+          <FlipCards locations={locationData} />
+        </>
+      )}
+    </div>
   );
 }
