@@ -9,7 +9,7 @@ export default function VeroPointsBadge({ score }: VeroPointsBadgeProps) {
   return (
     <Badge
       className={cn(
-        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold py-4 px-8 text-lg rounded-lg mt-4",
+        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-bold  mt-4",
       )}
     >
       {"Vero Points: "}

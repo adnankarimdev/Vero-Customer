@@ -5,6 +5,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import VeroPointsBadge from "@/components/ui/VeroPointsBadge";
+import RewardPack from "@/components/ui/RewardPack";
 
 export default function DuplicateReviewPage() {
   const router = useRouter();
@@ -43,11 +44,23 @@ export default function DuplicateReviewPage() {
   }, []);
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="relative min-h-screen">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
         <>
-          <VeroPointsBadge score={customerScore} />
+          {/* VeroPointsBadge positioned in the top right */}
+          <div className="absolute top-4 right-4">
+            <VeroPointsBadge score={customerScore} />
+          </div>
+
+          {/* RewardPack centered on the page, responsive layout */}
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <RewardPack packTitle="Vero Food" packWorth={200} />
+              <RewardPack packTitle="Vero Shop" packWorth={300} />
+              <RewardPack packTitle="Vero Travel" packWorth={400} />
+            </div>
+          </div>
         </>
       )}
     </div>
