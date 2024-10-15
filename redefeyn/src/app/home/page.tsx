@@ -21,10 +21,10 @@ export default function DuplicateReviewPage() {
     [],
   );
   const [isVeroCertified, setIsVeroCertified] = useState(false);
+  const veroCertifiedStatus =
+    Number(process.env.NEXT_PUBLIC_VERO_CERTIFIED_STATUS) || 0;
 
   const handleVeroCertifiedMessage = () => {
-    const veroCertifiedStatus =
-      Number(process.env.NEXT_PUBLIC_VERO_CERTIFIED_STATUS) || 0;
     if (!isVeroCertified) {
       toast({
         title: "Not Vero Certified.",
@@ -64,7 +64,7 @@ export default function DuplicateReviewPage() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-customer-reviewed-places/${email}/`,
         );
         setCustomerLocationsReviewed(response.data.data);
-        setIsVeroCertified(response.data.data.length > 5);
+        setIsVeroCertified(response.data.data.length > veroCertifiedStatus);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -88,32 +88,30 @@ export default function DuplicateReviewPage() {
                 onClick={handleVeroCertifiedMessage}
                 className="p-0 inline-flex items-center justify-center hover:bg-transparent hover:text-current focus:ring-0 active:bg-transparent"
               >
-                <Badge variant="outline">
-                  {"Vero Certified Reviewer: "}
-                  <svg width="0" height="0">
-                    <linearGradient
-                      id="purple-gradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="0%"
-                    >
-                      <stop stopColor="#a855f7" offset="0%" />
-                      <stop stopColor="#7e22ce" offset="100%" />
-                    </linearGradient>
-                  </svg>
-                  {isVeroCertified ? (
-                    <BadgeCheck
-                      className="w-6 h-6 ml-2"
-                      style={{ stroke: "url(#purple-gradient)" }}
-                    />
-                  ) : (
-                    <BadgeX
-                      className="w-6 h-6 ml-2"
-                      style={{ stroke: "url(#purple-gradient)" }}
-                    />
-                  )}
-                </Badge>
+                {"Vero Certified Reviewer: "}
+                <svg width="0" height="0">
+                  <linearGradient
+                    id="purple-gradient"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="0%"
+                  >
+                    <stop stopColor="#a855f7" offset="0%" />
+                    <stop stopColor="#7e22ce" offset="100%" />
+                  </linearGradient>
+                </svg>
+                {isVeroCertified ? (
+                  <BadgeCheck
+                    className="w-6 h-6 ml-2"
+                    style={{ stroke: "url(#purple-gradient)" }}
+                  />
+                ) : (
+                  <BadgeX
+                    className="w-6 h-6 ml-2"
+                    style={{ stroke: "url(#purple-gradient)" }}
+                  />
+                )}
               </Button>
             </div>
 
