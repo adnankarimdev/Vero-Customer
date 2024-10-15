@@ -56,9 +56,30 @@ export default function DuplicateReviewPage() {
           {/* RewardPack centered on the page, responsive layout */}
           <div className="flex items-center justify-center min-h-screen">
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <RewardPack packTitle="Vero Food" packWorth={200} />
-              <RewardPack packTitle="Vero Shop" packWorth={300} />
-              <RewardPack packTitle="Vero Travel" packWorth={400} />
+              <RewardPack
+                packTitle="Vero Food"
+                packWorth={200}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a cup of coffee, to a night out at a michelin star resturant."
+                }
+              />
+              <RewardPack
+                packTitle="Vero Shop"
+                packWorth={300}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a t-shirt at Zara, to a shopping spree at Louis Vuitton."
+                }
+              />
+              <RewardPack
+                packTitle="Vero Travel"
+                packWorth={400}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a new suitcase, to an all inclusive trip to Mexico."
+                }
+              />
             </div>
           </div>
         </>

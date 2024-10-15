@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useToast } from "@/hooks/use-toast";
 import { CircleDollarSign } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
@@ -11,11 +12,13 @@ const PackCard = ({
   onClick,
   packTitle,
   packWorth,
+  packDescription,
 }: {
   isOpen: boolean;
   onClick: () => void;
   packTitle: string;
   packWorth: number;
+  packDescription: string;
 }) => (
   <div className="flex flex-col items-center">
     <motion.div
@@ -36,7 +39,12 @@ const PackCard = ({
           closed: { opacity: 1 },
         }}
       >
-        {packTitle}
+        <div className="flex flex-col items-center">
+          <span>{packTitle}</span>
+          <p className="text-gray-500 text-xs mt-2 text-center">
+            {packDescription}
+          </p>
+        </div>
       </motion.div>
     </motion.div>
     <div className="flex items-center space-x-2 mt-4">
@@ -73,16 +81,29 @@ const CardReveal = ({
 export default function RewardPack({
   packTitle,
   packWorth,
+  customerScore,
+  packDescription,
 }: {
   packTitle: string;
   packWorth: number;
+  customerScore: number;
+  packDescription: string;
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
   const [randomNumber, setRandomNumber] = useState(0);
   const [showDialog, setShowDialog] = useState(false);
+  const { toast } = useToast();
 
   const handleClick = () => {
+    if (customerScore < packWorth) {
+      toast({
+        title: "Not enough Vero Points",
+        description: `You need ${packWorth - customerScore} more points.`,
+        duration: 3000,
+      });
+      return;
+    }
     if (!isOpen) {
       setIsOpen(true);
       setTimeout(() => {
@@ -112,6 +133,7 @@ export default function RewardPack({
           onClick={handleClick}
           packTitle={packTitle}
           packWorth={packWorth}
+          packDescription={packDescription}
         />
       </div>
       <Dialog open={showDialog} onOpenChange={handleDialogClose}>
