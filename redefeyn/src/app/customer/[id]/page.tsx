@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 import axios from "axios";
 import copy from "copy-to-clipboard";
@@ -15,6 +16,17 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import QuickAuthPage from "@/components/ui/QuickAuthPage";
 import { Checkbox } from "@/components/ui/checkbox";
 import { FcGoogle } from "react-icons/fc";
 import { Button } from "@/components/ui/button";
@@ -33,6 +45,13 @@ export default function AtHomeCustomerReview() {
   const { toast } = useToast();
   const pathname = usePathname();
   const router = useRouter();
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [tempEmail, setTempEmail] = useState("");
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
 
   useEffect(() => {
     const reviewUuid = pathname.split("/").pop(); // Get the last part of the URL
@@ -48,6 +67,7 @@ export default function AtHomeCustomerReview() {
         if (reviewResponse.data.posted_to_google) {
           router.push("/duplicatereview");
         }
+        setTempEmail(reviewResponse.data.email);
         setGeneratedReview(reviewResponse.data.review_body);
         setGoogleUrl(reviewResponse.data.google_review_url);
         setTone(reviewResponse.data.tone);
@@ -102,6 +122,33 @@ export default function AtHomeCustomerReview() {
               <CardTitle className="text-center">
                 Your review is ready to take the spotlight! 🌟
               </CardTitle>
+              {/* {customerEmail === "" && (
+                              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                              <DrawerTrigger>
+                                <Badge
+                                  className={cn(
+                                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
+                                  )}
+                                >
+                                  {"Sign up/Log in to Receieve Vero Points: 1 "}
+                                </Badge>
+                              </DrawerTrigger>
+                              <DrawerContent className="items-center">
+                                <DrawerHeader>
+                                  <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
+                                  <DrawerDescription>
+                                    You'll get 1 Vero Point for posting this to google.
+                                  </DrawerDescription>
+                                </DrawerHeader>
+                                <QuickAuthPage setCustomerEmail={setCustomerEmail} onDrawerClose={handleDrawerClose} customerEmail={tempEmail}/>
+                                <DrawerFooter>
+                                  <DrawerClose>
+                                    <Button variant="outline">Cancel</Button>
+                                  </DrawerClose>
+                                </DrawerFooter>
+                              </DrawerContent>
+                            </Drawer>
+              )} */}
               <CardDescription className="text-center">
                 Feel free to edit this! Once it looks good, click the button
                 below and it will copy the review for you to paste to Google 🥳

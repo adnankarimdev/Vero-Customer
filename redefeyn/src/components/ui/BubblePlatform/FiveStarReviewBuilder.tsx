@@ -288,6 +288,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
       customerEmail: customerEmail,
     };
+    console.log(customerEmail);
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
@@ -338,6 +339,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
       customerEmail: customerEmail,
     };
+    console.log(customerEmail);
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
@@ -389,7 +391,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
       customerEmail: customerEmail,
     };
-
+    console.log(customerEmail);
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
@@ -523,6 +525,7 @@ export default function FiveStarReviewBuilder({
       pendingGoogleReview: true,
       customerEmail: customerEmail,
     };
+    console.log(customerEmail);
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
@@ -621,6 +624,7 @@ export default function FiveStarReviewBuilder({
       reviewUuid: uuidv4(),
       customerEmail: customerEmail,
     };
+    console.log(customerEmail);
     await axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/save-customer-review/`,
@@ -737,6 +741,9 @@ export default function FiveStarReviewBuilder({
         isDialogOpen={isDialogOpen}
         generatedReview={generatedReview}
         setGeneratedReview={setGeneratedReview}
+        customerEmail={customerEmail}
+        setCustomerEmail={setCustomerEmail}
+        inStoreMode={inStoreMode}
         handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
         handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
         allBadges={Object.entries(selectedBadges).flatMap(
@@ -759,6 +766,9 @@ export default function FiveStarReviewBuilder({
         setUserEmail={setUserEmail}
         handleWorryRatingDialog={handleWorryRatingDialog}
         sendEmail={sendEmail}
+        inStoreMode={inStoreMode}
+        customerEmail={customerEmail}
+        setCustomerEmail={setCustomerEmail}
       />
     );
   }
@@ -772,6 +782,9 @@ export default function FiveStarReviewBuilder({
           setGeneratedReview={setGeneratedReview}
           handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
           handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+          customerEmail={customerEmail}
+          setCustomerEmail={setCustomerEmail}
+          inStoreMode={inStoreMode}
           allBadges={Object.entries(selectedBadges).flatMap(
             ([category, badges]) => badges.map((badge) => `${badge}`),
           )}

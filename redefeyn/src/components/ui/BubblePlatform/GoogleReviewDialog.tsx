@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
@@ -7,7 +8,18 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 import { Checkbox } from "@/components/ui/checkbox";
+import QuickAuthPage from "../QuickAuthPage";
 import { ScrollArea } from "../scroll-area";
 import { Separator } from "../separator";
 import { Badge } from "../badge";
@@ -22,6 +34,9 @@ interface GoogleReviewDialogContentProps {
   handlePostGeneratedReviewToGoogle: () => void;
   handleGoogleReviewDialogChange: (open: boolean) => void;
   allBadges?: string[];
+  customerEmail?: string;
+  setCustomerEmail?: (email: string) => void;
+  inStoreMode?: boolean;
 }
 
 const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
@@ -31,8 +46,16 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
   handlePostGeneratedReviewToGoogle,
   handleGoogleReviewDialogChange,
   allBadges,
+  customerEmail,
+  setCustomerEmail,
+  inStoreMode,
 }) => {
   const [isChecked, setIsChecked] = useState(false); // state to track checkbox
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleDrawerClose = () => {
+    setIsDrawerOpen(false);
+  };
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleGoogleReviewDialogChange}>
@@ -41,6 +64,37 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
           <DialogTitle className="text-center">
             Your review is ready to take the spotlight! 🌟
           </DialogTitle>
+          {!inStoreMode && customerEmail === "" && (
+            <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+              <DrawerTrigger>
+                <Badge
+                  className={cn(
+                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
+                  )}
+                >
+                  {"Sign up/Log in to Receieve Vero Points: 1 "}
+                </Badge>
+              </DrawerTrigger>
+              <DrawerContent className="items-center">
+                <DrawerHeader>
+                  <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
+                  <DrawerDescription>
+                    You'll get 1 Vero Point for posting this to google.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <QuickAuthPage
+                  setCustomerEmail={setCustomerEmail}
+                  onDrawerClose={handleDrawerClose}
+                />
+                <DrawerFooter>
+                  <DrawerClose>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </DrawerContent>
+            </Drawer>
+          )}
+
           <DialogDescription className="text-center">
             Feel free to edit this! Once it looks good, click the button below
             and it will copy the review for you to paste to Google 🥳
