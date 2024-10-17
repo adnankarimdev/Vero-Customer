@@ -79,7 +79,7 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
                 <DrawerHeader>
                   <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
                   <DrawerDescription>
-                    You'll get 1 Vero Point for posting this to google.
+                    {"You'll get 1 Vero Point for posting this to google."}
                   </DrawerDescription>
                 </DrawerHeader>
                 <QuickAuthPage

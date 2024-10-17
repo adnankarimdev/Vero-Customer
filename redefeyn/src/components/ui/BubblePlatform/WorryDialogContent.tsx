@@ -87,7 +87,7 @@ const WorryDialogContent: React.FC<WorryDialogContentProps> = ({
                 <DrawerHeader>
                   <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
                   <DrawerDescription>
-                    You'll get 0.5 Vero Point for posting this to google.
+                    {"You'll get 0.5 Vero Point for posting this to google."}
                   </DrawerDescription>
                 </DrawerHeader>
                 <QuickAuthPage
