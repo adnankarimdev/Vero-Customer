@@ -122,7 +122,7 @@ export default function AtHomeCustomerReview() {
               <CardTitle className="text-center">
                 Your review is ready to take the spotlight! 🌟
               </CardTitle>
-              {/* {customerEmail === "" && (
+              {customerEmail === "" && (
                               <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                               <DrawerTrigger>
                                 <Badge
@@ -148,7 +148,7 @@ export default function AtHomeCustomerReview() {
                                 </DrawerFooter>
                               </DrawerContent>
                             </Drawer>
-              )} */}
+              )}
               <CardDescription className="text-center">
                 Feel free to edit this! Once it looks good, click the button
                 below and it will copy the review for you to paste to Google 🥳
