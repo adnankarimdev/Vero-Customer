@@ -52,8 +52,8 @@ export default function DuplicateReviewPage() {
           <div className="flex justify-between items-center">
             <SearchBar />
             <Button
-              variant="default"
-              className="hidden md:inline-flex mr-2"
+              variant="ghost"
+              className="md:inline-flex mr-2"
               onClick={onGetStarted}
             >
               Login
