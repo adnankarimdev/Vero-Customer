@@ -24,7 +24,8 @@ function LocationCard({
       for (const locationArray of placesInfo) {
         for (const location of locationArray) {
           if (location.name === searchName) {
-            return location.formatted_address;
+            // just return formatted address if things look weird.
+            return extractCityAndProvince(location.formatted_address);
           }
         }
       }
@@ -32,6 +33,19 @@ function LocationCard({
     }
   }
 
+  function extractCityAndProvince(address: string): string | undefined {
+    // This regex assumes the format: "Street, City, Province PostalCode, Country"
+    const regex = /,\s*([A-Za-z\s]+),\s*([A-Z]{2})\s/;
+    const match = address.match(regex);
+  
+    if (match && match.length >= 3) {
+      const city = match[1].trim();      // Capture the city name
+      const province = match[2].trim();  // Capture the province or state code
+      return city +  ", " + province;
+    }
+  
+    return undefined;  // Return null if the pattern doesn't match
+  }
   return (
     <div
       className="w-full h-[400px] perspective-1000 cursor-pointer"
