@@ -66,3 +66,13 @@ export interface PersonalReviewInfoFromSerializer {
   posted_to_google_after_email_sent?: boolean;
   score_received?: number;
 }
+
+export type LocationInfo = {
+  currentRating: number;
+  currentTotalReviews: number;
+  formatted_address: string;
+  googleTypes: string[]; // array of strings
+  name: string;
+  place_id: string;
+  websiteUrl: string;
+};

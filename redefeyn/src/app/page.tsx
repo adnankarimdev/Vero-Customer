@@ -17,6 +17,7 @@ export default function DuplicateReviewPage() {
   const { toast } = useToast();
   const [locationData, setLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [places, setPlaces] = useState([]);
   useEffect(() => {
     setIsLoading(true);
     const fetchData = async () => {
@@ -24,8 +25,11 @@ export default function DuplicateReviewPage() {
         const reviewSettingsResponse = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-data-customer/`,
         );
-        console.log(reviewSettingsResponse.data);
         setLocationData(reviewSettingsResponse.data);
+        const placesInformation = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-place-information/`,
+        );
+        setPlaces(placesInformation.data);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -55,7 +59,7 @@ export default function DuplicateReviewPage() {
               Login
             </Button>
           </div>
-          <FlipCards locations={locationData} />
+          <FlipCards locations={locationData} placesInfo={places} />
         </>
       )}
     </div>

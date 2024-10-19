@@ -6,16 +6,32 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
-import { LocationDataInfo, RatingSummary } from "../Types/types";
+import { LocationDataInfo, RatingSummary, LocationInfo } from "../Types/types";
 
 function LocationCard({
   location,
   placeReviewed,
+  placesInfo,
 }: {
   location: LocationDataInfo;
   placeReviewed?: boolean;
+  placesInfo?: LocationInfo[][];
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
+
+  function getFormattedAddress(searchName: string): string | undefined {
+    if (placesInfo) {
+      for (const locationArray of placesInfo) {
+        for (const location of locationArray) {
+          if (location.name === searchName) {
+            return location.formatted_address;
+          }
+        }
+      }
+      return "No location found"; // return undefined if no match is found
+    }
+  }
+
   return (
     <div
       className="w-full h-[400px] perspective-1000 cursor-pointer"
@@ -48,6 +64,21 @@ function LocationCard({
                   >
                     {"Reviewed"}
                   </Badge>
+                )}
+                {placesInfo && (
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.location)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Badge
+                      className={cn(
+                        "bg-gradient-to-r from-blue-300 to-blue-500 text-white font-small mt-2",
+                      )}
+                    >
+                      {getFormattedAddress(location.location)}
+                    </Badge>
+                  </a>
                 )}
               </div>
             </CardHeader>
@@ -114,9 +145,11 @@ function LocationCard({
 export default function FlipCards({
   locations,
   customerLocationsReviewed,
+  placesInfo,
 }: {
   locations: LocationDataInfo[];
   customerLocationsReviewed?: string[];
+  placesInfo?: LocationInfo[][];
 }) {
   return (
     <div className="container mx-auto p-4">
@@ -125,6 +158,7 @@ export default function FlipCards({
           <LocationCard
             key={id}
             location={location}
+            placesInfo={placesInfo}
             placeReviewed={customerLocationsReviewed?.includes(
               location.place_id,
             )}

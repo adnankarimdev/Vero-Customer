@@ -123,31 +123,35 @@ export default function AtHomeCustomerReview() {
                 Your review is ready to take the spotlight! 🌟
               </CardTitle>
               {customerEmail === "" && (
-                              <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                              <DrawerTrigger>
-                                <Badge
-                                  className={cn(
-                                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
-                                  )}
-                                >
-                                  {"Sign up/Log in to Receieve Vero Points: 1 "}
-                                </Badge>
-                              </DrawerTrigger>
-                              <DrawerContent className="items-center">
-                                <DrawerHeader>
-                                  <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
-                                  <DrawerDescription>
-                                    You'll get 1 Vero Point for posting this to google.
-                                  </DrawerDescription>
-                                </DrawerHeader>
-                                <QuickAuthPage setCustomerEmail={setCustomerEmail} onDrawerClose={handleDrawerClose} customerEmail={tempEmail}/>
-                                <DrawerFooter>
-                                  <DrawerClose>
-                                    <Button variant="outline">Cancel</Button>
-                                  </DrawerClose>
-                                </DrawerFooter>
-                              </DrawerContent>
-                            </Drawer>
+                <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                  <DrawerTrigger>
+                    <Badge
+                      className={cn(
+                        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
+                      )}
+                    >
+                      {"Sign up/Log in to Receieve Vero Points: 1 "}
+                    </Badge>
+                  </DrawerTrigger>
+                  <DrawerContent className="items-center">
+                    <DrawerHeader>
+                      <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
+                      <DrawerDescription>
+                        You'll get 1 Vero Point for posting this to google.
+                      </DrawerDescription>
+                    </DrawerHeader>
+                    <QuickAuthPage
+                      setCustomerEmail={setCustomerEmail}
+                      onDrawerClose={handleDrawerClose}
+                      customerEmail={tempEmail}
+                    />
+                    <DrawerFooter>
+                      <DrawerClose>
+                        <Button variant="outline">Cancel</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
               )}
               <CardDescription className="text-center">
                 Feel free to edit this! Once it looks good, click the button

@@ -17,6 +17,7 @@ export default function DuplicateReviewPage() {
   const { toast } = useToast();
   const [locationData, setLocationData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [places, setPlaces] = useState([]);
   const [customerLocationsReviewed, setCustomerLocationsReviewed] = useState(
     [],
   );
@@ -47,8 +48,11 @@ export default function DuplicateReviewPage() {
         const reviewSettingsResponse = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-data-customer/`,
         );
-        console.log(reviewSettingsResponse.data);
         setLocationData(reviewSettingsResponse.data);
+        const placesInformation = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-place-information/`,
+        );
+        setPlaces(placesInformation.data);
 
         const email = localStorage.getItem("customerEmail");
         if (!email) {
@@ -126,6 +130,7 @@ export default function DuplicateReviewPage() {
             <FlipCards
               locations={locationData}
               customerLocationsReviewed={customerLocationsReviewed}
+              placesInfo={places}
             />
           </div>
         </>
