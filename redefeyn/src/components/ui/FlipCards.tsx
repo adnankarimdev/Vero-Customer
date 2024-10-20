@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
 import { Star } from "lucide-react";
 import { LocationDataInfo, RatingSummary, LocationInfo } from "../Types/types";
+import { placeIcons } from "../Icons/icons";
+import {MapPinCheckInside} from "lucide-react"
 
 function LocationCard({
   location,
@@ -18,6 +20,7 @@ function LocationCard({
   placesInfo?: LocationInfo[][];
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
+  console.log(placesInfo)
 
   function getFormattedAddress(searchName: string): string | undefined {
     if (placesInfo) {
@@ -30,6 +33,30 @@ function LocationCard({
         }
       }
       return "No location found"; // return undefined if no match is found
+    }
+  }
+
+  function getLocationTypeIcon(searchName: string): JSX.Element | undefined {
+    if (placesInfo) {
+      for (const locationArray of placesInfo) {
+        for (const location of locationArray) {
+          if (location.name === searchName) {
+            // Ensure googleTypes array exists and has at least one element
+            if (location.googleTypes && location.googleTypes.length > 0) {
+              const iconEntry = placeIcons.find(iconObj => iconObj.place === location.googleTypes[0]);
+              if (iconEntry && iconEntry.icon) {
+                const IconComponent = iconEntry.icon; // Get the icon component
+                return <IconComponent size={16}/>; // Render the component
+              } else {
+                return <MapPinCheckInside size={16}/>; // Return a fallback JSX element
+              }
+            } else {
+              return <MapPinCheckInside size={16}/> // Return JSX for missing googleTypes
+            }
+          }
+        }
+      }
+      return undefined; // Return JSX for no matching location
     }
   }
 
@@ -58,11 +85,26 @@ function LocationCard({
       >
         {/* Front of the card */}
         <Card className="w-full h-full overflow-hidden">
+            {/* Icon placement */}
+  {getLocationTypeIcon(location.location) && (
+    <div
+      className={cn(
+        // Centered below the title on small screens
+        "flex justify-center mt-2",
+        // Top-right for larger screens
+        "md:absolute md:top-0 md:right-0 md:justify-end md:mt-2 mr-2"
+      )}
+    >
+      {getLocationTypeIcon(location.location)}
+    </div>
+  )}
           <div className="h-full flex flex-col">
             <CardHeader className="flex-shrink-0">
-              <CardTitle className="text-2xl mb-2 text-center">
-                {location.location}
-              </CardTitle>
+            <CardTitle className="relative text-2xl mb-2 text-center">
+  {/* Centered content */}
+  {location.location}
+
+</CardTitle>
               <div className="flex flex-col items-center justify-center mb-2">
                 <span className="ml-2">
                   {location.average_rating.toFixed(1)} / 5.0
@@ -94,6 +136,7 @@ function LocationCard({
                     </Badge>
                   </a>
                 )}
+
               </div>
             </CardHeader>
             <Separator className="mb-4" />
