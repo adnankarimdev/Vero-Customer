@@ -37,14 +37,14 @@ function LocationCard({
     // This regex assumes the format: "Street, City, Province PostalCode, Country"
     const regex = /,\s*([A-Za-z\s]+),\s*([A-Z]{2})\s/;
     const match = address.match(regex);
-  
+
     if (match && match.length >= 3) {
-      const city = match[1].trim();      // Capture the city name
-      const province = match[2].trim();  // Capture the province or state code
-      return city +  ", " + province;
+      const city = match[1].trim(); // Capture the city name
+      const province = match[2].trim(); // Capture the province or state code
+      return city + ", " + province;
     }
-  
-    return undefined;  // Return null if the pattern doesn't match
+
+    return undefined; // Return null if the pattern doesn't match
   }
   return (
     <div

@@ -622,7 +622,7 @@ export default function FiveStarReviewBuilder({
         rating > worryRating || inStoreMode ? true : bubbleRatingPlatform,
       postedWithInStoreMode: inStoreMode,
       reviewUuid: uuidv4(),
-      customerEmail: customerEmail,
+      customerEmail: customerEmail !== "" ? customerEmail : userEmail, //if not logged in, use the userEmail provided. Assuming they have an account.
     };
     console.log(customerEmail);
     await axios
