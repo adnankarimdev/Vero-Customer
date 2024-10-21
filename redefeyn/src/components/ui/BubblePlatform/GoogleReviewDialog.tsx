@@ -83,7 +83,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                 <DrawerHeader>
                   <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
                   <DrawerDescription>
-                    You'll get 1 Vero Point for posting this to Google.
+                    {"You'll get 1 Vero Point for posting this to Google."}
                   </DrawerDescription>
                 </DrawerHeader>
                 <QuickAuthPage
