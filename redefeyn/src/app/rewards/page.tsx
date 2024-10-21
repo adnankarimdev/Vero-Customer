@@ -56,39 +56,39 @@ export default function DuplicateReviewPage() {
 
           {/* RewardPack centered on the page, responsive layout */}
           <div className="flex flex-col items-center justify-center min-h-screen">
-  {/* Centered Badge */}
-  <div className="mb-4">
-    <VeroGlobalBadge score={500} />
-  </div>
+            {/* Centered Badge */}
+            <div className="mb-4">
+              <VeroGlobalBadge score={500} />
+            </div>
 
-  {/* Reward Packs */}
-  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-    <RewardPack
-      packTitle="Vero Food"
-      packWorth={10}
-      customerScore={customerScore}
-      packDescription={
-        "Rewards that span from a cup of coffee, to a night out at a Michelin star restaurant."
-      }
-    />
-    <RewardPack
-      packTitle="Vero Shop"
-      packWorth={20}
-      customerScore={customerScore}
-      packDescription={
-        "Rewards that span from a t-shirt at Zara, to a shopping spree at Louis Vuitton."
-      }
-    />
-    <RewardPack
-      packTitle="Vero Travel"
-      packWorth={30}
-      customerScore={customerScore}
-      packDescription={
-        "Rewards that span from a new suitcase, to an all-inclusive trip to Mexico."
-      }
-    />
-  </div>
-</div>
+            {/* Reward Packs */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <RewardPack
+                packTitle="Vero Food"
+                packWorth={10}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a cup of coffee, to a night out at a Michelin star restaurant."
+                }
+              />
+              <RewardPack
+                packTitle="Vero Shop"
+                packWorth={20}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a t-shirt at Zara, to a shopping spree at Louis Vuitton."
+                }
+              />
+              <RewardPack
+                packTitle="Vero Travel"
+                packWorth={30}
+                customerScore={customerScore}
+                packDescription={
+                  "Rewards that span from a new suitcase, to an all-inclusive trip to Mexico."
+                }
+              />
+            </div>
+          </div>
         </>
       )}
     </div>

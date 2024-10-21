@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface TimelineItem {
-  id: number
-  content: string
-  checked: boolean
-  connected: boolean
+  id: number;
+  content: string;
+  checked: boolean;
+  connected: boolean;
 }
 
 export default function WeeklyObjectives() {
@@ -18,23 +18,28 @@ export default function WeeklyObjectives() {
     { id: 3, content: "Develop frontend", checked: false, connected: false },
     { id: 4, content: "Implement backend", checked: false, connected: false },
     { id: 5, content: "Testing phase", checked: false, connected: false },
-    { id: 6, content: "Deploy to production", checked: false, connected: false },
-  ])
+    {
+      id: 6,
+      content: "Deploy to production",
+      checked: false,
+      connected: false,
+    },
+  ]);
 
   const handleCheckboxChange = (id: number) => {
-    setTimelineItems(prev => {
-      const newItems = [...prev]
-      const index = newItems.findIndex(item => item.id === id)
-      newItems[index].checked = !newItems[index].checked
+    setTimelineItems((prev) => {
+      const newItems = [...prev];
+      const index = newItems.findIndex((item) => item.id === id);
+      newItems[index].checked = !newItems[index].checked;
 
       // Update connections
       for (let i = 0; i < newItems.length - 1; i++) {
-        newItems[i].connected = newItems[i].checked && newItems[i + 1].checked
+        newItems[i].connected = newItems[i].checked && newItems[i + 1].checked;
       }
 
-      return newItems
-    })
-  }
+      return newItems;
+    });
+  };
 
   return (
     <Card className="w-full max-w-md mx-auto">
@@ -43,15 +48,21 @@ export default function WeeklyObjectives() {
           {timelineItems.map((item, index) => (
             <div key={item.id} className="flex items-start space-x-4">
               <div className="flex flex-col items-center">
-                <div className={`w-4 h-4 border-2 rounded-full transition-colors duration-300 ${
-                  item.checked ? 'bg-primary border-primary' : 'border-primary bg-background'
-                }`} />
+                <div
+                  className={`w-4 h-4 border-2 rounded-full transition-colors duration-300 ${
+                    item.checked
+                      ? "bg-primary border-primary"
+                      : "border-primary bg-background"
+                  }`}
+                />
                 {index !== timelineItems.length - 1 && (
                   <div className="w-0.5 h-full bg-primary relative">
-                    <div 
+                    <div
                       className={`absolute top-0 left-0 w-full transition-all duration-300 ${
-                        item.connected ? 'h-full bg-primary' : 'h-0 bg-transparent'
-                      }`} 
+                        item.connected
+                          ? "h-full bg-primary"
+                          : "h-0 bg-transparent"
+                      }`}
                     />
                   </div>
                 )}
@@ -76,5 +87,5 @@ export default function WeeklyObjectives() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

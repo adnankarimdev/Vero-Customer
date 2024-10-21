@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Drawer,
   DrawerClose,
@@ -20,37 +20,41 @@ import {
 } from "@/components/ui/drawer";
 import { Checkbox } from "@/components/ui/checkbox";
 import QuickAuthPage from "../QuickAuthPage";
-import { ScrollArea } from "../scroll-area";
-import { Separator } from "../separator";
-import { Badge } from "../badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Inter } from "next/font/google";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea"; // import necessary components from your UI library
-import { FcGoogle } from "react-icons/fc"; // if using Google icon
+import { Textarea } from "@/components/ui/textarea";
+import { FcGoogle } from "react-icons/fc";
 
-interface GoogleReviewDialogContentProps {
-  isDialogOpen: boolean;
+interface GoogleReviewCardProps {
+  isDialogOpen?: boolean;
   generatedReview: string;
+  handleGoogleReviewDialogChange: (open: boolean) => void;
   setGeneratedReview: (review: string) => void;
   handlePostGeneratedReviewToGoogle: () => void;
-  handleGoogleReviewDialogChange: (open: boolean) => void;
   allBadges?: string[];
   customerEmail?: string;
   setCustomerEmail?: (email: string) => void;
   inStoreMode?: boolean;
+  generatedSentences?: string[];
 }
+const inter = Inter({ subsets: ["latin"] });
 
-const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
+const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
   isDialogOpen,
+  handleGoogleReviewDialogChange,
   generatedReview,
   setGeneratedReview,
   handlePostGeneratedReviewToGoogle,
-  handleGoogleReviewDialogChange,
   allBadges,
   customerEmail,
   setCustomerEmail,
   inStoreMode,
+  generatedSentences,
 }) => {
-  const [isChecked, setIsChecked] = useState(false); // state to track checkbox
+  const [isChecked, setIsChecked] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const handleDrawerClose = () => {
@@ -58,28 +62,28 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
   };
 
   return (
-    <Dialog open={isDialogOpen} onOpenChange={handleGoogleReviewDialogChange}>
-      <DialogContent className="w-full max-h-[80vh] overflow-y-auto sm:max-h-[none]">
-        <DialogHeader>
-          <DialogTitle className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
+      <Card className="w-full h-full max-w-3xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-center">
             Your review is ready to take the spotlight! 🌟
-          </DialogTitle>
+          </CardTitle>
           {!inStoreMode && customerEmail === "" && (
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-              <DrawerTrigger>
+              <DrawerTrigger asChild>
                 <Badge
                   className={cn(
-                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
+                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 cursor-pointer",
                   )}
                 >
-                  {"Sign up/Log in to Receieve Vero Points: 1 "}
+                  Sign up/Log in to Receive Vero Points: 1
                 </Badge>
               </DrawerTrigger>
               <DrawerContent className="items-center">
                 <DrawerHeader>
                   <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
                   <DrawerDescription>
-                    {"You'll get 1 Vero Point for posting this to google."}
+                    You'll get 1 Vero Point for posting this to Google.
                   </DrawerDescription>
                 </DrawerHeader>
                 <QuickAuthPage
@@ -87,45 +91,75 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
                   onDrawerClose={handleDrawerClose}
                 />
                 <DrawerFooter>
-                  <DrawerClose>
+                  <DrawerClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerClose>
                 </DrawerFooter>
               </DrawerContent>
             </Drawer>
           )}
-
-          <DialogDescription className="text-center">
-            Feel free to edit this! Once it looks good, click the button below
-            and it will copy the review for you to paste to Google 🥳
-          </DialogDescription>
+          <CardDescription className="text-center">
+            Build & Edit! Once it looks good, click the button below and it will
+            copy the review for you to paste to Google 🥳
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
           <div className="flex flex-col w-full h-full min-h-[400px]">
-            <Textarea
-              value={generatedReview}
-              onChange={(e) => setGeneratedReview(e.target.value)}
-              rows={generatedReview.split("\n").length + 10}
-              className="flex-grow resize-none mb-2"
-              placeholder="Your generated review will appear here..."
-            />
-            <div className="bg-background border rounded-md p-2">
+            <div className="flex flex-grow gap-4">
+              <Textarea
+                value={generatedReview}
+                onChange={(e) => setGeneratedReview(e.target.value)}
+                rows={generatedReview.split("\n").length + 10}
+                className="flex-grow resize-none mb-2"
+              />
+              <div className="bg-background border rounded-md p-2 w-1/3">
+                <p className="text-xs font-medium text-center mb-2">
+                  Vibes felt Today
+                </p>
+                <ScrollArea className="h-auto">
+                  <div className="flex flex-wrap gap-2 justify-center">
+                    {allBadges &&
+                      allBadges.map((badge, index) => (
+                        <Badge
+                          key={index}
+                          variant="outline"
+                          className="bg-blue-500 text-white"
+                        >
+                          {badge}
+                        </Badge>
+                      ))}
+                  </div>
+                </ScrollArea>
+              </div>
+            </div>
+            <div className="bg-background border rounded-md p-2 mt-4">
               <p className="text-xs font-medium text-center mb-2">
-                Selected Badges at Time of Selection
+                Review Helper ✍🏻
               </p>
               <ScrollArea className="h-24">
                 <div className="flex flex-wrap gap-2 justify-center">
-                  {allBadges &&
-                    allBadges.map((badge, index) => (
-                      <Badge key={index} variant="outline">
-                        {badge}
+                  {generatedSentences &&
+                    generatedSentences.length > 0 &&
+                    generatedSentences.map((sentence, index) => (
+                      <Badge
+                        key={index}
+                        className={`bg-green-500 text-white ${inter.className}`}
+                        onClick={() =>
+                          setGeneratedReview(
+                            ((prev: any) => prev + " " + sentence) as any,
+                          )
+                        }
+                      >
+                        {sentence}
                       </Badge>
                     ))}
                 </div>
               </ScrollArea>
             </div>
           </div>
-        </DialogHeader>
-        <DialogFooter className="flex flex-col justify-between items-center">
-          <div className="flex flex-col  justify-center items-center h-full w-full">
+        </CardContent>
+        <CardFooter className="flex flex-col justify-between items-center">
+          <div className="flex flex-col justify-center items-center h-full w-full">
             <div className="flex items-center">
               <Checkbox
                 id="terms"
@@ -137,7 +171,7 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
                 htmlFor="terms"
                 className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                I confirm this reflects my experience.
+                I confirm this is my genuine experience.
               </label>
             </div>
             <Button
@@ -145,15 +179,15 @@ const GoogleReviewDialogContent: React.FC<GoogleReviewDialogContentProps> = ({
               onClick={handlePostGeneratedReviewToGoogle}
               variant="default"
               className="mt-4"
-              disabled={!isChecked} // Disable the button if checkbox is not checked
+              disabled={!isChecked}
             >
-              Copy & Paste
+              Copy & Paste to Google
             </Button>
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </CardFooter>
+      </Card>
+    </div>
   );
 };
 
-export default GoogleReviewDialogContent;
+export default GoogleReviewCard;

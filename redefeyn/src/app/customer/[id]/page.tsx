@@ -6,6 +6,7 @@ import axios from "axios";
 import copy from "copy-to-clipboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Inter } from "next/font/google";
 import { Separator } from "@/components/ui/separator";
 import EmailSkeleton from "@/components/ui/Skeletons/EmailSkeleton";
 import {
@@ -34,6 +35,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 
+const inter = Inter({ subsets: ["latin"] });
+
 export default function AtHomeCustomerReview() {
   const [isLoading, setIsLoading] = useState(true);
   const [isChecked, setIsChecked] = useState(false); // state to track checkbox
@@ -48,6 +51,7 @@ export default function AtHomeCustomerReview() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [customerEmail, setCustomerEmail] = useState("");
   const [tempEmail, setTempEmail] = useState("");
+  const [sentences, setSentences] = useState([]);
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
@@ -65,10 +69,11 @@ export default function AtHomeCustomerReview() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-review-by-uuid/${reviewUuid}/`,
         );
         if (reviewResponse.data.posted_to_google) {
-          router.push("/duplicatereview");
+          // router.push("/duplicatereview");
         }
         setTempEmail(reviewResponse.data.email);
-        setGeneratedReview(reviewResponse.data.review_body);
+        // setGeneratedReview(reviewResponse.data.review_body);
+        setSentences(JSON.parse(reviewResponse.data.review_body)["sentences"]);
         setGoogleUrl(reviewResponse.data.google_review_url);
         setTone(reviewResponse.data.tone);
         setBadges(JSON.parse(reviewResponse.data.badges));
@@ -116,7 +121,7 @@ export default function AtHomeCustomerReview() {
       {isLoading ? (
         <RecordingLoader />
       ) : (
-        <Card>
+        <Card className="w-full h-full max-w-3xl mx-auto">
           <CardContent className="w-full">
             <CardHeader>
               <CardTitle className="text-center">
@@ -154,8 +159,8 @@ export default function AtHomeCustomerReview() {
                 </Drawer>
               )}
               <CardDescription className="text-center">
-                Feel free to edit this! Once it looks good, click the button
-                below and it will copy the review for you to paste to Google 🥳
+                Build & Edit! Once it looks good, click the button below and it
+                will copy the review for you to paste to Google 🥳
                 <p className="text-gray-500 text-xs mt-2">
                   Tone at Time of Selection:{" "}
                   <span className="font-bold">
@@ -165,29 +170,61 @@ export default function AtHomeCustomerReview() {
               </CardDescription>
 
               <div className="flex flex-col w-full h-full min-h-[400px]">
-                <Textarea
-                  value={generatedReview}
-                  onChange={(e) => setGeneratedReview(e.target.value)}
-                  className="flex-grow resize-none mb-2"
-                  rows={generatedReview.split("\n").length + 10}
-                  placeholder="Your generated review will appear here..."
-                />
-                <div className="bg-background border rounded-md p-2">
+                <div className="flex flex-grow gap-4">
+                  <Textarea
+                    value={generatedReview}
+                    onChange={(e) => setGeneratedReview(e.target.value)}
+                    rows={generatedReview.split("\n").length + 10}
+                    className="flex-grow resize-none mb-2"
+                  />
+                  <div className="bg-background border rounded-md p-2 w-1/3">
+                    <p className="text-xs font-medium text-center mb-2">
+                      Vibes felt from your Visit
+                    </p>
+                    <Separator className="mb-2" />
+                    <ScrollArea className="h-auto">
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {badges &&
+                          badges.map((badge, index) => (
+                            <Badge
+                              key={index}
+                              variant="outline"
+                              className="bg-blue-500 text-white"
+                            >
+                              {badge}
+                            </Badge>
+                          ))}
+                      </div>
+                    </ScrollArea>
+                  </div>
+                </div>
+                <div className="bg-background border rounded-md p-2 mt-4">
                   <p className="text-xs font-medium text-center mb-2">
-                    Selected Badges at Time of Selection
+                    Review Helper ✍🏻
                   </p>
                   <ScrollArea className="h-24">
                     <div className="flex flex-wrap gap-2 justify-center">
-                      {badges.map((badge, index) => (
-                        <Badge key={index} variant="outline">
-                          {badge}
-                        </Badge>
-                      ))}
+                      {sentences &&
+                        sentences.length > 0 &&
+                        sentences.map((sentence, index) => (
+                          <Badge
+                            key={index}
+                            className={`bg-green-500 text-white ${inter.className}`}
+                            onClick={() =>
+                              setGeneratedReview(
+                                ((prev: any) => prev + " " + sentence) as any,
+                              )
+                            }
+                          >
+                            {sentence}
+                          </Badge>
+                        ))}
                     </div>
                   </ScrollArea>
                 </div>
               </div>
             </CardHeader>
+            <CardContent></CardContent>
             <CardFooter className="flex flex-col justify-between items-center">
               <div className="flex flex-col  justify-center items-center h-full w-full">
                 <div className="flex items-center">

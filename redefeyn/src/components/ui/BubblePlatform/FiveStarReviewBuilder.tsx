@@ -125,6 +125,7 @@ export default function FiveStarReviewBuilder({
   const [tone, setTone] = useState("friendly");
   const [customerEmail, setCustomerEmail] = useState("");
   const [alreadyPostedToGoogle, setAlreadyPostedToGoogle] = useState(false);
+  const [generatedSentences, setGeneratedSentences] = useState([]);
   let globalRating = 0;
   const positiveTones = [
     "friendly 🤗",
@@ -246,7 +247,9 @@ export default function FiveStarReviewBuilder({
         },
       )
       .then((response) => {
-        setGeneratedReview(response.data.content);
+        console.log(JSON.parse(response.data.content));
+        setGeneratedSentences(JSON.parse(response.data.content)["sentences"]);
+        // setGeneratedReview(response.data.content);
         setInitialGeneratedReviewBody(response.data.content);
         setIsAlertDialogOpen(false);
         setIsDialogOpen(true);
@@ -720,7 +723,7 @@ export default function FiveStarReviewBuilder({
       handleWorryRatingDialog();
     } else if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
-    } else if (localOverallRating > worryRating && !alreadyPostedToGoogle) {
+    } else if (localOverallRating > worryRating) {
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
@@ -741,6 +744,7 @@ export default function FiveStarReviewBuilder({
         isDialogOpen={isDialogOpen}
         generatedReview={generatedReview}
         setGeneratedReview={setGeneratedReview}
+        generatedSentences={generatedSentences}
         customerEmail={customerEmail}
         setCustomerEmail={setCustomerEmail}
         inStoreMode={inStoreMode}
@@ -780,6 +784,7 @@ export default function FiveStarReviewBuilder({
           isDialogOpen={isDialogOpen}
           generatedReview={generatedReview}
           setGeneratedReview={setGeneratedReview}
+          generatedSentences={generatedSentences}
           handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
           handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
           customerEmail={customerEmail}
