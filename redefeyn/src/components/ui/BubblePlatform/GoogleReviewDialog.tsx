@@ -136,7 +136,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
               <p className="text-xs font-medium text-center mb-2">
                 Review Helper ✍🏻
               </p>
-              <ScrollArea className="h-24">
+              <ScrollArea className="h-auto">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {generatedSentences &&
                     generatedSentences.length > 0 &&

@@ -215,7 +215,7 @@ export default function AtHomeCustomerReview() {
                   <p className="text-xs font-medium text-center mb-2">
                     Review Helper ✍🏻
                   </p>
-                  <ScrollArea className="h-24">
+                  <ScrollArea className="h-auto">
                     <div className="flex flex-wrap gap-2 justify-center">
                       {sentences &&
                         sentences.length > 0 &&
