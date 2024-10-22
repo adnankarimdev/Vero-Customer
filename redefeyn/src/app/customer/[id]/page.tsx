@@ -137,16 +137,18 @@ export default function AtHomeCustomerReview() {
                   <DrawerTrigger>
                     {/* can we always assume the email sent and logged in is the same email?
                     might want to add a condition regarding it.  */}
-                    {localCustomerEmail === ""  && (
+                    {localCustomerEmail === "" && (
                       <Badge
-  className={cn(
-    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2"
-  )}
->
-  {`Sign up/Log in as `}
-  <span className="text-black ml-1 mr-1">{tempEmail}</span>
-  {`to Receive Vero Points: 1 `}
-</Badge>
+                        className={cn(
+                          "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
+                        )}
+                      >
+                        {`Sign up/Log in as `}
+                        <span className="text-black ml-1 mr-1">
+                          {tempEmail}
+                        </span>
+                        {`to Receive Vero Points: 1 `}
+                      </Badge>
                     )}
                   </DrawerTrigger>
                   <DrawerContent className="items-center">
