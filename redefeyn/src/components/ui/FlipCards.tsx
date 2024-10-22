@@ -5,8 +5,19 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Separator } from "@/components/ui/separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Star } from "lucide-react";
-import { LocationDataInfo, RatingSummary, LocationInfo } from "../Types/types";
+import {
+  LocationDataInfo,
+  RatingSummary,
+  LocationInfo,
+  PersonalReviewInfoFromSerializer,
+} from "../Types/types";
 import { placeIcons } from "../Icons/icons";
 import { MapPinCheckInside } from "lucide-react";
 
@@ -14,13 +25,14 @@ function LocationCard({
   location,
   placeReviewed,
   placesInfo,
+  isLoyal,
 }: {
   location: LocationDataInfo;
   placeReviewed?: boolean;
   placesInfo?: LocationInfo[][];
+  isLoyal?: boolean;
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
-  console.log(placesInfo);
 
   function getFormattedAddress(searchName: string): string | undefined {
     if (placesInfo) {
@@ -99,6 +111,30 @@ function LocationCard({
             >
               {getLocationTypeIcon(location.location)}
             </div>
+          )}
+          {isLoyal == true && (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Badge
+                    className={cn(
+                      "bg-rose-300 text-white font-medium mt-2 ml-2",
+                    )}
+                  >
+                    Loyal
+                  </Badge>
+                </TooltipTrigger>
+                <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
+                  <p>
+                    {`Loyalty is rare. `}
+                    <span className="text-emerald-500">
+                      {location.location}
+                    </span>
+                    {` knows you have it 👑`}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           )}
           <div className="h-full flex flex-col">
             <CardHeader className="flex-shrink-0">
@@ -203,10 +239,12 @@ export default function FlipCards({
   locations,
   customerLocationsReviewed,
   placesInfo,
+  customerPersonalReviews,
 }: {
   locations: LocationDataInfo[];
   customerLocationsReviewed?: string[];
   placesInfo?: LocationInfo[][];
+  customerPersonalReviews?: PersonalReviewInfoFromSerializer[];
 }) {
   return (
     <div className="container mx-auto p-4">
@@ -219,6 +257,12 @@ export default function FlipCards({
             placeReviewed={customerLocationsReviewed?.includes(
               location.place_id,
             )}
+            isLoyal={
+              customerPersonalReviews &&
+              customerPersonalReviews?.filter(
+                (item) => item.place_id_from_review === location.place_id,
+              ).length > 2
+            } //need at least 3 reviews to be considered loyal to a place
           />
         ))}
       </div>

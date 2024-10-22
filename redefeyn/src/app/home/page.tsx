@@ -11,6 +11,7 @@ import { BadgeCheck, BadgeX } from "lucide-react";
 import TypingEffect from "@/components/ui/TypingEffect";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import { Button } from "@/components/ui/button";
+import { PersonalReviewInfoFromSerializer } from "@/components/Types/types";
 
 export default function DuplicateReviewPage() {
   const router = useRouter();
@@ -22,6 +23,7 @@ export default function DuplicateReviewPage() {
     [],
   );
   const [isVeroCertified, setIsVeroCertified] = useState(false);
+  const [personalReviews, setPersonalReviews] = useState([]);
   const veroCertifiedStatus =
     Number(process.env.NEXT_PUBLIC_VERO_CERTIFIED_STATUS) || 0;
 
@@ -68,6 +70,7 @@ export default function DuplicateReviewPage() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-customer-reviewed-places/${email}/`,
         );
         setCustomerLocationsReviewed(response.data.data);
+        console.log(response.data.data);
         setIsVeroCertified(response.data.data.length > veroCertifiedStatus);
         setIsLoading(false);
       } catch (err) {
@@ -77,8 +80,40 @@ export default function DuplicateReviewPage() {
     };
 
     fetchData();
+    fetchCustomerReviews();
   }, []);
 
+  const fetchCustomerReviews = async () => {
+    try {
+      const email = localStorage.getItem("customerEmail");
+      if (!email) {
+        toast({
+          title: "Please sign in.",
+          duration: 3000,
+        });
+        router.push("/authentication");
+        console.error("Email not found in localStorage");
+        return;
+      }
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-personal-reviews/${email}/`,
+      );
+      const data = response.data as PersonalReviewInfoFromSerializer[];
+      const updatedReviews = data.map((review) => {
+        // Convert badges JSON string to array or empty array if invalid
+        const badgesArray = review.badges ? JSON.parse(review.badges) : [];
+        return {
+          ...review,
+          badges: Array.isArray(badgesArray) ? badgesArray : [],
+        };
+      });
+      setPersonalReviews(updatedReviews.reverse() as any);
+      console.log(updatedReviews.reverse());
+    } catch (err) {
+      console.error(err);
+      false;
+    }
+  };
   return (
     <div className="relative space-y-4 p-4">
       {isLoading && <RecordingLoader />}
@@ -131,6 +166,7 @@ export default function DuplicateReviewPage() {
               locations={locationData}
               customerLocationsReviewed={customerLocationsReviewed}
               placesInfo={places}
+              customerPersonalReviews={personalReviews}
             />
           </div>
         </>
