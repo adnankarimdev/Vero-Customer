@@ -50,6 +50,7 @@ export default function AtHomeCustomerReview() {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [customerEmail, setCustomerEmail] = useState("");
+  const [localCustomerEmail, setLocalCustomerEmail] = useState("");
   const [tempEmail, setTempEmail] = useState("");
   const [sentences, setSentences] = useState([]);
 
@@ -61,6 +62,10 @@ export default function AtHomeCustomerReview() {
     const reviewUuid = pathname.split("/").pop(); // Get the last part of the URL
     if (reviewUuid) {
       setReviewUuidFromUrl(reviewUuid);
+    }
+    const email = localStorage.getItem("customerEmail");
+    if (email) {
+      setLocalCustomerEmail(email);
     }
     const fetchData = async () => {
       try {
@@ -130,13 +135,19 @@ export default function AtHomeCustomerReview() {
               {customerEmail === "" && (
                 <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                   <DrawerTrigger>
-                    <Badge
-                      className={cn(
-                        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
-                      )}
-                    >
-                      {"Sign up/Log in to Receieve Vero Points: 1 "}
-                    </Badge>
+                    {/* can we always assume the email sent and logged in is the same email?
+                    might want to add a condition regarding it.  */}
+                    {localCustomerEmail === ""  && (
+                      <Badge
+  className={cn(
+    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2"
+  )}
+>
+  {`Sign up/Log in as `}
+  <span className="text-black ml-1 mr-1">{tempEmail}</span>
+  {`to Receive Vero Points: 1 `}
+</Badge>
+                    )}
                   </DrawerTrigger>
                   <DrawerContent className="items-center">
                     <DrawerHeader>
