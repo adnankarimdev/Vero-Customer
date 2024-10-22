@@ -132,12 +132,12 @@ export default function AtHomeCustomerReview() {
               <CardTitle className="text-center">
                 Your review is ready to take the spotlight! 🌟
               </CardTitle>
-              {customerEmail === "" && (
+              {
                 <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                   <DrawerTrigger>
                     {/* can we always assume the email sent and logged in is the same email?
                     might want to add a condition regarding it.  */}
-                    {localCustomerEmail === "" && (
+                    {
                       <Badge
                         className={cn(
                           "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
@@ -149,7 +149,7 @@ export default function AtHomeCustomerReview() {
                         </span>
                         {`to Receive Vero Points: 1 `}
                       </Badge>
-                    )}
+                    }
                   </DrawerTrigger>
                   <DrawerContent className="items-center">
                     <DrawerHeader>
@@ -170,7 +170,7 @@ export default function AtHomeCustomerReview() {
                     </DrawerFooter>
                   </DrawerContent>
                 </Drawer>
-              )}
+              }
               <CardDescription className="text-center">
                 Build & Edit! Once it looks good, click the button below and it
                 will copy the review for you to paste to Google 🥳
