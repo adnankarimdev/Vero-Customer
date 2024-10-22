@@ -723,7 +723,7 @@ export default function FiveStarReviewBuilder({
       handleWorryRatingDialog();
     } else if (localOverallRating <= worryRating && showEmailWorryDialog) {
       setIsWorryDialogOpen(true);
-    } else if (localOverallRating > worryRating) {
+    } else if (localOverallRating > worryRating && !alreadyPostedToGoogle) {
       setIsAlertDialogOpen(true);
     }
     // no email dialog by client, make sure to save the badges.
