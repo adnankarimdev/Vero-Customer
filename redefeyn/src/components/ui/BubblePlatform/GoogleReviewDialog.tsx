@@ -71,6 +71,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
           {!inStoreMode && customerEmail === "" && (
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger asChild>
+              <div className="w-fit mx-auto flex items-center justify-center">
                 <Badge
                   className={cn(
                     "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 cursor-pointer",
@@ -78,6 +79,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                 >
                   Sign up/Log in to Receive Vero Points: 1
                 </Badge>
+                </div>
               </DrawerTrigger>
               <DrawerContent className="items-center">
                 <DrawerHeader>
