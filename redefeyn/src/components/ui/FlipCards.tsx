@@ -279,7 +279,7 @@ export default function GroupedFlipCards({
             "font-medium",
             selectedType === null
               ? "bg-blue-500 hover:bg-blue-600 text-white"
-              : "bg-emerald-500 hover:bg-emerald-600 text-white",
+              : "bg-amber-500 hover:bg-amber-600 text-white",
           )}
         >
           All
@@ -295,7 +295,7 @@ export default function GroupedFlipCards({
                   "font-medium",
                   selectedType === type
                     ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-emerald-500 hover:bg-emerald-600 text-white",
+                    : "bg-amber-500 hover:bg-amber-600 text-white",
                 )}
               >
                 {type.replace("_", " ")}
@@ -308,7 +308,7 @@ export default function GroupedFlipCards({
               "font-medium",
               selectedType === "Other"
                 ? "bg-blue-500 hover:bg-blue-600 text-white"
-                : "bg-emerald-500 hover:bg-emerald-600 text-white",
+                : "bg-amber-500 hover:bg-amber-600 text-white",
             )}
           >
             Other
