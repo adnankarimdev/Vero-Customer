@@ -50,7 +50,7 @@ export default function DuplicateReviewPage() {
       {!isLoading && (
         <>
           <div className="flex justify-between items-center">
-            <SearchBar />
+            {/* <SearchBar /> */}
             <Button
               variant="ghost"
               className="md:inline-flex mr-2"

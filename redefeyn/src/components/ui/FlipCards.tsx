@@ -1,25 +1,25 @@
-'use client'
+"use client";
 
-import { useState, useMemo } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-import { Separator } from '@/components/ui/separator'
+import { useState, useMemo } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@/components/ui/tooltip'
-import { Star, MapPinCheckInside } from 'lucide-react'
+} from "@/components/ui/tooltip";
+import { Star, MapPinCheckInside } from "lucide-react";
 import {
   LocationDataInfo,
   RatingSummary,
   LocationInfo,
   PersonalReviewInfoFromSerializer,
-} from '../Types/types'
-import { placeIcons } from '../Icons/icons'
+} from "../Types/types";
+import { placeIcons } from "../Icons/icons";
 
 function LocationCard({
   location,
@@ -27,12 +27,12 @@ function LocationCard({
   placesInfo,
   isLoyal,
 }: {
-  location: LocationDataInfo
-  placeReviewed?: boolean
-  placesInfo?: LocationInfo[][]
-  isLoyal?: boolean
+  location: LocationDataInfo;
+  placeReviewed?: boolean;
+  placesInfo?: LocationInfo[][];
+  isLoyal?: boolean;
 }) {
-  const [isFlipped, setIsFlipped] = useState(false)
+  const [isFlipped, setIsFlipped] = useState(false);
 
   function getFormattedAddress(searchName: string): string | undefined {
     if (placesInfo) {
@@ -40,11 +40,11 @@ function LocationCard({
         for (const location of locationArray) {
           if (location.name === searchName) {
             // just return formatted address if things look weird.
-            return extractCityAndProvince(location.formatted_address)
+            return extractCityAndProvince(location.formatted_address);
           }
         }
       }
-      return 'No location found' // return undefined if no match is found
+      return "No location found"; // return undefined if no match is found
     }
   }
 
@@ -56,36 +56,36 @@ function LocationCard({
             // Ensure googleTypes array exists and has at least one element
             if (location.googleTypes && location.googleTypes.length > 0) {
               const iconEntry = placeIcons.find(
-                (iconObj) => iconObj.place === location.googleTypes[0]
-              )
+                (iconObj) => iconObj.place === location.googleTypes[0],
+              );
               if (iconEntry && iconEntry.icon) {
-                const IconComponent = iconEntry.icon // Get the icon component
-                return <IconComponent size={16} /> // Render the component
+                const IconComponent = iconEntry.icon; // Get the icon component
+                return <IconComponent size={16} />; // Render the component
               } else {
-                return <MapPinCheckInside size={16} /> // Return a fallback JSX element
+                return <MapPinCheckInside size={16} />; // Return a fallback JSX element
               }
             } else {
-              return <MapPinCheckInside size={16} /> // Return JSX for missing googleTypes
+              return <MapPinCheckInside size={16} />; // Return JSX for missing googleTypes
             }
           }
         }
       }
-      return undefined // Return JSX for no matching location
+      return undefined; // Return JSX for no matching location
     }
   }
 
   function extractCityAndProvince(address: string): string | undefined {
     // This regex assumes the format: "Street, City, Province PostalCode, Country"
-    const regex = /,\s*([A-Za-z\s]+),\s*([A-Z]{2})\s/
-    const match = address.match(regex)
+    const regex = /,\s*([A-Za-z\s]+),\s*([A-Z]{2})\s/;
+    const match = address.match(regex);
 
     if (match && match.length >= 3) {
-      const city = match[1].trim() // Capture the city name
-      const province = match[2].trim() // Capture the province or state code
-      return city + ', ' + province
+      const city = match[1].trim(); // Capture the city name
+      const province = match[2].trim(); // Capture the province or state code
+      return city + ", " + province;
     }
 
-    return undefined // Return null if the pattern doesn't match
+    return undefined; // Return null if the pattern doesn't match
   }
 
   return (
@@ -95,7 +95,7 @@ function LocationCard({
     >
       <div
         className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
-          isFlipped ? 'rotate-y-180' : ''
+          isFlipped ? "rotate-y-180" : ""
         }`}
       >
         {/* Front of the card */}
@@ -105,9 +105,9 @@ function LocationCard({
             <div
               className={cn(
                 // Centered below the title on small screens
-                'flex justify-center mt-2',
+                "flex justify-center mt-2",
                 // Top-right for larger screens
-                'md:absolute md:top-0 md:right-0 md:justify-end md:mt-2 mr-2'
+                "md:absolute md:top-0 md:right-0 md:justify-end md:mt-2 mr-2",
               )}
             >
               {getLocationTypeIcon(location.location)}
@@ -119,7 +119,7 @@ function LocationCard({
                 <TooltipTrigger>
                   <Badge
                     className={cn(
-                      'bg-rose-300 text-white font-medium mt-2 ml-2'
+                      "bg-rose-300 text-white font-medium mt-2 ml-2",
                     )}
                   >
                     Loyal
@@ -153,23 +153,23 @@ function LocationCard({
                 {placeReviewed == true && (
                   <Badge
                     className={cn(
-                      'bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2'
+                      "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
                     )}
                   >
-                    {'Reviewed'}
+                    {"Reviewed"}
                   </Badge>
                 )}
                 {placesInfo && (
                   <a
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      location.location
+                      location.location,
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <Badge
                       className={cn(
-                        'bg-gradient-to-r from-blue-300 to-blue-500 text-white font-small mt-2'
+                        "bg-gradient-to-r from-blue-300 to-blue-500 text-white font-small mt-2",
                       )}
                     >
                       {getFormattedAddress(location.location)}
@@ -190,12 +190,12 @@ function LocationCard({
                           key={idx}
                           className={`text-white ${
                             summary.rating === 5
-                              ? 'bg-green-500'
+                              ? "bg-green-500"
                               : summary.rating === 4
-                              ? 'bg-yellow-500'
-                              : summary.rating === 3
-                              ? 'bg-orange-500'
-                              : 'bg-red-500'
+                                ? "bg-yellow-500"
+                                : summary.rating === 3
+                                  ? "bg-orange-500"
+                                  : "bg-red-500"
                           }`}
                         >
                           {badge}
@@ -235,7 +235,7 @@ function LocationCard({
         </Card> */}
       </div>
     </div>
-  )
+  );
 }
 
 export default function GroupedFlipCards({
@@ -244,62 +244,76 @@ export default function GroupedFlipCards({
   placesInfo,
   customerPersonalReviews,
 }: {
-  locations: LocationDataInfo[]
-  customerLocationsReviewed?: string[]
-  placesInfo?: LocationInfo[][]
-  customerPersonalReviews?: PersonalReviewInfoFromSerializer[]
+  locations: LocationDataInfo[];
+  customerLocationsReviewed?: string[];
+  placesInfo?: LocationInfo[][];
+  customerPersonalReviews?: PersonalReviewInfoFromSerializer[];
 }) {
-  const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const groupedLocations = useMemo(() => {
-    const groups: { [key: string]: LocationDataInfo[] } = {}
+    const groups: { [key: string]: LocationDataInfo[] } = {};
     locations.forEach((location) => {
       const type =
         placesInfo
           ?.find((infoArray) =>
-            infoArray.find((info) => info.name === location.location)
+            infoArray.find((info) => info.name === location.location),
           )
           ?.find((info) => info.name === location.location)?.googleTypes[0] ||
-        'Other'
+        "Other";
 
       if (!groups[type]) {
-        groups[type] = []
+        groups[type] = [];
       }
-      groups[type].push(location)
-    })
-    return groups
-  }, [locations, placesInfo])
+      groups[type].push(location);
+    });
+    return groups;
+  }, [locations, placesInfo]);
 
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
-
         <Button
           onClick={() => setSelectedType(null)}
-          variant={selectedType === null ? 'default' : 'outline'}
+          className={cn(
+            "font-medium",
+            selectedType === null
+              ? "bg-blue-500 hover:bg-blue-600 text-white"
+              : "bg-emerald-500 hover:bg-emerald-600 text-white",
+          )}
         >
           All
         </Button>
         {[
-  ...Object.keys(groupedLocations)
-    .filter(type => type !== "Other") // Exclude "other" if it exists
-    .map(type => (
-      <Button
-        key={type}
-        onClick={() => setSelectedType(type)}
-        variant={selectedType === type ? 'default' : 'outline'}
-      >
-        {type.replace("_", " ")}
-      </Button>
-    )),
-  <Button
-    key="other"
-    onClick={() => setSelectedType("Other")}
-    variant={selectedType === "other" ? 'default' : 'outline'}
-  >
-    Other
-  </Button>
-]}
+          ...Object.keys(groupedLocations)
+            .filter((type) => type !== "Other")
+            .map((type) => (
+              <Button
+                key={type}
+                onClick={() => setSelectedType(type)}
+                className={cn(
+                  "font-medium",
+                  selectedType === type
+                    ? "bg-blue-500 hover:bg-blue-600 text-white"
+                    : "bg-emerald-500 hover:bg-emerald-600 text-white",
+                )}
+              >
+                {type.replace("_", " ")}
+              </Button>
+            )),
+          <Button
+            key="other"
+            onClick={() => setSelectedType("Other")}
+            className={cn(
+              "font-medium",
+              selectedType === "Other"
+                ? "bg-blue-500 hover:bg-blue-600 text-white"
+                : "bg-emerald-500 hover:bg-emerald-600 text-white",
+            )}
+          >
+            Other
+          </Button>,
+        ]}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {(selectedType ? groupedLocations[selectedType] : locations).map(
@@ -309,18 +323,18 @@ export default function GroupedFlipCards({
               location={location}
               placesInfo={placesInfo}
               placeReviewed={customerLocationsReviewed?.includes(
-                location.place_id
+                location.place_id,
               )}
               isLoyal={
                 customerPersonalReviews &&
                 customerPersonalReviews?.filter(
-                  (item) => item.place_id_from_review === location.place_id
+                  (item) => item.place_id_from_review === location.place_id,
                 ).length > 2
               } //need at least 3 reviews to be considered loyal to a place
             />
-          )
+          ),
         )}
       </div>
     </div>
-  )
+  );
 }

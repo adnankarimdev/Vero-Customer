@@ -156,7 +156,7 @@ export default function DuplicateReviewPage() {
 
             {/* Search Bar */}
             <div className="z-10 w-full sm:w-auto">
-              <SearchBar />
+              {/* <SearchBar /> */}
             </div>
           </div>
 

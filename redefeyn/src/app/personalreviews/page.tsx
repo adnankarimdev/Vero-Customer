@@ -61,7 +61,7 @@ export default function DuplicateReviewPage() {
       {isLoading && <RecordingLoader />}
       {!isLoading && (
         <>
-          <SearchBar />
+          {/* <SearchBar /> */}
           {personalReviews.length > 0 ? (
             <PersonalReviewsFlipCards reviews={personalReviews} />
           ) : (
