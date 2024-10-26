@@ -8,6 +8,7 @@ import {
   LogOut,
   BadgeDollarSign,
   HandHeart,
+  CircleUserRound,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/home" },
   { icon: Star, label: "Reviews", href: "/personalreviews" },
   { icon: HandHeart, label: "Rewards", href: "/rewards" },
+  { icon: CircleUserRound, label: "Avatar Creator", href: "/avatar" },
   // { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
