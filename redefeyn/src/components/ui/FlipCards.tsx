@@ -272,7 +272,7 @@ export default function GroupedFlipCards({
 
   return (
     <div className="container mx-auto p-4">
-      <div className="mb-4 flex flex-wrap gap-2">
+      <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
 
         <Button
           onClick={() => setSelectedType(null)}
