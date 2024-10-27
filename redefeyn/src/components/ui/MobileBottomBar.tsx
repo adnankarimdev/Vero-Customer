@@ -9,6 +9,7 @@ import {
   BadgeDollarSign,
   HandHeart,
   CircleUserRound,
+  SettingsIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -19,7 +20,8 @@ const navItems = [
   { icon: LayoutDashboard, label: "Home", href: "/home" },
   { icon: Star, label: "Reviews", href: "/personalreviews" },
   { icon: HandHeart, label: "Rewards", href: "/rewards" },
-  { icon: CircleUserRound, label: "Avatar Creator", href: "/avatar" },
+  // { icon: CircleUserRound, label: "Avatar Creator", href: "/avatar" },
+  { icon: SettingsIcon, label: "User Settings", href: "/user-settings" },
   // { icon: Settings, label: "Settings", href: "/settings" },
 ];
 

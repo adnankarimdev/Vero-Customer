@@ -76,3 +76,27 @@ export type LocationInfo = {
   place_id: string;
   websiteUrl: string;
 };
+
+export type UserSerializer = {
+  avatar_svg: string; // SVG string for the avatar
+  date_joined: string; // ISO date string
+  email: string;
+  first_name: string;
+  google_reviewed_places: string[]; // Array of place IDs as strings
+  groups: string[]; // Array of group names or IDs (if any)
+  id: number;
+  is_active: boolean;
+  is_staff: boolean;
+  is_superuser: boolean;
+  last_login: string; // ISO date string
+  last_name: string;
+  password: string;
+  place_review_dates: Record<string, string>; // Mapping of place IDs to review dates as ISO strings
+  places_reviewed: string[]; // Array of place IDs as strings
+  user_google_reviews: number;
+  user_permissions: string[]; // Array of permissions (if any)
+  user_regular_reviews: number;
+  user_reviews: Record<string, unknown>; // Flexible structure for additional review data, adjust as needed
+  user_score: number; // User score as a numeric value
+  username: string;
+};

@@ -155,9 +155,7 @@ export default function DuplicateReviewPage() {
             </div>
 
             {/* Search Bar */}
-            <div className="z-10 w-full sm:w-auto">
-              {/* <SearchBar /> */}
-            </div>
+            <div className="z-10 w-full sm:w-auto">{/* <SearchBar /> */}</div>
           </div>
 
           {/* Responsive FlipCards */}
