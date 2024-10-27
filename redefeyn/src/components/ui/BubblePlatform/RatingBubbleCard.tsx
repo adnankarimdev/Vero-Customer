@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Card,
   CardHeader,
@@ -32,6 +33,12 @@ import {
 import { Star, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  getUserLocation,
+  getLatLongFromAddress,
+  isWithinRadius,
+} from "@/utils/getLatLong";
+import LocationConfirmerSkeleton from "../Skeletons/LocationConfirmerSkeleton";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -53,6 +60,7 @@ interface RatingBubbleCardProps {
   worryRating: number;
   translateLanguage?: (language: string) => void;
   cardDescription?: string;
+  formattedAddress?: string;
 }
 
 export default function RatingBubbleCard({
@@ -73,6 +81,7 @@ export default function RatingBubbleCard({
   worryRating,
   translateLanguage,
   cardDescription,
+  formattedAddress,
 }: RatingBubbleCardProps) {
   const [categoryRatings, setCategoryRatings] = useState<{
     [key: string]: number;
@@ -82,6 +91,13 @@ export default function RatingBubbleCard({
   const [newBadge, setNewBadge] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("english");
+  const [locationConfirmed, setIsLocationConfirmed] = useState(true)
+  // For when we confirm, use condition below.
+  // const [locationConfirmed, setIsLocationConfirmed] = useState(
+  //   inStoreMode ? true : false,
+  // );
+  const [confirmingLocation, setConfirmingLocation] = useState(false);
+  const { toast } = useToast();
   const languageOptions = [
     { value: "english", label: "English" },
     { value: "french", label: "French" },
@@ -103,6 +119,18 @@ export default function RatingBubbleCard({
     }
   }, [editingCategory]);
 
+  // We will refresh the page if personal device reviews, every 5 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!inStoreMode) {
+        // Check the condition before refreshing
+        window.location.reload(); // Refresh the page if condition is true
+      }
+    }, 300000); // 300000 milliseconds = 5 minutes
+
+    return () => clearInterval(interval); // Cleanup the interval on unmount
+  }, []);
+
   const handleCategoryRating = (categoryName: string, newRating: number) => {
     setCategoryRatings((prev) => {
       if (prev[categoryName] !== newRating) {
@@ -115,6 +143,66 @@ export default function RatingBubbleCard({
     });
   };
 
+  const isInLocation = async () => {
+    if (formattedAddress) {
+      setConfirmingLocation(true);
+      const placeLocation = await getLatLongFromAddress(
+        "100 Somercrest Grove SW",
+      );
+      let userLocation = { latitude: 0, longitude: 0 };
+      try {
+        const userLocationConfirm = await getUserLocation();
+        if (userLocationConfirm) {
+          userLocation = userLocationConfirm;
+        }
+      } catch {
+        setConfirmingLocation(false);
+        toast({
+          title: "Location Permission Required",
+          description:
+            "You must allow location usage to ensure you're at the store leaving a review.",
+          variant: "destructive",
+          duration: 10000,
+        });
+        return;
+      }
+      if (placeLocation && userLocation) {
+        const withinRadius = isWithinRadius(placeLocation, userLocation, 50);
+        if (withinRadius === true) {
+          setConfirmingLocation(false);
+          setIsLocationConfirmed(true);
+          toast({
+            title: "Location confirmed",
+            description: "Clear for Reviewing! 🛫",
+            duration: 2000,
+          });
+        } else {
+          setConfirmingLocation(false);
+          setIsLocationConfirmed(false);
+          toast({
+            title: "Not at store location",
+            description: "Reviews must be left in store.",
+            duration: 2000,
+            variant: "destructive",
+          });
+        }
+      } else {
+        setConfirmingLocation(false);
+        toast({
+          title: "Failed to confirm location.",
+          description: "It's not you, it's us. Please try again!",
+          duration: 2000,
+        });
+      }
+    }
+  };
+
+  const notifyUser = () => {
+    toast({
+      title: "Confirm your location",
+      duration: 2000,
+    });
+  };
   const getBadgesForRating = (categoryName: string) => {
     const category = categories.find((cat) => cat.name === categoryName);
     const rating = categoryRatings[categoryName];
@@ -152,7 +240,19 @@ export default function RatingBubbleCard({
 
   return (
     <Card className="w-full max-w-3xl border-0">
-      <CardHeader>
+      {confirmingLocation && <LocationConfirmerSkeleton />}
+      <div className="flex justify-end items-start mr-2 mt-2">
+        {!inStoreMode && !locationConfirmed && (
+          <Button
+            className="text-xs px-2 py-1 h-auto"
+            variant="outline"
+            onClick={() => isInLocation()}
+          >
+            {"I'm in store"}
+          </Button>
+        )}
+      </div>
+      <CardHeader className="relative">
         <CardTitle className="flex items-center justify-center space-x-1 text-sm">
           {businessName}
         </CardTitle>
@@ -201,7 +301,13 @@ export default function RatingBubbleCard({
                           ? "text-primary fill-primary"
                           : "text-muted stroke-muted-foreground"
                       }`}
-                      onClick={() => handleCategoryRating(category.name, i + 1)}
+                      onClick={() => {
+                        if (locationConfirmed) {
+                          handleCategoryRating(category.name, i + 1);
+                        } else {
+                          notifyUser();
+                        }
+                      }}
                     />
                   ))}
                 </div>

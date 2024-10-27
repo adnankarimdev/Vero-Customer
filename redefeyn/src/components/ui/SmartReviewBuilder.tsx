@@ -81,6 +81,7 @@ const SmartReviewBuilder = ({
   const [currentStep, setCurrentStep] = useState(0);
   const [title, setTitle] = useState("P&S");
   const [keywords, setKeywords] = useState([]);
+  const [formattedAddress, setFormattedAddress] = useState("");
   const [questions, setQuestions] = useState([
     {
       id: 1,
@@ -196,6 +197,7 @@ const SmartReviewBuilder = ({
           (place: Place) => place.place_id === id,
         );
         setTitle(reviewPlace.name);
+        setFormattedAddress(reviewPlace.formatted_address);
         setIsLoading(false);
         setShowRatingsPage(false);
       } catch (err) {
@@ -692,6 +694,7 @@ const SmartReviewBuilder = ({
             showEmailWorryDialog={worryDialog}
             inStoreMode={inStoreMode}
             onlineBusinessMode={onlineBusinessMode}
+            formattedAddress={formattedAddress}
           />
         )}
       {!showRatingsPage &&

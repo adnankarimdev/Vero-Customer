@@ -100,3 +100,8 @@ export type UserSerializer = {
   user_score: number; // User score as a numeric value
   username: string;
 };
+
+export type Coordinates = {
+  latitude: number;
+  longitude: number;
+};

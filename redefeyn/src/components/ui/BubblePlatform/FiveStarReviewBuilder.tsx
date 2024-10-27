@@ -75,6 +75,7 @@ interface FiveStarReviewBuilderProps {
   showEmailWorryDialog?: boolean;
   inStoreMode?: boolean;
   onlineBusinessMode?: boolean;
+  formattedAddress?: string;
 }
 
 export default function FiveStarReviewBuilder({
@@ -90,6 +91,7 @@ export default function FiveStarReviewBuilder({
   worryRating,
   inStoreMode,
   onlineBusinessMode,
+  formattedAddress,
 }: FiveStarReviewBuilderProps) {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
@@ -247,7 +249,6 @@ export default function FiveStarReviewBuilder({
         },
       )
       .then((response) => {
-        console.log(JSON.parse(response.data.content));
         setGeneratedSentences(JSON.parse(response.data.content)["sentences"]);
         // setGeneratedReview(response.data.content);
         setInitialGeneratedReviewBody(response.data.content);
@@ -844,6 +845,7 @@ export default function FiveStarReviewBuilder({
           worryRating={worryRating}
           translateLanguage={translateLanguage}
           cardDescription={cardDescription}
+          formattedAddress={formattedAddress}
         />
 
         // <TinderPlatform
