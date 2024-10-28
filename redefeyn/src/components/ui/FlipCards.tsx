@@ -181,8 +181,12 @@ function LocationCard({
             <Separator className="mb-4" />
             <CardContent className="flex-grow overflow-auto">
               <div className="grid gap-4">
+              <div className="relative text-2xl mb-2 text-center">
+                {/* Centered content */}
+                {"Top Badges"}
+              </div>
                 {location.ratings_summary.map((summary, index) => (
-                  <div key={index}>
+                  <div key={index} className="mb-2">
                     <h4 className="text-lg mb-2">Rating: {summary.rating}</h4>
                     <div className="flex flex-wrap gap-2">
                       {summary.badges.map((badge, idx) => (
