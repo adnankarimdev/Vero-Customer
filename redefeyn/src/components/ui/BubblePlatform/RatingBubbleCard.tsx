@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Card,
   CardHeader,
@@ -92,6 +93,7 @@ export default function RatingBubbleCard({
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("english");
   const [locationConfirmed, setIsLocationConfirmed] = useState(true)
+  const [hoveredBadge, setHoveredBadge] = useState<string | null>(null)
   // For when we confirm, use condition below.
   // const [locationConfirmed, setIsLocationConfirmed] = useState(
   //   inStoreMode ? true : false,
@@ -314,9 +316,21 @@ export default function RatingBubbleCard({
               </div>
 
               <div className="flex flex-wrap gap-2">
-                {getBadgesForRating(category.name).map((badge: string) => (
+              <motion.div layout className="flex flex-wrap gap-2 relative">
+            <AnimatePresence>
+              {getBadgesForRating(category.name).map((badge: string) => (
+                <motion.div
+                  key={badge}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  onHoverStart={() => setHoveredBadge(badge)}
+                  onHoverEnd={() => setHoveredBadge(null)}
+                >
                   <Badge
-                    key={badge}
                     variant={
                       selectedBadges[category.name]?.includes(badge)
                         ? "default"
@@ -333,7 +347,10 @@ export default function RatingBubbleCard({
                   >
                     {badge}
                   </Badge>
-                ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
                 {selectedBadges[category.name]
                   ?.filter(
                     (badge) =>
