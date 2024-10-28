@@ -147,7 +147,7 @@ export default function RatingBubbleCard({
     if (formattedAddress) {
       setConfirmingLocation(true);
       const placeLocation = await getLatLongFromAddress(
-        "100 Somercrest Grove SW",
+        formattedAddress,
       );
       let userLocation = { latitude: 0, longitude: 0 };
       try {
@@ -174,15 +174,15 @@ export default function RatingBubbleCard({
           toast({
             title: "Location confirmed",
             description: "Clear for Reviewing! 🛫",
-            duration: 2000,
+            duration: 5000,
           });
         } else {
           setConfirmingLocation(false);
           setIsLocationConfirmed(false);
           toast({
-            title: "Not at store location",
+            title: `Not at ${businessName}`,
             description: "Reviews must be left in store.",
-            duration: 2000,
+            duration: 5000,
             variant: "destructive",
           });
         }
