@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
   CardHeader,
@@ -92,8 +92,8 @@ export default function RatingBubbleCard({
   const [newBadge, setNewBadge] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("english");
-  const [locationConfirmed, setIsLocationConfirmed] = useState(true)
-  const [hoveredBadge, setHoveredBadge] = useState<string | null>(null)
+  const [locationConfirmed, setIsLocationConfirmed] = useState(true);
+  const [hoveredBadge, setHoveredBadge] = useState<string | null>(null);
   // For when we confirm, use condition below.
   // const [locationConfirmed, setIsLocationConfirmed] = useState(
   //   inStoreMode ? true : false,
@@ -148,9 +148,7 @@ export default function RatingBubbleCard({
   const isInLocation = async () => {
     if (formattedAddress) {
       setConfirmingLocation(true);
-      const placeLocation = await getLatLongFromAddress(
-        formattedAddress,
-      );
+      const placeLocation = await getLatLongFromAddress(formattedAddress);
       let userLocation = { latitude: 0, longitude: 0 };
       try {
         const userLocationConfirm = await getUserLocation();
@@ -316,41 +314,43 @@ export default function RatingBubbleCard({
               </div>
 
               <div className="flex flex-wrap gap-2">
-              <motion.div layout className="flex flex-wrap gap-2 relative">
-            <AnimatePresence>
-              {getBadgesForRating(category.name).map((badge: string) => (
-                <motion.div
-                  key={badge}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  transition={{ duration: 0.2 }}
-                  onHoverStart={() => setHoveredBadge(badge)}
-                  onHoverEnd={() => setHoveredBadge(null)}
-                >
-                  <Badge
-                    variant={
-                      selectedBadges[category.name]?.includes(badge)
-                        ? "default"
-                        : "outline"
-                    }
-                    className={`cursor-pointer transition-colors ${
-                      selectedBadges[category.name]?.includes(badge)
-                        ? categoryRatings[category.name] <= worryRating
-                          ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                          : "bg-green-500 text-green-foreground hover:bg-green-400"
-                        : ""
-                    }`}
-                    onClick={() => handleToggleBadge(category.name, badge)}
-                  >
-                    {badge}
-                  </Badge>
+                <motion.div layout className="flex flex-wrap gap-2 relative">
+                  <AnimatePresence>
+                    {getBadgesForRating(category.name).map((badge: string) => (
+                      <motion.div
+                        key={badge}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        onHoverStart={() => setHoveredBadge(badge)}
+                        onHoverEnd={() => setHoveredBadge(null)}
+                      >
+                        <Badge
+                          variant={
+                            selectedBadges[category.name]?.includes(badge)
+                              ? "default"
+                              : "outline"
+                          }
+                          className={`cursor-pointer transition-colors ${
+                            selectedBadges[category.name]?.includes(badge)
+                              ? categoryRatings[category.name] <= worryRating
+                                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                : "bg-green-500 text-green-foreground hover:bg-green-400"
+                              : ""
+                          }`}
+                          onClick={() =>
+                            handleToggleBadge(category.name, badge)
+                          }
+                        >
+                          {badge}
+                        </Badge>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
                 </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
                 {selectedBadges[category.name]
                   ?.filter(
                     (badge) =>

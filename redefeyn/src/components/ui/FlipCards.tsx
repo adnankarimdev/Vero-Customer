@@ -20,17 +20,21 @@ import {
   PersonalReviewInfoFromSerializer,
 } from "../Types/types";
 import { placeIcons } from "../Icons/icons";
+import TimerBadge from "./TimerBadge";
+import { isThreeDaysPassed } from "@/utils/time";
 
 function LocationCard({
   location,
   placeReviewed,
   placesInfo,
   isLoyal,
+  timeStamp,
 }: {
   location: LocationDataInfo;
   placeReviewed?: boolean;
   placesInfo?: LocationInfo[][];
   isLoyal?: boolean;
+  timeStamp?: string;
 }) {
   const [isFlipped, setIsFlipped] = useState(false);
 
@@ -150,15 +154,18 @@ function LocationCard({
                 <span className="ml-2">
                   {location.total_reviews} Vero Reviews
                 </span>
-                {placeReviewed == true && (
-                  <Badge
-                    className={cn(
-                      "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
-                    )}
-                  >
-                    {"Reviewed"}
-                  </Badge>
-                )}
+                {placeReviewed == true &&
+                  timeStamp &&
+                  !isThreeDaysPassed(timeStamp) && (
+                    <Badge
+                      className={cn(
+                        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
+                      )}
+                    >
+                      {"Reviewed"}
+                    </Badge>
+                  )}
+                {timeStamp && <TimerBadge timestamp={timeStamp} />}
                 {placesInfo && (
                   <a
                     href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
@@ -181,10 +188,10 @@ function LocationCard({
             <Separator className="mb-4" />
             <CardContent className="flex-grow overflow-auto">
               <div className="grid gap-4">
-              <div className="relative text-2xl mb-2 text-center">
-                {/* Centered content */}
-                {"Top Badges"}
-              </div>
+                <div className="relative text-2xl mb-2 text-center">
+                  {/* Centered content */}
+                  {"Top Badges"}
+                </div>
                 {location.ratings_summary.map((summary, index) => (
                   <div key={index} className="mb-2">
                     <h4 className="text-lg mb-2">Rating: {summary.rating}</h4>
@@ -247,11 +254,13 @@ export default function GroupedFlipCards({
   customerLocationsReviewed,
   placesInfo,
   customerPersonalReviews,
+  customerReviewTimes,
 }: {
   locations: LocationDataInfo[];
   customerLocationsReviewed?: string[];
   placesInfo?: LocationInfo[][];
   customerPersonalReviews?: PersonalReviewInfoFromSerializer[];
+  customerReviewTimes?: {};
 }) {
   const [selectedType, setSelectedType] = useState<string | null>(null);
 
@@ -329,6 +338,12 @@ export default function GroupedFlipCards({
               placeReviewed={customerLocationsReviewed?.includes(
                 location.place_id,
               )}
+              timeStamp={
+                customerReviewTimes &&
+                (customerReviewTimes as { [key: string]: any })[
+                  location.place_id
+                ]
+              }
               isLoyal={
                 customerPersonalReviews &&
                 customerPersonalReviews?.filter(

@@ -22,6 +22,7 @@ export default function DuplicateReviewPage() {
   const [customerLocationsReviewed, setCustomerLocationsReviewed] = useState(
     [],
   );
+  const [customerReviewTimes, setCustomerReviewTimes] = useState({});
   const [isVeroCertified, setIsVeroCertified] = useState(false);
   const [personalReviews, setPersonalReviews] = useState([]);
   const veroCertifiedStatus =
@@ -70,7 +71,8 @@ export default function DuplicateReviewPage() {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-customer-reviewed-places/${email}/`,
         );
         setCustomerLocationsReviewed(response.data.data);
-        console.log(response.data.data);
+        console.log(response.data);
+        setCustomerReviewTimes(response.data.reviewDates);
         setIsVeroCertified(response.data.data.length > veroCertifiedStatus);
         setIsLoading(false);
       } catch (err) {
@@ -165,6 +167,7 @@ export default function DuplicateReviewPage() {
               customerLocationsReviewed={customerLocationsReviewed}
               placesInfo={places}
               customerPersonalReviews={personalReviews}
+              customerReviewTimes={customerReviewTimes}
             />
           </div>
         </>
