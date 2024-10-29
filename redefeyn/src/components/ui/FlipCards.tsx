@@ -307,6 +307,7 @@ export default function GroupedFlipCards({
             .filter((type) => type !== "Other")
             .map((type) => (
               <Button
+                key={type}
                 variant="ghost"
                 className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
               >
@@ -325,6 +326,7 @@ export default function GroupedFlipCards({
               </Button>
             )),
           <Button
+            key={0}
             variant="ghost"
             className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
           >
