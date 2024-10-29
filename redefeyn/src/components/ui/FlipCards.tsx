@@ -286,52 +286,61 @@ export default function GroupedFlipCards({
   return (
     <div className="container mx-auto p-4">
       <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
-        <Button variant="ghost">
-        <Badge
-          onClick={() => setSelectedType(null)}
-          className={cn(
-            "font-small",
-            selectedType === null
-              ? "bg-blue-500 hover:bg-blue-600 text-white"
-              : "bg-amber-500 hover:bg-amber-600 text-white",
-          )}
+        <Button
+          variant="ghost"
+          className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
         >
-          All
-        </Badge>
+          <Badge
+            onClick={() => setSelectedType(null)}
+            className={cn(
+              "font-small",
+              selectedType === null
+                ? "bg-blue-500 hover:bg-blue-600 text-white"
+                : "bg-amber-500 hover:bg-amber-600 text-white",
+            )}
+          >
+            All
+          </Badge>
         </Button>
         {[
           ...Object.keys(groupedLocations)
             .filter((type) => type !== "Other")
             .map((type) => (
-              <Button variant="ghost">
-              <Badge
-                key={type}
-                onClick={() => setSelectedType(type)}
-                className={cn(
-                  "font-small",
-                  selectedType === type
-                    ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-amber-500 hover:bg-amber-600 text-white",
-                )}
+              <Button
+                variant="ghost"
+                className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
               >
-                {type.replace("_", " ")}
-              </Badge>
+                <Badge
+                  key={type}
+                  onClick={() => setSelectedType(type)}
+                  className={cn(
+                    "font-small",
+                    selectedType === type
+                      ? "bg-blue-500 hover:bg-blue-600 text-white"
+                      : "bg-amber-500 hover:bg-amber-600 text-white",
+                  )}
+                >
+                  {type.replace("_", " ")}
+                </Badge>
               </Button>
             )),
-            <Button variant="ghost">
-          <Badge
-            key="other"
-            onClick={() => setSelectedType("Other")}
-            className={cn(
-              "font-small",
-              selectedType === "Other"
-                ? "bg-blue-500 hover:bg-blue-600 text-white"
-                : "bg-amber-500 hover:bg-amber-600 text-white",
-            )}
+          <Button
+            variant="ghost"
+            className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
           >
-            Other
-          </Badge>
-          </Button>
+            <Badge
+              key="other"
+              onClick={() => setSelectedType("Other")}
+              className={cn(
+                "font-small",
+                selectedType === "Other"
+                  ? "bg-blue-500 hover:bg-blue-600 text-white"
+                  : "bg-amber-500 hover:bg-amber-600 text-white",
+              )}
+            >
+              Other
+            </Badge>
+          </Button>,
         ]}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

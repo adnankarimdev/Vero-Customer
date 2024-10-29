@@ -26,9 +26,9 @@ export default function TimerBadge({
         const hours = Math.floor((diff % (24 * 60 * 60)) / (60 * 60));
         const minutes = Math.floor((diff % (60 * 60)) / 60);
         const seconds = diff % 60;
-        
+
         let timeLeft;
-        
+
         if (days > 0) {
           timeLeft = `${days}d ${hours}h`;
         } else if (hours > 0) {
@@ -38,7 +38,7 @@ export default function TimerBadge({
         } else {
           timeLeft = `${seconds}s`;
         }
-        
+
         setTimeLeft(timeLeft);
       }
     }, 1000);
