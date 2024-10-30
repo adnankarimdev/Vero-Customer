@@ -15,7 +15,9 @@ export default function DuplicateReviewPage() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [customerScore, setCustomerScore] = useState(0);
-  const [userInformation, setUserInformation] = useState<Partial<UserSerializer>>({});
+  const [userInformation, setUserInformation] = useState<
+    Partial<UserSerializer>
+  >({});
 
   useEffect(() => {
     setIsLoading(true);
@@ -33,8 +35,8 @@ export default function DuplicateReviewPage() {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/get-customer-information/${email}/`,
         );
-        console.log(response.data.data)
-        setUserInformation(response.data.data)
+        console.log(response.data.data);
+        setUserInformation(response.data.data);
         setIsLoading(false);
       } catch (err) {
         setIsLoading(false);
@@ -51,9 +53,7 @@ export default function DuplicateReviewPage() {
       {!isLoading && (
         <>
           {/* VeroPointsBadge positioned in the top right */}
-          <div className="absolute top-4 right-4">
-            
-          </div>
+          <div className="absolute top-4 right-4"></div>
 
           {/* RewardPack centered on the page, responsive layout */}
           <div className="flex flex-col items-center justify-center min-h-screen">
@@ -62,7 +62,7 @@ export default function DuplicateReviewPage() {
 
             {/* Reward Packs */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <UserSettings userInformation={userInformation}/>
+              <UserSettings userInformation={userInformation} />
             </div>
           </div>
         </>
