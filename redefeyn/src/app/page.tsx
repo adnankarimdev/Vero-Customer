@@ -49,7 +49,7 @@ export default function DuplicateReviewPage() {
       {isLoading && <RecordingLoader />}
       {!isLoading && (
         <>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-end items-center">
             {/* <SearchBar /> */}
             <Button
               variant="ghost"
