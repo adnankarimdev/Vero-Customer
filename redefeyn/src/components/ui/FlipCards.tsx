@@ -192,9 +192,9 @@ function LocationCard({
                   {/* Centered content */}
                   {"Top Badges"}
                 </div>
-                {location.ratings_summary.map((summary, index) => (
+                {location.ratings_summary.filter(item => item.rating == 5).map((summary, index) => (
                   <div key={index} className="mb-2">
-                    <h4 className="text-lg mb-2">Rating: {summary.rating}</h4>
+                    {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
                     <div className="flex flex-wrap gap-2">
                       {summary.badges.map((badge, idx) => (
                         <Badge
