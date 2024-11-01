@@ -117,30 +117,57 @@ function LocationCard({
               {getLocationTypeIcon(location.location)}
             </div>
           )}
-          {isLoyal == true && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Badge
-                    className={cn(
-                      "bg-rose-300 text-white font-medium mt-2 ml-2",
-                    )}
-                  >
-                    Loyal
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
-                  <p>
-                    {`Loyalty is rare. `}
-                    <span className="text-emerald-500">
-                      {location.location}
-                    </span>
-                    {` knows you have it 👑`}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
+          <div className="flex flex-col items-start justify-start">
+            {isLoyal == true && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Badge
+                      className={cn(
+                        "bg-rose-300 text-white font-medium mt-2 ml-2",
+                      )}
+                    >
+                      Loyal
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
+                    <p>
+                      {`Loyalty is rare. `}
+                      <span className="text-emerald-500">
+                        {location.location}
+                      </span>
+                      {` knows you have it 👑`}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {location.showOffer && location.showOffer == true && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Badge
+                      className={cn(
+                        "bg-fuchsia-300 text-white font-medium mt-2 ml-2",
+                      )}
+                    >
+                      {location.offer}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
+                    <p>
+                      {`Visit `}
+                      <span className="text-emerald-500">
+                        {location.location}
+                      </span>
+                      {` for this offer!`}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+
           <div className="h-full flex flex-col">
             <CardHeader className="flex-shrink-0">
               <CardTitle className="relative text-2xl mb-2 text-center">
@@ -192,29 +219,31 @@ function LocationCard({
                   {/* Centered content */}
                   {"Top Badges"}
                 </div>
-                {location.ratings_summary.filter(item => item.rating == 5).map((summary, index) => (
-                  <div key={index} className="mb-2">
-                    {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
-                    <div className="flex flex-wrap gap-2">
-                      {summary.badges.map((badge, idx) => (
-                        <Badge
-                          key={idx}
-                          className={`text-white ${
-                            summary.rating === 5
-                              ? "bg-green-500"
-                              : summary.rating === 4
-                                ? "bg-yellow-500"
-                                : summary.rating === 3
-                                  ? "bg-orange-500"
-                                  : "bg-red-500"
-                          }`}
-                        >
-                          {badge}
-                        </Badge>
-                      ))}
+                {location.ratings_summary
+                  .filter((item) => item.rating == 5)
+                  .map((summary, index) => (
+                    <div key={index} className="mb-2">
+                      {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
+                      <div className="flex flex-wrap gap-2">
+                        {summary.badges.map((badge, idx) => (
+                          <Badge
+                            key={idx}
+                            className={`text-white ${
+                              summary.rating === 5
+                                ? "bg-green-500"
+                                : summary.rating === 4
+                                  ? "bg-yellow-500"
+                                  : summary.rating === 3
+                                    ? "bg-orange-500"
+                                    : "bg-red-500"
+                            }`}
+                          >
+                            {badge}
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </CardContent>
           </div>
@@ -278,8 +307,18 @@ export default function GroupedFlipCards({
       if (!groups[type]) {
         groups[type] = [];
       }
+      if (placesInfo) {
+        const foundInfo = placesInfo.find((infoArray) =>
+          infoArray.find((info) => info.name === location.location),
+        );
+
+        // Ensure that foundInfo and the first item exist before accessing the offer
+        location["offer"] = foundInfo?.[0]?.offer || "";
+        location["showOffer"] = foundInfo?.[0]?.showOffer || false;
+      }
       groups[type].push(location);
     });
+    console.log("mg", groups);
     return groups;
   }, [locations, placesInfo]);
 

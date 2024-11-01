@@ -43,6 +43,8 @@ export interface LocationDataInfo {
   average_rating: number;
   total_reviews: number;
   place_id: string;
+  offer: string;
+  showOffer: boolean;
   ratings_summary: RatingSummary[];
 }
 
@@ -75,6 +77,8 @@ export type LocationInfo = {
   name: string;
   place_id: string;
   websiteUrl: string;
+  offer: string;
+  showOffer: boolean;
 };
 
 export type UserSerializer = {
