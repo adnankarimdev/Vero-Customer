@@ -79,9 +79,12 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             {"You're the best 🤩"}
           </DialogTitle>
           <DialogDescription>
-            {
-              "Go ahead and give us your name and preferred contact method, and it'll be in your inbox or phone soon! 💌"
-            }
+          <div className="text-center">
+  <span className="text-orange-500 mr-2">Name.</span> 
+  <span className="text-blue-500 mr-2">Contact.</span> 
+  <span className="text-violet-500 mr-2">Time.</span> 
+  <span className="text-emerald-500 mr-2">Sent.</span>
+</div>
           </DialogDescription>
         </DialogHeader>
 
@@ -157,7 +160,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             </div>
           )}
 
-          <div className="flex flex-col gap-2">
+          {/* <div className="flex flex-col gap-2" hidden={true}>
             <Label htmlFor="email" className="text-left">
               Review Tone
             </Label>
@@ -178,7 +181,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
                 </SelectGroup>
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
           {/* DateTimePicker */}
           <div className="flex flex-col gap-2">
             <Label htmlFor="email" className="text-left">
@@ -200,7 +203,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             type="submit"
             onClick={sendEmailToClientWithReview}
             className="ml-auto"
-            variant="ghost"
+            variant="outline"
           >
             Send
           </Button>
