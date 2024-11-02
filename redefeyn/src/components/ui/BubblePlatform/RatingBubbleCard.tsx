@@ -416,7 +416,7 @@ export default function RatingBubbleCard({
                   <>
                     {businessName}{" "}
                     <span className="text-emerald-500">
-                      knows you're helpful.
+                      {"knows you're helpful."}
                     </span>{" "}
                     <br /> <br />
                     Let Vero{" "}
@@ -429,7 +429,7 @@ export default function RatingBubbleCard({
                   <>
                     {businessName}{" "}
                     <span className="text-emerald-500">
-                      knows you're helpful.
+                      {"knows you're helpful."}
                     </span>{" "}
                     <br /> <br />
                     Let Vero{" "}
