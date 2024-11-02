@@ -408,13 +408,37 @@ export default function RatingBubbleCard({
         <AlertDialog open={isAlertDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>
+              <AlertDialogTitle className="text-center mb-2">
                 {"We've got your feedback, Thank You! 🙌🏼"}
               </AlertDialogTitle>
               <AlertDialogDescription>
-                {inStoreMode
-                  ? "If you want, we can help build a review, based on your selections, for you to post on Google Reviews for us. It would be really helpful! We'll send you it along with the review link!"
-                  : "If you want, we can help build a review, based on your selections, for you to post on Google Reviews for us. You can edit it too! 🤗 You'll just have to paste it."}
+                {inStoreMode ? (
+                  <>
+                    {businessName}{" "}
+                    <span className="text-emerald-500">
+                      knows you're helpful.
+                    </span>{" "}
+                    <br /> <br />
+                    Let Vero{" "}
+                    <span className="text-blue-500">
+                      remind and help build you a review
+                    </span>{" "}
+                    for later to post on Google?
+                  </>
+                ) : (
+                  <>
+                    {businessName}{" "}
+                    <span className="text-emerald-500">
+                      knows you're helpful.
+                    </span>{" "}
+                    <br /> <br />
+                    Let Vero{" "}
+                    <span className="text-blue-500">
+                      help you build a review
+                    </span>{" "}
+                    and post to Google?
+                  </>
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

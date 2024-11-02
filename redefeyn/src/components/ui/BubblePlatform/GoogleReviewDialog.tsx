@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import {
   Card,
@@ -56,11 +56,42 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  const [copyPasteClicked, setCopyPasteClicked] = useState(false);
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
   };
 
+  const [translateX, setTranslateX] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const content = contentRef.current;
+    if (!container || !content) return;
+
+    const totalWidth = content.offsetWidth;
+    const animationDuration = totalWidth * 10; // Adjust speed here
+
+    const animate = () => {
+      setTranslateX((prevTranslateX) => {
+        if (prevTranslateX <= -totalWidth) {
+          return 0;
+        }
+        return prevTranslateX - 1;
+      });
+    };
+
+    const animationId = setInterval(animate, animationDuration / totalWidth);
+
+    return () => clearInterval(animationId);
+  }, [allBadges]);
+
+  useEffect(() => {
+    if (generatedReview.length < 10) {
+      setIsChecked(false);
+    }
+  }, [generatedReview.length]);
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full h-full max-w-3xl mx-auto">
@@ -71,7 +102,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
           {!inStoreMode && customerEmail === "" && (
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger asChild>
-                <div className="w-fit mx-auto flex items-center justify-center">
+                {/* <div className="w-fit mx-auto flex items-center justify-center">
                   <Badge
                     className={cn(
                       "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 cursor-pointer",
@@ -79,7 +110,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                   >
                     Sign up/Log in to Receive Vero Points: 1
                   </Badge>
-                </div>
+                </div> */}
               </DrawerTrigger>
               <DrawerContent className="items-center">
                 <DrawerHeader>
@@ -101,12 +132,81 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
             </Drawer>
           )}
           <CardDescription className="text-center">
-            Build & Edit! Once it looks good, click the button below and it will
-            copy the review for you to paste to Google 🥳
+            <div>
+              <span
+                className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
+                style={{
+                  textDecorationThickness:
+                    generatedReview.length > 10 ? `${2}px` : "0px",
+                  transition: "text-decoration-thickness 0.3s ease-in-out",
+                }}
+              >
+                Build.
+              </span>
+              <span
+                className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
+                style={{
+                  textDecorationThickness: isChecked ? `${2}px` : "0px",
+                  transition: "text-decoration-thickness 0.3s ease-in-out",
+                }}
+              >
+                Confirm.
+              </span>
+              <span
+                className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
+                style={{
+                  textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
+                  transition: "text-decoration-thickness 0.3s ease-in-out",
+                }}
+              >
+                Copy.
+              </span>
+              <span
+                className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
+                style={{
+                  textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
+                  transition: "text-decoration-thickness 0.3s ease-in-out",
+                }}
+              >
+                Paste.
+              </span>
+            </div>
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col w-full h-full min-h-[400px]">
+            <div className="bg-background border rounded-md mb-4">
+              {" "}
+              <div className="flex justify-center mt-2">
+                <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                  Vibes felt Today
+                </span>
+              </div>
+              <div
+                ref={containerRef}
+                className="relative overflow-hidden whitespace-nowrap"
+                role="region"
+                aria-live="polite"
+                aria-label="Scrolling vibes banner"
+              >
+                <div
+                  ref={contentRef}
+                  className="inline-block transition-transform duration-1000 ease-linear mb-2"
+                  style={{ transform: `translateX(${translateX}px)` }}
+                >
+                  {allBadges &&
+                    allBadges.concat(allBadges).map((badge, index) => (
+                      <Badge
+                        key={index}
+                        variant="outline"
+                        className="bg-blue-500 text-white text-xs py-0.5 px-2 mx-1 whitespace-nowrap"
+                      >
+                        {badge}
+                      </Badge>
+                    ))}
+                </div>
+              </div>
+            </div>
             <div className="flex flex-grow gap-4">
               <Textarea
                 value={generatedReview}
@@ -114,25 +214,6 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                 rows={generatedReview.split("\n").length + 10}
                 className="flex-grow resize-none mb-2"
               />
-              <div className="bg-background border rounded-md p-2 w-1/3">
-                <p className="text-xs font-medium text-center mb-2">
-                  Vibes felt Today
-                </p>
-                <ScrollArea className="h-auto">
-                  <div className="flex flex-wrap gap-2 justify-center">
-                    {allBadges &&
-                      allBadges.map((badge, index) => (
-                        <Badge
-                          key={index}
-                          variant="outline"
-                          className="bg-blue-500 text-white"
-                        >
-                          {badge}
-                        </Badge>
-                      ))}
-                  </div>
-                </ScrollArea>
-              </div>
             </div>
             <div className="bg-background border rounded-md p-2 mt-4">
               <p className="text-xs font-medium text-center mb-2">
@@ -168,6 +249,7 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                 checked={isChecked}
                 onCheckedChange={(checked) => setIsChecked(checked === true)}
                 className="mr-4"
+                disabled={generatedReview.length < 10}
               />
               <label
                 htmlFor="terms"
@@ -178,10 +260,13 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
             </div>
             <Button
               type="submit"
-              onClick={handlePostGeneratedReviewToGoogle}
+              onClick={() => {
+                setCopyPasteClicked(true);
+                handlePostGeneratedReviewToGoogle();
+              }}
               variant="default"
               className="mt-4"
-              disabled={!isChecked}
+              disabled={!(isChecked && generatedReview.length > 10)}
             >
               Copy & Paste to Google
             </Button>
