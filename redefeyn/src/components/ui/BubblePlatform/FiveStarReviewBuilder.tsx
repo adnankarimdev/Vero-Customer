@@ -504,6 +504,14 @@ export default function FiveStarReviewBuilder({
     if (!validateForm()) {
       return;
     }
+    toast({
+      className: cn(
+        "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+      ),
+      title: `You're good to go 😇`,
+      description: "Thank you!",
+      duration: 3000,
+    });
     setIsSendingEmail(true);
     setIsEmailReviewDialogOpen(false);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
@@ -581,14 +589,6 @@ export default function FiveStarReviewBuilder({
       )
       .then((response) => {
         setIsEmailReviewDialogOpen(false);
-        toast({
-          className: cn(
-            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
-          ),
-          title: `Email Will be sent at ${time} on ${date?.toDateString()}!`,
-          description: "Thank you!",
-          duration: 3000,
-        });
         if (inStoreMode) {
           setTimeout(() => {
             window.location.reload();
@@ -599,11 +599,18 @@ export default function FiveStarReviewBuilder({
       })
       .catch((error) => {
         setIsSendingEmail(false);
-        toast({
-          title: "Error",
-          description: "Failed to send email.",
-          duration: 1000,
-        });
+        // toast({
+        //   title: "Error",
+        //   description: "Failed to send email. That's on us. ",
+        //   duration: 1000,
+        // });
+        if (inStoreMode) {
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } else {
+          router.push("/thankyou");
+        }
       });
   };
   const sendEmail = async () => {
