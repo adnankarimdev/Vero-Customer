@@ -50,26 +50,28 @@ export default function DuplicateReviewPage() {
 
   return (
     <AnimatedLayout>
-    <div className="relative min-h-screen">
-      {isLoading && <RecordingLoader />}
-      {!isLoading && (
-        <>
-          {/* VeroPointsBadge positioned in the top right */}
-          <div className="absolute top-4 right-4"></div>
+      <div className="relative min-h-screen">
+        {isLoading && <RecordingLoader />}
+        {!isLoading && (
+          <>
+            {/* VeroPointsBadge positioned in the top right */}
+            <div className="absolute top-4 right-4"></div>
 
-          {/* RewardPack centered on the page, responsive layout */}
-          <div className="flex flex-col items-center justify-center min-h-screen">
-            {/* Centered Badge */}
-            <div className="mb-4">{/* <VeroGlobalBadge score={500} /> */}</div>
+            {/* RewardPack centered on the page, responsive layout */}
+            <div className="flex flex-col items-center justify-center min-h-screen">
+              {/* Centered Badge */}
+              <div className="mb-4">
+                {/* <VeroGlobalBadge score={500} /> */}
+              </div>
 
-            {/* Reward Packs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <UserSettings userInformation={userInformation} />
+              {/* Reward Packs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <UserSettings userInformation={userInformation} />
+              </div>
             </div>
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

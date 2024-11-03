@@ -47,28 +47,30 @@ export default function DuplicateReviewPage() {
 
   return (
     <AnimatedLayout>
-    <div className="relative min-h-screen">
-      {isLoading && <RecordingLoader />}
-      {!isLoading && (
-        <>
-          {/* VeroPointsBadge positioned in the top right */}
-          <div className="absolute top-4 right-4">
-            <VeroPointsBadge score={customerScore} />
-          </div>
+      <div className="relative min-h-screen">
+        {isLoading && <RecordingLoader />}
+        {!isLoading && (
+          <>
+            {/* VeroPointsBadge positioned in the top right */}
+            <div className="absolute top-4 right-4">
+              <VeroPointsBadge score={customerScore} />
+            </div>
 
-          {/* RewardPack centered on the page, responsive layout */}
-          <div className="flex flex-col items-center justify-center min-h-screen">
-            {/* Centered Badge */}
-            <div className="mb-4">{/* <VeroGlobalBadge score={500} /> */}</div>
+            {/* RewardPack centered on the page, responsive layout */}
+            <div className="flex flex-col items-center justify-center min-h-screen">
+              {/* Centered Badge */}
+              <div className="mb-4">
+                {/* <VeroGlobalBadge score={500} /> */}
+              </div>
 
-            {/* Reward Packs */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <h1>
-                {
-                  "The countdown has begun! Your Vero Points are about to become more valuable than ever. Get ready free food, drinks, shopping sprees, really anything! 🎉"
-                }
-              </h1>
-              {/* <RewardPack
+              {/* Reward Packs */}
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <h1>
+                  {
+                    "The countdown has begun! Your Vero Points are about to become more valuable than ever. Get ready free food, drinks, shopping sprees, really anything! 🎉"
+                  }
+                </h1>
+                {/* <RewardPack
                 packTitle="Vero Food"
                 packWorth={10}
                 customerScore={customerScore}
@@ -92,11 +94,11 @@ export default function DuplicateReviewPage() {
                   "Rewards that span from a new suitcase, to an all-inclusive trip to Mexico."
                 }
               /> */}
+              </div>
             </div>
-          </div>
-        </>
-      )}
-    </div>
+          </>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

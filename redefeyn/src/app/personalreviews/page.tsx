@@ -59,23 +59,23 @@ export default function DuplicateReviewPage() {
   }, []);
   return (
     <AnimatedLayout>
-    <div className="container mx-auto p-4">
-      {isLoading && <RecordingLoader />}
-      {!isLoading && (
-        <>
-          {/* <SearchBar /> */}
-          {personalReviews.length > 0 ? (
-            <PersonalReviewsFlipCards reviews={personalReviews} />
-          ) : (
-            <div className="flex items-center justify-center h-screen">
-              <p className="text-center">
-                All your personal reviews will appear here.
-              </p>
-            </div>
-          )}
-        </>
-      )}
-    </div>
+      <div className="container mx-auto p-4">
+        {isLoading && <RecordingLoader />}
+        {!isLoading && (
+          <>
+            {/* <SearchBar /> */}
+            {personalReviews.length > 0 ? (
+              <PersonalReviewsFlipCards reviews={personalReviews} />
+            ) : (
+              <div className="flex items-center justify-center h-screen">
+                <p className="text-center">
+                  All your personal reviews will appear here.
+                </p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

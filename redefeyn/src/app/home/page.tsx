@@ -119,62 +119,62 @@ export default function DuplicateReviewPage() {
   };
   return (
     <AnimatedLayout>
-    <div className="relative space-y-4 p-4">
-      {isLoading && <RecordingLoader />}
-      {!isLoading && (
-        <>
-          <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-start mb-4 sm:mb-0">
-            {/* Badge */}
-            <div className="flex justify-center sm:justify-start sm:absolute sm:top-4 sm:right-4 z-20">
-              <Button
-                variant="ghost"
-                onClick={handleVeroCertifiedMessage}
-                className="p-0 inline-flex items-center justify-center hover:bg-transparent hover:text-current focus:ring-0 active:bg-transparent"
-              >
-                {"Vero Certified Reviewer: "}
-                <svg width="0" height="0">
-                  <linearGradient
-                    id="purple-gradient"
-                    x1="0%"
-                    y1="0%"
-                    x2="100%"
-                    y2="0%"
-                  >
-                    <stop stopColor="#a855f7" offset="0%" />
-                    <stop stopColor="#7e22ce" offset="100%" />
-                  </linearGradient>
-                </svg>
-                {isVeroCertified ? (
-                  <BadgeCheck
-                    className="w-6 h-6 ml-2"
-                    style={{ stroke: "url(#purple-gradient)" }}
-                  />
-                ) : (
-                  <BadgeX
-                    className="w-6 h-6 ml-2"
-                    style={{ stroke: "url(#purple-gradient)" }}
-                  />
-                )}
-              </Button>
+      <div className="relative space-y-4 p-4">
+        {isLoading && <RecordingLoader />}
+        {!isLoading && (
+          <>
+            <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:justify-between sm:items-start mb-4 sm:mb-0">
+              {/* Badge */}
+              <div className="flex justify-center sm:justify-start sm:absolute sm:top-4 sm:right-4 z-20">
+                <Button
+                  variant="ghost"
+                  onClick={handleVeroCertifiedMessage}
+                  className="p-0 inline-flex items-center justify-center hover:bg-transparent hover:text-current focus:ring-0 active:bg-transparent"
+                >
+                  {"Vero Certified Reviewer: "}
+                  <svg width="0" height="0">
+                    <linearGradient
+                      id="purple-gradient"
+                      x1="0%"
+                      y1="0%"
+                      x2="100%"
+                      y2="0%"
+                    >
+                      <stop stopColor="#a855f7" offset="0%" />
+                      <stop stopColor="#7e22ce" offset="100%" />
+                    </linearGradient>
+                  </svg>
+                  {isVeroCertified ? (
+                    <BadgeCheck
+                      className="w-6 h-6 ml-2"
+                      style={{ stroke: "url(#purple-gradient)" }}
+                    />
+                  ) : (
+                    <BadgeX
+                      className="w-6 h-6 ml-2"
+                      style={{ stroke: "url(#purple-gradient)" }}
+                    />
+                  )}
+                </Button>
+              </div>
+
+              {/* Search Bar */}
+              <div className="z-10 w-full sm:w-auto">{/* <SearchBar /> */}</div>
             </div>
 
-            {/* Search Bar */}
-            <div className="z-10 w-full sm:w-auto">{/* <SearchBar /> */}</div>
-          </div>
-
-          {/* Responsive FlipCards */}
-          <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
-            <FlipCards
-              locations={locationData}
-              customerLocationsReviewed={customerLocationsReviewed}
-              placesInfo={places}
-              customerPersonalReviews={personalReviews}
-              customerReviewTimes={customerReviewTimes}
-            />
-          </div>
-        </>
-      )}
-    </div>
+            {/* Responsive FlipCards */}
+            <div className="flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0">
+              <FlipCards
+                locations={locationData}
+                customerLocationsReviewed={customerLocationsReviewed}
+                placesInfo={places}
+                customerPersonalReviews={personalReviews}
+                customerReviewTimes={customerReviewTimes}
+              />
+            </div>
+          </>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

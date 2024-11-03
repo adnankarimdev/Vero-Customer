@@ -30,32 +30,32 @@ export default function DuplicateReviewPage() {
 
   return (
     <AnimatedLayout>
-    <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
-      <div className="flex items-center">
-        <TypingEffect
-          text="You've already posted your review!"
-          speed={50}
-          className="text-2xl"
-        />
-        {showFirstEmoji && <span className="text-xl ml-2">🦸‍♂️</span>}
-      </div>
+      <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
+        <div className="flex items-center">
+          <TypingEffect
+            text="You've already posted your review!"
+            speed={50}
+            className="text-2xl"
+          />
+          {showFirstEmoji && <span className="text-xl ml-2">🦸‍♂️</span>}
+        </div>
 
-      {/* Embedding the YouTube video iframe with autoplay */}
-      {/* <div className=" flex mt-6 w-full items-center justify-center ">
+        {/* Embedding the YouTube video iframe with autoplay */}
+        {/* <div className=" flex mt-6 w-full items-center justify-center ">
       <iframe src="https://giphy.com/embed/bnrMLzlb3xTVuBgFsX" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/studiosoriginals-bnrMLzlb3xTVuBgFsX">via GIPHY</a></p>
       </div> */}
 
-      {showSecondComponent && (
-        <div className="flex items-center">
-          <TypingEffect
-            text="Thanks for using Vero"
-            speed={50}
-            className="text-md text-muted-foreground"
-          />
-          {showSecondEmoji && <span className="text-xl ml-2">🥳</span>}
-        </div>
-      )}
-    </div>
+        {showSecondComponent && (
+          <div className="flex items-center">
+            <TypingEffect
+              text="Thanks for using Vero"
+              speed={50}
+              className="text-md text-muted-foreground"
+            />
+            {showSecondEmoji && <span className="text-xl ml-2">🥳</span>}
+          </div>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

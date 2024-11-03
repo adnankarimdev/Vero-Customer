@@ -95,164 +95,164 @@ function LocationCard({
 
   return (
     <AnimatedLayout>
-    <div
-      className="w-full h-[400px] perspective-1000 cursor-pointer"
-      onClick={() => setIsFlipped(!isFlipped)}
-    >
       <div
-        className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
-          isFlipped ? "rotate-y-180" : ""
-        }`}
+        className="w-full h-[400px] perspective-1000 cursor-pointer"
+        onClick={() => setIsFlipped(!isFlipped)}
       >
-        {/* Front of the card */}
-        <Card className="w-full h-full overflow-hidden">
-          {/* Icon placement */}
-          {getLocationTypeIcon(location.location) && (
-            <div
-              className={cn(
-                // Centered below the title on small screens
-                "flex justify-center mt-2",
-                // Top-right for larger screens
-                "md:absolute md:top-0 md:right-0 md:justify-end md:mt-2 mr-2",
-              )}
-            >
-              {getLocationTypeIcon(location.location)}
-            </div>
-          )}
-          <div className="flex flex-col items-start justify-start">
-            {isLoyal == true && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Badge
-                      className={cn(
-                        "bg-rose-300 text-white font-medium mt-2 ml-2",
-                      )}
-                    >
-                      Loyal
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
-                    <p>
-                      {`Loyalty is rare. `}
-                      <span className="text-emerald-500">
-                        {location.location}
-                      </span>
-                      {` knows you have it 👑`}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-            {location.showOffer && location.showOffer == true && (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Badge
-                      className={cn(
-                        "bg-fuchsia-300 text-white font-medium mt-2 ml-2",
-                      )}
-                    >
-                      {location.offer}
-                    </Badge>
-                  </TooltipTrigger>
-                  <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
-                    <p>
-                      {`Visit `}
-                      <span className="text-emerald-500">
-                        {location.location}
-                      </span>
-                      {` for this offer!`}
-                    </p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
-          </div>
-
-          <div className="h-full flex flex-col">
-            <CardHeader className="flex-shrink-0">
-              <CardTitle className="relative text-2xl mb-2 text-center">
-                {/* Centered content */}
-                {location.location}
-              </CardTitle>
-              <div className="flex flex-col items-center justify-center mb-2">
-                <span className="ml-2">
-                  {location.average_rating.toFixed(1)} / 5.0
-                </span>
-                <span className="ml-2">
-                  {location.total_reviews} Vero Reviews
-                </span>
-                {placeReviewed == true &&
-                  timeStamp &&
-                  !isThreeDaysPassed(timeStamp) && (
-                    <Badge
-                      className={cn(
-                        "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
-                      )}
-                    >
-                      {"Reviewed"}
-                    </Badge>
-                  )}
-                {timeStamp && <TimerBadge timestamp={timeStamp} />}
-                {placesInfo && (
-                  <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
-                      location.location,
-                    )}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Badge
-                      className={cn(
-                        "bg-gradient-to-r from-blue-300 to-blue-500 text-white font-small mt-2",
-                      )}
-                    >
-                      {getFormattedAddress(location.location)}
-                    </Badge>
-                  </a>
+        <div
+          className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
+            isFlipped ? "rotate-y-180" : ""
+          }`}
+        >
+          {/* Front of the card */}
+          <Card className="w-full h-full overflow-hidden">
+            {/* Icon placement */}
+            {getLocationTypeIcon(location.location) && (
+              <div
+                className={cn(
+                  // Centered below the title on small screens
+                  "flex justify-center mt-2",
+                  // Top-right for larger screens
+                  "md:absolute md:top-0 md:right-0 md:justify-end md:mt-2 mr-2",
                 )}
+              >
+                {getLocationTypeIcon(location.location)}
               </div>
-            </CardHeader>
-            <Separator className="mb-4" />
-            <CardContent className="flex-grow overflow-auto">
-              <div className="grid gap-4">
-                <div className="relative text-2xl mb-2 text-center">
-                  {/* Centered content */}
-                  {"Top Badges"}
-                </div>
-                {location.ratings_summary
-                  .filter((item) => item.rating == 5)
-                  .map((summary, index) => (
-                    <div key={index} className="mb-2">
-                      {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
-                      <div className="flex flex-wrap gap-2">
-                        {summary.badges.map((badge, idx) => (
-                          <Badge
-                            key={idx}
-                            className={`text-white ${
-                              summary.rating === 5
-                                ? "bg-green-500"
-                                : summary.rating === 4
-                                  ? "bg-yellow-500"
-                                  : summary.rating === 3
-                                    ? "bg-orange-500"
-                                    : "bg-red-500"
-                            }`}
-                          >
-                            {badge}
-                          </Badge>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </CardContent>
-          </div>
-        </Card>
+            )}
+            <div className="flex flex-col items-start justify-start">
+              {isLoyal == true && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge
+                        className={cn(
+                          "bg-rose-300 text-white font-medium mt-2 ml-2",
+                        )}
+                      >
+                        Loyal
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
+                      <p>
+                        {`Loyalty is rare. `}
+                        <span className="text-emerald-500">
+                          {location.location}
+                        </span>
+                        {` knows you have it 👑`}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              {location.showOffer && location.showOffer == true && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <Badge
+                        className={cn(
+                          "bg-fuchsia-300 text-white font-medium mt-2 ml-2",
+                        )}
+                      >
+                        {location.offer}
+                      </Badge>
+                    </TooltipTrigger>
+                    <TooltipContent className="bg-white text-black border border-gray-200 shadow-md">
+                      <p>
+                        {`Visit `}
+                        <span className="text-emerald-500">
+                          {location.location}
+                        </span>
+                        {` for this offer!`}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+            </div>
 
-        {/* Back of the card */}
-        {/* <Card className="absolute w-full h-full backface-hidden rotate-y-180 overflow-auto">
+            <div className="h-full flex flex-col">
+              <CardHeader className="flex-shrink-0">
+                <CardTitle className="relative text-2xl mb-2 text-center">
+                  {/* Centered content */}
+                  {location.location}
+                </CardTitle>
+                <div className="flex flex-col items-center justify-center mb-2">
+                  <span className="ml-2">
+                    {location.average_rating.toFixed(1)} / 5.0
+                  </span>
+                  <span className="ml-2">
+                    {location.total_reviews} Vero Reviews
+                  </span>
+                  {placeReviewed == true &&
+                    timeStamp &&
+                    !isThreeDaysPassed(timeStamp) && (
+                      <Badge
+                        className={cn(
+                          "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2",
+                        )}
+                      >
+                        {"Reviewed"}
+                      </Badge>
+                    )}
+                  {timeStamp && <TimerBadge timestamp={timeStamp} />}
+                  {placesInfo && (
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                        location.location,
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Badge
+                        className={cn(
+                          "bg-gradient-to-r from-blue-300 to-blue-500 text-white font-small mt-2",
+                        )}
+                      >
+                        {getFormattedAddress(location.location)}
+                      </Badge>
+                    </a>
+                  )}
+                </div>
+              </CardHeader>
+              <Separator className="mb-4" />
+              <CardContent className="flex-grow overflow-auto">
+                <div className="grid gap-4">
+                  <div className="relative text-2xl mb-2 text-center">
+                    {/* Centered content */}
+                    {"Top Badges"}
+                  </div>
+                  {location.ratings_summary
+                    .filter((item) => item.rating == 5)
+                    .map((summary, index) => (
+                      <div key={index} className="mb-2">
+                        {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
+                        <div className="flex flex-wrap gap-2">
+                          {summary.badges.map((badge, idx) => (
+                            <Badge
+                              key={idx}
+                              className={`text-white ${
+                                summary.rating === 5
+                                  ? "bg-green-500"
+                                  : summary.rating === 4
+                                    ? "bg-yellow-500"
+                                    : summary.rating === 3
+                                      ? "bg-orange-500"
+                                      : "bg-red-500"
+                              }`}
+                            >
+                              {badge}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </CardContent>
+            </div>
+          </Card>
+
+          {/* Back of the card */}
+          {/* <Card className="absolute w-full h-full backface-hidden rotate-y-180 overflow-auto">
           <CardContent className="grid gap-4">
             {location.ratings_summary.map((summary, index) => (
               <div key={index}>
@@ -275,8 +275,8 @@ function LocationCard({
             ))}
           </CardContent>
         </Card> */}
+        </div>
       </div>
-    </div>
     </AnimatedLayout>
   );
 }
@@ -327,96 +327,96 @@ export default function GroupedFlipCards({
 
   return (
     <AnimatedLayout>
-    <div className="container mx-auto p-4">
-      <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
-        <Button
-          variant="ghost"
-          className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
-        >
-          <Badge
-            onClick={() => setSelectedType(null)}
-            className={cn(
-              "font-small",
-              selectedType === null
-                ? "bg-blue-500 hover:bg-blue-600 text-white"
-                : "bg-amber-500 hover:bg-amber-600 text-white",
-            )}
+      <div className="container mx-auto p-4">
+        <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
+          <Button
+            variant="ghost"
+            className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
           >
-            All
-          </Badge>
-        </Button>
-        {[
-          ...Object.keys(groupedLocations)
-            .filter((type) => type !== "Other")
-            .map((type) => (
+            <Badge
+              onClick={() => setSelectedType(null)}
+              className={cn(
+                "font-small",
+                selectedType === null
+                  ? "bg-blue-500 hover:bg-blue-600 text-white"
+                  : "bg-amber-500 hover:bg-amber-600 text-white",
+              )}
+            >
+              All
+            </Badge>
+          </Button>
+          {[
+            ...Object.keys(groupedLocations)
+              .filter((type) => type !== "Other")
+              .map((type) => (
+                <Button
+                  key={type}
+                  variant="ghost"
+                  className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
+                >
+                  <Badge
+                    key={type}
+                    onClick={() => setSelectedType(type)}
+                    className={cn(
+                      "font-small",
+                      selectedType === type
+                        ? "bg-blue-500 hover:bg-blue-600 text-white"
+                        : "bg-amber-500 hover:bg-amber-600 text-white",
+                    )}
+                  >
+                    {type.replace("_", " ")}
+                  </Badge>
+                </Button>
+              )),
+            Object.keys(groupedLocations).includes("Other") && (
               <Button
-                key={type}
+                key={0}
                 variant="ghost"
                 className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
               >
                 <Badge
-                  key={type}
-                  onClick={() => setSelectedType(type)}
+                  key="other"
+                  onClick={() => setSelectedType("Other")}
                   className={cn(
                     "font-small",
-                    selectedType === type
+                    selectedType === "Other"
                       ? "bg-blue-500 hover:bg-blue-600 text-white"
                       : "bg-amber-500 hover:bg-amber-600 text-white",
                   )}
                 >
-                  {type.replace("_", " ")}
+                  Other
                 </Badge>
               </Button>
-            )),
-          Object.keys(groupedLocations).includes("Other") && (
-            <Button
-              key={0}
-              variant="ghost"
-              className="bg-transparent hover:bg-transparent active:bg-transparent focus:bg-transparent"
-            >
-              <Badge
-                key="other"
-                onClick={() => setSelectedType("Other")}
-                className={cn(
-                  "font-small",
-                  selectedType === "Other"
-                    ? "bg-blue-500 hover:bg-blue-600 text-white"
-                    : "bg-amber-500 hover:bg-amber-600 text-white",
+            ),
+          ]}
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {(selectedType ? groupedLocations[selectedType] : locations).map(
+            (location, id) => (
+              <LocationCard
+                key={id}
+                location={location}
+                placesInfo={placesInfo}
+                placeReviewed={customerLocationsReviewed?.includes(
+                  location.place_id,
                 )}
-              >
-                Other
-              </Badge>
-            </Button>
-          ),
-        ]}
+                timeStamp={
+                  customerReviewTimes &&
+                  (customerReviewTimes as { [key: string]: any })[
+                    location.place_id
+                  ]
+                }
+                isLoyal={
+                  customerPersonalReviews &&
+                  customerPersonalReviews?.filter(
+                    (item) => item.place_id_from_review === location.place_id,
+                  ).length > 2
+                } //need at least 3 reviews to be considered loyal to a place
+              />
+            ),
+          )}
+        </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {(selectedType ? groupedLocations[selectedType] : locations).map(
-          (location, id) => (
-            <LocationCard
-              key={id}
-              location={location}
-              placesInfo={placesInfo}
-              placeReviewed={customerLocationsReviewed?.includes(
-                location.place_id,
-              )}
-              timeStamp={
-                customerReviewTimes &&
-                (customerReviewTimes as { [key: string]: any })[
-                  location.place_id
-                ]
-              }
-              isLoyal={
-                customerPersonalReviews &&
-                customerPersonalReviews?.filter(
-                  (item) => item.place_id_from_review === location.place_id,
-                ).length > 2
-              } //need at least 3 reviews to be considered loyal to a place
-            />
-          ),
-        )}
-      </div>
-    </div>
     </AnimatedLayout>
   );
 }

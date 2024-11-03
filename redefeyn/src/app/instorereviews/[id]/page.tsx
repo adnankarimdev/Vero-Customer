@@ -93,13 +93,13 @@ export default function Dashboard() {
 
   return (
     <AnimatedLayout>
-    <div className="container mx-auto p-4">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <div className="container mx-auto p-4">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-      {dataLoaded && (
-        <SmartReviewBuilder id={id as string} inStoreMode={true} />
-      )}
-    </div>
+        {dataLoaded && (
+          <SmartReviewBuilder id={id as string} inStoreMode={true} />
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

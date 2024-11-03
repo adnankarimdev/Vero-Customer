@@ -168,205 +168,211 @@ export default function AtHomeCustomerReview() {
 
   return (
     <AnimatedLayout>
-    <div className="flex items-center justify-center min-h-screen">
-      {isLoading ? (
-        <RecordingLoader />
-      ) : (
-        <Card className="w-full h-full max-w-3xl mx-auto rounded-none border-0 shadow-none">
-          <CardContent className="w-full">
-            <CardHeader>
-              <CardTitle className="text-center">
-                Your review is ready to take the spotlight! 🌟
-              </CardTitle>
-              {
-                <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-                  <DrawerTrigger>
-                    {/* can we always assume the email sent and logged in is the same email?
+      <div className="flex items-center justify-center min-h-screen">
+        {isLoading ? (
+          <RecordingLoader />
+        ) : (
+          <Card className="w-full h-full max-w-3xl mx-auto rounded-none border-0 shadow-none">
+            <CardContent className="w-full">
+              <CardHeader>
+                <CardTitle className="text-center">
+                  Your review is ready to take the spotlight! 🌟
+                </CardTitle>
+                {
+                  <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                    <DrawerTrigger>
+                      {/* can we always assume the email sent and logged in is the same email?
                     might want to add a condition regarding it.  */}
-                    {
-                      <Badge
-                        className={cn(
-                          "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
-                        )}
-                      >
-                        {`Sign up/Log in as `}
-                        <span className="text-black ml-1 mr-1">
-                          {tempEmail}
-                        </span>
-                        {`to Receive Vero Points: 1 `}
-                      </Badge>
-                    }
-                  </DrawerTrigger>
-                  <DrawerContent className="items-center">
-                    <DrawerHeader>
-                      <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
-                      <DrawerDescription>
-                        You'll get 1 Vero Point for posting this to google.
-                      </DrawerDescription>
-                    </DrawerHeader>
-                    <QuickAuthPage
-                      setCustomerEmail={setCustomerEmail}
-                      onDrawerClose={handleDrawerClose}
-                      customerEmail={tempEmail}
-                    />
-                    <DrawerFooter>
-                      <DrawerClose>
-                        <Button variant="outline">Cancel</Button>
-                      </DrawerClose>
-                    </DrawerFooter>
-                  </DrawerContent>
-                </Drawer>
-              }
-              <CardDescription className="text-center">
-                <div>
-                  <span
-                    className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
-                    style={{
-                      textDecorationThickness:
-                        generatedReview.length > 10 ? `${2}px` : "0px",
-                      transition: "text-decoration-thickness 0.3s ease-in-out",
-                    }}
-                  >
-                    Build.
-                  </span>
-                  <span
-                    className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
-                    style={{
-                      textDecorationThickness: isChecked ? `${2}px` : "0px",
-                      transition: "text-decoration-thickness 0.3s ease-in-out",
-                    }}
-                  >
-                    Confirm.
-                  </span>
-                  <span
-                    className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
-                    style={{
-                      textDecorationThickness: copyPasteClicked
-                        ? `${2}px`
-                        : "0px",
-                      transition: "text-decoration-thickness 0.3s ease-in-out",
-                    }}
-                  >
-                    Copy.
-                  </span>
-                  <span
-                    className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
-                    style={{
-                      textDecorationThickness: copyPasteClicked
-                        ? `${2}px`
-                        : "0px",
-                      transition: "text-decoration-thickness 0.3s ease-in-out",
-                    }}
-                  >
-                    Paste.
-                  </span>
-                </div>
-              </CardDescription>
-
-              <div className="flex flex-col w-full h-full min-h-[400px]">
-                <div className="bg-background border rounded-md mb-4">
-                  {" "}
-                  <div className="flex justify-center mt-2">
-                    <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
-                      Vibes felt During Visit
+                      {
+                        <Badge
+                          className={cn(
+                            "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
+                          )}
+                        >
+                          {`Sign up/Log in as `}
+                          <span className="text-black ml-1 mr-1">
+                            {tempEmail}
+                          </span>
+                          {`to Receive Vero Points: 1 `}
+                        </Badge>
+                      }
+                    </DrawerTrigger>
+                    <DrawerContent className="items-center">
+                      <DrawerHeader>
+                        <DrawerTitle>
+                          Get rewarded for your reviews!
+                        </DrawerTitle>
+                        <DrawerDescription>
+                          You'll get 1 Vero Point for posting this to google.
+                        </DrawerDescription>
+                      </DrawerHeader>
+                      <QuickAuthPage
+                        setCustomerEmail={setCustomerEmail}
+                        onDrawerClose={handleDrawerClose}
+                        customerEmail={tempEmail}
+                      />
+                      <DrawerFooter>
+                        <DrawerClose>
+                          <Button variant="outline">Cancel</Button>
+                        </DrawerClose>
+                      </DrawerFooter>
+                    </DrawerContent>
+                  </Drawer>
+                }
+                <CardDescription className="text-center">
+                  <div>
+                    <span
+                      className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
+                      style={{
+                        textDecorationThickness:
+                          generatedReview.length > 10 ? `${2}px` : "0px",
+                        transition:
+                          "text-decoration-thickness 0.3s ease-in-out",
+                      }}
+                    >
+                      Build.
+                    </span>
+                    <span
+                      className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
+                      style={{
+                        textDecorationThickness: isChecked ? `${2}px` : "0px",
+                        transition:
+                          "text-decoration-thickness 0.3s ease-in-out",
+                      }}
+                    >
+                      Confirm.
+                    </span>
+                    <span
+                      className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
+                      style={{
+                        textDecorationThickness: copyPasteClicked
+                          ? `${2}px`
+                          : "0px",
+                        transition:
+                          "text-decoration-thickness 0.3s ease-in-out",
+                      }}
+                    >
+                      Copy.
+                    </span>
+                    <span
+                      className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
+                      style={{
+                        textDecorationThickness: copyPasteClicked
+                          ? `${2}px`
+                          : "0px",
+                        transition:
+                          "text-decoration-thickness 0.3s ease-in-out",
+                      }}
+                    >
+                      Paste.
                     </span>
                   </div>
-                  <div
-                    ref={containerRef}
-                    className="relative overflow-hidden whitespace-nowrap"
-                    role="region"
-                    aria-live="polite"
-                    aria-label="Scrolling vibes banner"
-                  >
-                    <div
-                      ref={contentRef}
-                      className="inline-block transition-transform duration-100 ease-linear mb-2"
-                      style={{ transform: `translateX(${translateX}px)` }}
-                    >
-                      {renderBadges()}
+                </CardDescription>
+
+                <div className="flex flex-col w-full h-full min-h-[400px]">
+                  <div className="bg-background border rounded-md mb-4">
+                    {" "}
+                    <div className="flex justify-center mt-2">
+                      <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                        Vibes felt During Visit
+                      </span>
                     </div>
                     <div
-                      className="inline-block transition-transform duration-100 ease-linear mb-2"
-                      style={{ transform: `translateX(${translateX}px)` }}
+                      ref={containerRef}
+                      className="relative overflow-hidden whitespace-nowrap"
+                      role="region"
+                      aria-live="polite"
+                      aria-label="Scrolling vibes banner"
                     >
-                      {renderBadges()}
+                      <div
+                        ref={contentRef}
+                        className="inline-block transition-transform duration-100 ease-linear mb-2"
+                        style={{ transform: `translateX(${translateX}px)` }}
+                      >
+                        {renderBadges()}
+                      </div>
+                      <div
+                        className="inline-block transition-transform duration-100 ease-linear mb-2"
+                        style={{ transform: `translateX(${translateX}px)` }}
+                      >
+                        {renderBadges()}
+                      </div>
                     </div>
                   </div>
+                  <div className="flex flex-grow gap-4">
+                    <Textarea
+                      value={generatedReview}
+                      onChange={(e) => setGeneratedReview(e.target.value)}
+                      rows={generatedReview.split("\n").length + 10}
+                      className="flex-grow resize-none mb-2"
+                    />
+                  </div>
+                  <div className="bg-background border rounded-md p-2 mt-4">
+                    <p className="text-xs font-medium text-center mb-2">
+                      Review Helper ✍🏻
+                    </p>
+                    <ScrollArea className="h-auto">
+                      <div className="flex flex-wrap gap-2 justify-center">
+                        {sentences &&
+                          sentences.length > 0 &&
+                          sentences.map((sentence, index) => (
+                            <Badge
+                              key={index}
+                              className={`bg-green-500 text-white ${inter.className}`}
+                              onClick={() =>
+                                setGeneratedReview(
+                                  ((prev: any) => prev + " " + sentence) as any,
+                                )
+                              }
+                            >
+                              {sentence}
+                            </Badge>
+                          ))}
+                      </div>
+                    </ScrollArea>
+                  </div>
                 </div>
-                <div className="flex flex-grow gap-4">
-                  <Textarea
-                    value={generatedReview}
-                    onChange={(e) => setGeneratedReview(e.target.value)}
-                    rows={generatedReview.split("\n").length + 10}
-                    className="flex-grow resize-none mb-2"
-                  />
-                </div>
-                <div className="bg-background border rounded-md p-2 mt-4">
-                  <p className="text-xs font-medium text-center mb-2">
-                    Review Helper ✍🏻
-                  </p>
-                  <ScrollArea className="h-auto">
-                    <div className="flex flex-wrap gap-2 justify-center">
-                      {sentences &&
-                        sentences.length > 0 &&
-                        sentences.map((sentence, index) => (
-                          <Badge
-                            key={index}
-                            className={`bg-green-500 text-white ${inter.className}`}
-                            onClick={() =>
-                              setGeneratedReview(
-                                ((prev: any) => prev + " " + sentence) as any,
-                              )
-                            }
-                          >
-                            {sentence}
-                          </Badge>
-                        ))}
-                    </div>
-                  </ScrollArea>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent></CardContent>
-            <CardFooter className="flex flex-col justify-between items-center">
-              <div className="flex flex-col  justify-center items-center h-full w-full">
-                <div className="flex items-center">
-                  <Checkbox
-                    id="terms"
-                    checked={isChecked}
-                    onCheckedChange={(checked) =>
-                      setIsChecked(checked === true)
-                    }
-                    className="mr-4"
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    I confirm this reflects my experience.
-                  </label>
-                </div>
-                <Button
-                  type="submit"
-                  onClick={() => {
-                    setCopyPasteClicked(true);
+              </CardHeader>
+              <CardContent></CardContent>
+              <CardFooter className="flex flex-col justify-between items-center">
+                <div className="flex flex-col  justify-center items-center h-full w-full">
+                  <div className="flex items-center">
+                    <Checkbox
+                      id="terms"
+                      checked={isChecked}
+                      onCheckedChange={(checked) =>
+                        setIsChecked(checked === true)
+                      }
+                      className="mr-4"
+                    />
+                    <label
+                      htmlFor="terms"
+                      className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      I confirm this reflects my experience.
+                    </label>
+                  </div>
+                  <Button
+                    type="submit"
+                    onClick={() => {
+                      setCopyPasteClicked(true);
 
-                    setTimeout(() => {
-                      handlePostGeneratedReviewToGoogle();
-                    }, 1000);
-                  }}
-                  variant="default"
-                  className="mt-4"
-                  disabled={!(isChecked && generatedReview.length > 10)} // Disable the button if checkbox is not checked
-                >
-                  Copy & Paste
-                </Button>
-              </div>
-            </CardFooter>
-          </CardContent>
-        </Card>
-      )}
-    </div>
+                      setTimeout(() => {
+                        handlePostGeneratedReviewToGoogle();
+                      }, 1000);
+                    }}
+                    variant="default"
+                    className="mt-4"
+                    disabled={!(isChecked && generatedReview.length > 10)} // Disable the button if checkbox is not checked
+                  >
+                    Copy & Paste
+                  </Button>
+                </div>
+              </CardFooter>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

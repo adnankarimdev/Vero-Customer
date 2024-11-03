@@ -47,24 +47,24 @@ export default function DuplicateReviewPage() {
   };
   return (
     <AnimatedLayout>
-    <div className="space-y-8">
-      {isLoading && <RecordingLoader />}
-      {!isLoading && (
-        <>
-          <div className="flex justify-end items-center">
-            {/* <SearchBar /> */}
-            <Button
-              variant="ghost"
-              className="md:inline-flex mr-2"
-              onClick={onGetStarted}
-            >
-              Login
-            </Button>
-          </div>
-          <FlipCards locations={locationData} placesInfo={places} />
-        </>
-      )}
-    </div>
+      <div className="space-y-8">
+        {isLoading && <RecordingLoader />}
+        {!isLoading && (
+          <>
+            <div className="flex justify-end items-center">
+              {/* <SearchBar /> */}
+              <Button
+                variant="ghost"
+                className="md:inline-flex mr-2"
+                onClick={onGetStarted}
+              >
+                Login
+              </Button>
+            </div>
+            <FlipCards locations={locationData} placesInfo={places} />
+          </>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }

@@ -30,23 +30,23 @@ export default function ThankYouPage() {
 
   return (
     <AnimatedLayout>
-    <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
-      <div className="flex items-center">
-        <TypingEffect text="You’re a feedback superstar!" speed={50} />
-        {showFirstEmoji && <span className="text-4xl ml-2">🏃💨</span>}
-      </div>
-
-      {showSecondComponent && (
+      <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
         <div className="flex items-center">
-          <TypingEffect
-            text="Thanks for using Vero"
-            speed={50}
-            className="text-md text-muted-foreground"
-          />
-          {showSecondEmoji && <span className="text-xl ml-2">🥳</span>}
+          <TypingEffect text="You’re a feedback superstar!" speed={50} />
+          {showFirstEmoji && <span className="text-4xl ml-2">🏃💨</span>}
         </div>
-      )}
-    </div>
+
+        {showSecondComponent && (
+          <div className="flex items-center">
+            <TypingEffect
+              text="Thanks for using Vero"
+              speed={50}
+              className="text-md text-muted-foreground"
+            />
+            {showSecondEmoji && <span className="text-xl ml-2">🥳</span>}
+          </div>
+        )}
+      </div>
     </AnimatedLayout>
   );
 }
