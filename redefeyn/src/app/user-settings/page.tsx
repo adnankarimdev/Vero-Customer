@@ -9,6 +9,7 @@ import RewardPack from "@/components/ui/RewardPack";
 import VeroGlobalBadge from "@/components/ui/VeroGlobalBadge";
 import UserSettings from "@/components/ui/UserSettings";
 import { UserSerializer } from "@/components/Types/types";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function DuplicateReviewPage() {
   const router = useRouter();
@@ -48,6 +49,7 @@ export default function DuplicateReviewPage() {
   }, []);
 
   return (
+    <AnimatedLayout>
     <div className="relative min-h-screen">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
@@ -68,5 +70,6 @@ export default function DuplicateReviewPage() {
         </>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

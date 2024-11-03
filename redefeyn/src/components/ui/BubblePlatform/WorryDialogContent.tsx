@@ -75,13 +75,13 @@ const WorryDialogContent: React.FC<WorryDialogContentProps> = ({
           {!inStoreMode && customerEmail === "" && (
             <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
               <DrawerTrigger>
-                {/* <Badge
+                <Badge
                   className={cn(
                     "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 ",
                   )}
                 >
                   {"Sign up/Log in to Receieve Vero Points: 0.5 "}
-                </Badge> */}
+                </Badge>
               </DrawerTrigger>
               <DrawerContent className="items-center">
                 <DrawerHeader>

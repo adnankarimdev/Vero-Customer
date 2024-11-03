@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import TypingEffect from "@/components/ui/TypingEffect";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function ThankYouPage() {
   const [showSecondComponent, setShowSecondComponent] = useState(false);
@@ -28,6 +29,7 @@ export default function ThankYouPage() {
   }, []);
 
   return (
+    <AnimatedLayout>
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
       <div className="flex items-center">
         <TypingEffect text="You’re a feedback superstar!" speed={50} />
@@ -45,5 +47,6 @@ export default function ThankYouPage() {
         </div>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

@@ -12,6 +12,7 @@ import TypingEffect from "@/components/ui/TypingEffect";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import { Button } from "@/components/ui/button";
 import { PersonalReviewInfoFromSerializer } from "@/components/Types/types";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function DuplicateReviewPage() {
   const router = useRouter();
@@ -117,6 +118,7 @@ export default function DuplicateReviewPage() {
     }
   };
   return (
+    <AnimatedLayout>
     <div className="relative space-y-4 p-4">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
@@ -173,5 +175,6 @@ export default function DuplicateReviewPage() {
         </>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

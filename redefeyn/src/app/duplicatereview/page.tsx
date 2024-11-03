@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import TypingEffect from "@/components/ui/TypingEffect";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function DuplicateReviewPage() {
   const [showSecondComponent, setShowSecondComponent] = useState(false);
@@ -28,6 +29,7 @@ export default function DuplicateReviewPage() {
   }, []);
 
   return (
+    <AnimatedLayout>
     <div className="flex flex-col items-center justify-center h-screen bg-white space-y-4">
       <div className="flex items-center">
         <TypingEffect
@@ -54,5 +56,6 @@ export default function DuplicateReviewPage() {
         </div>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

@@ -9,6 +9,7 @@ import TypingEffect from "@/components/ui/TypingEffect";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import PersonalReviewsFlipCards from "@/components/ui/PersonalReviewsFlipCards";
 import { PersonalReviewInfoFromSerializer } from "@/components/Types/types";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 // so we will create a new component here to open home page.
 // we will get the data from the table backend_customerreviewinfo. Ideally, we will handle all the data processing in the backend.
@@ -57,6 +58,7 @@ export default function DuplicateReviewPage() {
     fetchData();
   }, []);
   return (
+    <AnimatedLayout>
     <div className="container mx-auto p-4">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
@@ -74,5 +76,6 @@ export default function DuplicateReviewPage() {
         </>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

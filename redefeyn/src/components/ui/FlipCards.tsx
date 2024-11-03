@@ -22,6 +22,7 @@ import {
 import { placeIcons } from "../Icons/icons";
 import TimerBadge from "./TimerBadge";
 import { isThreeDaysPassed } from "@/utils/time";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 function LocationCard({
   location,
@@ -93,6 +94,7 @@ function LocationCard({
   }
 
   return (
+    <AnimatedLayout>
     <div
       className="w-full h-[400px] perspective-1000 cursor-pointer"
       onClick={() => setIsFlipped(!isFlipped)}
@@ -275,6 +277,7 @@ function LocationCard({
         </Card> */}
       </div>
     </div>
+    </AnimatedLayout>
   );
 }
 
@@ -323,6 +326,7 @@ export default function GroupedFlipCards({
   }, [locations, placesInfo]);
 
   return (
+    <AnimatedLayout>
     <div className="container mx-auto p-4">
       <div className="mb-4 flex flex-wrap gap-2 items-center justify-center">
         <Button
@@ -413,5 +417,6 @@ export default function GroupedFlipCards({
         )}
       </div>
     </div>
+    </AnimatedLayout>
   );
 }

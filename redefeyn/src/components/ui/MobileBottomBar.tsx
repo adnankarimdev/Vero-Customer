@@ -31,7 +31,7 @@ export default function MobileBottomBar() {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("customerEmail");
-    router.push("/authentication");
+    router.push("/");
   };
 
   return (
