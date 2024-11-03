@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import TypingEffect from "@/components/ui/TypingEffect";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import SearchBar from "@/components/ui/SearchBar";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 // so we will create a new component here to open home page.
 // we will get the data from the table backend_customerreviewinfo. Ideally, we will handle all the data processing in the backend.
@@ -45,6 +46,7 @@ export default function DuplicateReviewPage() {
     router.push("/authentication");
   };
   return (
+    <AnimatedLayout>
     <div className="space-y-8">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
@@ -63,5 +65,6 @@ export default function DuplicateReviewPage() {
         </>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

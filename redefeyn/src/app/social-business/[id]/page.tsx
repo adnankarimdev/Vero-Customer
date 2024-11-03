@@ -9,6 +9,7 @@ import axios from "axios";
 import TutorialSteps from "@/components/ui/TutorialSteps";
 import { useParams } from "next/navigation";
 import Logo from "@/components/ui/Logo";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function Dashboard() {
   const [showReviewPlatform, setShowReviewPlatform] = useState(false);
@@ -93,6 +94,7 @@ export default function Dashboard() {
   }, [id]); // Dependency on 'id'
 
   return (
+    <AnimatedLayout>
     <div className="container mx-auto p-4">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -104,6 +106,7 @@ export default function Dashboard() {
         />
       )}
     </div>
+    </AnimatedLayout>
   );
 }
 

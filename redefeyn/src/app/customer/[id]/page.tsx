@@ -7,6 +7,7 @@ import copy from "copy-to-clipboard";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Inter } from "next/font/google";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 import { Separator } from "@/components/ui/separator";
 import EmailSkeleton from "@/components/ui/Skeletons/EmailSkeleton";
 import {
@@ -166,6 +167,7 @@ export default function AtHomeCustomerReview() {
   }, [generatedReview.length]);
 
   return (
+    <AnimatedLayout>
     <div className="flex items-center justify-center min-h-screen">
       {isLoading ? (
         <RecordingLoader />
@@ -182,17 +184,17 @@ export default function AtHomeCustomerReview() {
                     {/* can we always assume the email sent and logged in is the same email?
                     might want to add a condition regarding it.  */}
                     {
-                      // <Badge
-                      //   className={cn(
-                      //     "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
-                      //   )}
-                      // >
-                      //   {`Sign up/Log in as `}
-                      //   <span className="text-black ml-1 mr-1">
-                      //     {tempEmail}
-                      //   </span>
-                      //   {`to Receive Vero Points: 1 `}
-                      // </Badge>
+                      <Badge
+                        className={cn(
+                          "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
+                        )}
+                      >
+                        {`Sign up/Log in as `}
+                        <span className="text-black ml-1 mr-1">
+                          {tempEmail}
+                        </span>
+                        {`to Receive Vero Points: 1 `}
+                      </Badge>
                     }
                   </DrawerTrigger>
                   <DrawerContent className="items-center">
@@ -365,5 +367,6 @@ export default function AtHomeCustomerReview() {
         </Card>
       )}
     </div>
+    </AnimatedLayout>
   );
 }

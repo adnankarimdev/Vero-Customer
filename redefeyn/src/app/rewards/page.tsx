@@ -7,6 +7,7 @@ import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
 import VeroPointsBadge from "@/components/ui/VeroPointsBadge";
 import RewardPack from "@/components/ui/RewardPack";
 import VeroGlobalBadge from "@/components/ui/VeroGlobalBadge";
+import AnimatedLayout from "@/animations/AnimatedLayout";
 
 export default function DuplicateReviewPage() {
   const router = useRouter();
@@ -45,6 +46,7 @@ export default function DuplicateReviewPage() {
   }, []);
 
   return (
+    <AnimatedLayout>
     <div className="relative min-h-screen">
       {isLoading && <RecordingLoader />}
       {!isLoading && (
@@ -95,5 +97,6 @@ export default function DuplicateReviewPage() {
         </>
       )}
     </div>
+    </AnimatedLayout>
   );
 }
