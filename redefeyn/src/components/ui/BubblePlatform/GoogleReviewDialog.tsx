@@ -70,22 +70,34 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
     const content = contentRef.current;
     if (!container || !content) return;
 
-    const totalWidth = content.offsetWidth;
-    const animationDuration = totalWidth * 10; // Adjust speed here
+    const contentWidth = content.offsetWidth;
+    const containerWidth = container.offsetWidth;
 
     const animate = () => {
       setTranslateX((prevTranslateX) => {
-        if (prevTranslateX <= -totalWidth) {
-          return 0;
-        }
-        return prevTranslateX - 1;
+        const newTranslateX = prevTranslateX - 1;
+        return newTranslateX <= -contentWidth / 2 ? 0 : newTranslateX;
       });
     };
 
-    const animationId = setInterval(animate, animationDuration / totalWidth);
+    const animationId = setInterval(animate, 30); // Adjust speed here
 
     return () => clearInterval(animationId);
   }, [allBadges]);
+
+  const renderBadges = () => {
+    if (allBadges) {
+      return allBadges.concat(allBadges).map((badge, index) => (
+        <Badge
+          key={index}
+          variant="outline"
+          className="bg-blue-500 text-white text-xs py-0.5 px-2 mx-1 whitespace-nowrap"
+        >
+          {badge}
+        </Badge>
+      ));
+    }
+  };
 
   useEffect(() => {
     if (generatedReview.length < 10) {
@@ -191,19 +203,16 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
               >
                 <div
                   ref={contentRef}
-                  className="inline-block transition-transform duration-1000 ease-linear mb-2"
+                  className="inline-block transition-transform duration-100 ease-linear mb-2"
                   style={{ transform: `translateX(${translateX}px)` }}
                 >
-                  {allBadges &&
-                    allBadges.concat(allBadges).map((badge, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        className="bg-blue-500 text-white text-xs py-0.5 px-2 mx-1 whitespace-nowrap"
-                      >
-                        {badge}
-                      </Badge>
-                    ))}
+                  {renderBadges()}
+                </div>
+                <div
+                  className="inline-block transition-transform duration-100 ease-linear mb-2"
+                  style={{ transform: `translateX(${translateX}px)` }}
+                >
+                  {renderBadges()}
                 </div>
               </div>
             </div>

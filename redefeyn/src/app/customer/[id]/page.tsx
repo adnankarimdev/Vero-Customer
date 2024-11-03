@@ -63,22 +63,34 @@ export default function AtHomeCustomerReview() {
     const content = contentRef.current;
     if (!container || !content) return;
 
-    const totalWidth = content.offsetWidth;
-    const animationDuration = totalWidth * 10; // Adjust speed here
+    const contentWidth = content.offsetWidth;
+    const containerWidth = container.offsetWidth;
 
     const animate = () => {
       setTranslateX((prevTranslateX) => {
-        if (prevTranslateX <= -totalWidth) {
-          return 0;
-        }
-        return prevTranslateX - 1;
+        const newTranslateX = prevTranslateX - 1;
+        return newTranslateX <= -contentWidth / 2 ? 0 : newTranslateX;
       });
     };
 
-    const animationId = setInterval(animate, animationDuration / totalWidth);
+    const animationId = setInterval(animate, 30); // Adjust speed here
 
     return () => clearInterval(animationId);
   }, [badges]);
+
+  const renderBadges = () => {
+    if (badges) {
+      return badges.concat(badges).map((badge, index) => (
+        <Badge
+          key={index}
+          variant="outline"
+          className="bg-blue-500 text-white text-xs py-0.5 px-2 mx-1 whitespace-nowrap"
+        >
+          {badge}
+        </Badge>
+      ));
+    }
+  };
 
   const handleDrawerClose = () => {
     setIsDrawerOpen(false);
@@ -204,82 +216,82 @@ export default function AtHomeCustomerReview() {
                 </Drawer>
               }
               <CardDescription className="text-center">
-              <div>
-              <span
-                className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
-                style={{
-                  textDecorationThickness:
-                    generatedReview.length > 10 ? `${2}px` : "0px",
-                  transition: "text-decoration-thickness 0.3s ease-in-out",
-                }}
-              >
-                Build.
-              </span>
-              <span
-                className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
-                style={{
-                  textDecorationThickness: isChecked ? `${2}px` : "0px",
-                  transition: "text-decoration-thickness 0.3s ease-in-out",
-                }}
-              >
-                Confirm.
-              </span>
-              <span
-                className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
-                style={{
-                  textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
-                  transition: "text-decoration-thickness 0.3s ease-in-out",
-                }}
-              >
-                Copy.
-              </span>
-              <span
-                className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
-                style={{
-                  textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
-                  transition: "text-decoration-thickness 0.3s ease-in-out",
-                }}
-              >
-                Paste.
-              </span>
-            </div>
+                <div>
+                  <span
+                    className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness:
+                        generatedReview.length > 10 ? `${2}px` : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Build.
+                  </span>
+                  <span
+                    className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: isChecked ? `${2}px` : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Confirm.
+                  </span>
+                  <span
+                    className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: copyPasteClicked
+                        ? `${2}px`
+                        : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Copy.
+                  </span>
+                  <span
+                    className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: copyPasteClicked
+                        ? `${2}px`
+                        : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Paste.
+                  </span>
+                </div>
               </CardDescription>
 
               <div className="flex flex-col w-full h-full min-h-[400px]">
-              <div className="bg-background border rounded-md mb-4">
-              {" "}
-              <div className="flex justify-center mt-2">
-                <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
-                  Vibes felt During Visit
-                </span>
-              </div>
-              <div
-                ref={containerRef}
-                className="relative overflow-hidden whitespace-nowrap"
-                role="region"
-                aria-live="polite"
-                aria-label="Scrolling vibes banner"
-              >
-                <div
-                  ref={contentRef}
-                  className="inline-block transition-transform duration-1000 ease-linear mb-2"
-                  style={{ transform: `translateX(${translateX}px)` }}
-                >
-                  {badges &&
-                    badges.concat(badges).map((badge, index) => (
-                      <Badge
-                        key={index}
-                        variant="outline"
-                        className="bg-blue-500 text-white text-xs py-0.5 px-2 mx-1 whitespace-nowrap"
-                      >
-                        {badge}
-                      </Badge>
-                    ))}
+                <div className="bg-background border rounded-md mb-4">
+                  {" "}
+                  <div className="flex justify-center mt-2">
+                    <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                      Vibes felt During Visit
+                    </span>
+                  </div>
+                  <div
+                    ref={containerRef}
+                    className="relative overflow-hidden whitespace-nowrap"
+                    role="region"
+                    aria-live="polite"
+                    aria-label="Scrolling vibes banner"
+                  >
+                    <div
+                      ref={contentRef}
+                      className="inline-block transition-transform duration-100 ease-linear mb-2"
+                      style={{ transform: `translateX(${translateX}px)` }}
+                    >
+                      {renderBadges()}
+                    </div>
+                    <div
+                      className="inline-block transition-transform duration-100 ease-linear mb-2"
+                      style={{ transform: `translateX(${translateX}px)` }}
+                    >
+                      {renderBadges()}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
                 <div className="flex flex-grow gap-4">
-                  
                   <Textarea
                     value={generatedReview}
                     onChange={(e) => setGeneratedReview(e.target.value)}
@@ -336,7 +348,7 @@ export default function AtHomeCustomerReview() {
                   type="submit"
                   onClick={() => {
                     setCopyPasteClicked(true);
-                    
+
                     setTimeout(() => {
                       handlePostGeneratedReviewToGoogle();
                     }, 1000);

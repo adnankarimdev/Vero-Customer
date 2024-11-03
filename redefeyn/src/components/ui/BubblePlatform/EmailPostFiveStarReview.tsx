@@ -79,12 +79,12 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             {"You're the best 🤩"}
           </DialogTitle>
           <DialogDescription>
-          <div className="text-center">
-  <span className="text-orange-500 mr-2">Name.</span> 
-  <span className="text-blue-500 mr-2">Contact.</span> 
-  <span className="text-violet-500 mr-2">Time.</span> 
-  <span className="text-emerald-500 mr-2">Sent.</span>
-</div>
+            <div className="text-center">
+              <span className="text-orange-500 mr-2">Name.</span>
+              <span className="text-blue-500 mr-2">Contact.</span>
+              <span className="text-violet-500 mr-2">Time.</span>
+              <span className="text-emerald-500 mr-2">Sent.</span>
+            </div>
           </DialogDescription>
         </DialogHeader>
 
