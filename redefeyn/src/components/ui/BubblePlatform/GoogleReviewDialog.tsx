@@ -187,13 +187,13 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
         </CardHeader>
         <CardContent>
           <div className="flex flex-col w-full h-full min-h-[400px]">
+            <div className="flex justify-center mt-2">
+              <span className="bg-gradient-to-r from-purple-500 to-rose-400 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                Vibes felt Today
+              </span>
+            </div>
             <div className="bg-background border rounded-md mb-4">
               {" "}
-              <div className="flex justify-center mt-2">
-                <span className="bg-gradient-to-r from-purple-500 to-purple-700 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
-                  Vibes felt Today
-                </span>
-              </div>
               <div
                 ref={containerRef}
                 className="relative overflow-hidden whitespace-nowrap"
@@ -209,14 +209,20 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                   {renderBadges()}
                 </div>
                 <div
-                  className="inline-block transition-transform duration-100 ease-linear mb-2"
+                  className="inline-block transition-transform duration-100 ease-linear mb-2 mt-2"
                   style={{ transform: `translateX(${translateX}px)` }}
                 >
                   {renderBadges()}
                 </div>
               </div>
             </div>
-            <div className="flex flex-grow gap-4">
+            <div className="flex flex-col items-center mt-2">
+              {/* Non-editable label text */}
+              <span className="bg-gradient-to-r from-blue-500 to-emerald-300 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                {"Build & Type"}
+              </span>
+
+              {/* Textarea where the user can input text */}
               <Textarea
                 value={generatedReview}
                 onChange={(e) => setGeneratedReview(e.target.value)}
@@ -224,10 +230,10 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
                 className="flex-grow resize-none mb-2"
               />
             </div>
-            <div className="bg-background border rounded-md p-2 mt-4">
-              <p className="text-xs font-medium text-center mb-2">
-                Review Helper ✍🏻
-              </p>
+            <span className="bg-gradient-to-r from-yellow-100 to-orange-900 text-xs font-medium text-center mt-2 bg-clip-text text-transparent">
+              Review Helper
+            </span>
+            <div className="bg-background border rounded-md p-2 mt-2">
               <ScrollArea className="h-auto">
                 <div className="flex flex-wrap gap-2 justify-center">
                   {generatedSentences &&
