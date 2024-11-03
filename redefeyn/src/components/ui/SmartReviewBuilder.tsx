@@ -79,7 +79,8 @@ const SmartReviewBuilder = ({
   const startTimeRef = useRef<number | null>(null);
   const endTimeRef = useRef<number | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
-  const [title, setTitle] = useState("P&S");
+  const [title, setTitle] = useState("");
+  const [chosenIcon, setChosenIcon] = useState("Star");
   const [keywords, setKeywords] = useState([]);
   const [formattedAddress, setFormattedAddress] = useState("");
   const [questions, setQuestions] = useState([
@@ -192,6 +193,7 @@ const SmartReviewBuilder = ({
         setWorryBody(response.data.dialogBody);
         setWorryTitle(response.data.dialogTitle);
         setKeywords(response.data.keywords);
+        setChosenIcon(response.data.chosen_icon);
         setUseBubblePlatform(response.data.useBubblePlatform);
         const reviewPlace = response.data.places.find(
           (place: Place) => place.place_id === id,
@@ -695,6 +697,7 @@ const SmartReviewBuilder = ({
             inStoreMode={inStoreMode}
             onlineBusinessMode={onlineBusinessMode}
             formattedAddress={formattedAddress}
+            chosenIcon={chosenIcon}
           />
         )}
       {!showRatingsPage &&

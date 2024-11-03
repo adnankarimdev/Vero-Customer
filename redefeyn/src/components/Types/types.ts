@@ -1,6 +1,10 @@
+import { flattenedIconMap } from "@/utils/IconList";
+
 export type KeywordCounts = {
   [key: string]: number;
 };
+
+export type IconMapType = typeof flattenedIconMap;
 
 export type Block = {
   id: string;

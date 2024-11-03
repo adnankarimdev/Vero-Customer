@@ -76,6 +76,7 @@ interface FiveStarReviewBuilderProps {
   inStoreMode?: boolean;
   onlineBusinessMode?: boolean;
   formattedAddress?: string;
+  chosenIcon?: string;
 }
 
 export default function FiveStarReviewBuilder({
@@ -92,6 +93,7 @@ export default function FiveStarReviewBuilder({
   inStoreMode,
   onlineBusinessMode,
   formattedAddress,
+  chosenIcon,
 }: FiveStarReviewBuilderProps) {
   const router = useRouter();
   const startTimeRef = useRef<number | null>(null);
@@ -853,6 +855,7 @@ export default function FiveStarReviewBuilder({
           translateLanguage={translateLanguage}
           cardDescription={cardDescription}
           formattedAddress={formattedAddress}
+          chosenIcon={chosenIcon}
         />
 
         // <TinderPlatform

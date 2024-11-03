@@ -40,6 +40,8 @@ import {
   isWithinRadius,
 } from "@/utils/getLatLong";
 import LocationConfirmerSkeleton from "../Skeletons/LocationConfirmerSkeleton";
+import { flattenedIconMap } from "@/utils/IconList";
+import { IconMapType } from "@/components/Types/types";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -62,6 +64,7 @@ interface RatingBubbleCardProps {
   translateLanguage?: (language: string) => void;
   cardDescription?: string;
   formattedAddress?: string;
+  chosenIcon?: string;
 }
 
 export default function RatingBubbleCard({
@@ -83,6 +86,7 @@ export default function RatingBubbleCard({
   translateLanguage,
   cardDescription,
   formattedAddress,
+  chosenIcon,
 }: RatingBubbleCardProps) {
   const [categoryRatings, setCategoryRatings] = useState<{
     [key: string]: number;
@@ -238,6 +242,8 @@ export default function RatingBubbleCard({
     toggleBadge(categoryName, badge);
   };
 
+  const SelectedIcon = flattenedIconMap[chosenIcon as keyof IconMapType];
+
   return (
     <Card className="w-full max-w-3xl border-0">
       {confirmingLocation && <LocationConfirmerSkeleton />}
@@ -294,12 +300,12 @@ export default function RatingBubbleCard({
                 )}
                 <div className="flex items-center space-x-1 justify-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star
+                    <SelectedIcon
                       key={i}
                       className={`w-5 h-5 cursor-pointer ${
                         i < categoryRatings[category.name]
-                          ? "text-primary fill-primary"
-                          : "text-muted stroke-muted-foreground"
+                          ? "text-yellow-300"
+                          : "text-neutral-400"
                       }`}
                       onClick={() => {
                         if (locationConfirmed) {
