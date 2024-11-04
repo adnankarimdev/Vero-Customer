@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -76,31 +76,40 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
 
   const handleShareLink = async () => {
     const response = await sendEmailToClientWithReview("airdrop");
-    if (response && navigator.share && userName) {
-      try {
-        await navigator.share({
-          title: `For ${userName}, With Good Vibes ❤️: `,
-          url: airDropUrl,
-        });
-        console.log("Link shared successfully");
-        toast({
-          className: cn(
-            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
-          ),
-          title: `You're good to go 😇`,
-          description: "Thank you!",
-          duration: 3000,
-        });
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      } catch (err) {
-        console.error("Error sharing: ", err);
-      }
-    } else {
-      console.warn("Web Share API not supported in this browser.");
-    }
+    // The response is already handled within the sendEmailToClientWithReview function
   };
+
+  useEffect(() => {
+    const shareWithNavigator = async () => {
+      if (airDropUrl && navigator.share && userName) {
+        try {
+          await navigator.share({
+            title: `For ${userName}, With Good Vibes ❤️: `,
+            url: airDropUrl,
+          });
+          console.log("Link shared successfully");
+          toast({
+            className: cn(
+              "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+            ),
+            title: `You're good to go 😇`,
+            description: "Thank you!",
+            duration: 3000,
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } catch (err) {
+          console.error("Error sharing: ", err);
+        }
+      } else {
+        console.warn("Web Share API not supported in this browser.");
+      }
+    };
+
+    // Trigger the share action whenever airDropUrl changes
+    shareWithNavigator();
+  }, [airDropUrl, userName]); // Adding userName as a dependency if it can change
 
   return (
     <Dialog
