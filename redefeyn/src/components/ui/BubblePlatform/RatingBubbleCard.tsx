@@ -300,21 +300,38 @@ export default function RatingBubbleCard({
                 )}
                 <div className="flex items-center space-x-1 justify-center">
                   {[...Array(5)].map((_, i) => (
-                    <SelectedIcon
+                    <motion.div
                       key={i}
-                      className={`w-5 h-5 cursor-pointer ${
-                        i < categoryRatings[category.name]
-                          ? "text-yellow-300"
-                          : "text-neutral-400"
-                      }`}
-                      onClick={() => {
-                        if (locationConfirmed) {
-                          handleCategoryRating(category.name, i + 1);
-                        } else {
-                          notifyUser();
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <motion.div
+                        animate={
+                          i < categoryRatings[category.name]
+                            ? {
+                                y: [0, -10, 0],
+                              }
+                            : {}
                         }
-                      }}
-                    />
+                        transition={{ duration: 0.5, delay: i * 0.1 }}
+                      >
+                        <SelectedIcon
+                          key={i}
+                          className={`w-5 h-5 cursor-pointer ${
+                            i < categoryRatings[category.name]
+                              ? "text-yellow-300"
+                              : "text-neutral-400"
+                          }`}
+                          onClick={() => {
+                            if (locationConfirmed) {
+                              handleCategoryRating(category.name, i + 1);
+                            } else {
+                              notifyUser();
+                            }
+                          }}
+                        />
+                      </motion.div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
