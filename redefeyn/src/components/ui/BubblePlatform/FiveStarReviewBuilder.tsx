@@ -130,6 +130,7 @@ export default function FiveStarReviewBuilder({
   const [customerEmail, setCustomerEmail] = useState("");
   const [alreadyPostedToGoogle, setAlreadyPostedToGoogle] = useState(false);
   const [generatedSentences, setGeneratedSentences] = useState([]);
+  const [airDropUrl, setAirDropUrl] = useState("");
   let globalRating = 0;
   const positiveTones = [
     "friendly 🤗",
@@ -165,7 +166,13 @@ export default function FiveStarReviewBuilder({
     return emailRegex.test(email);
   };
 
-  const validateForm = (): boolean => {
+  const validatePhoneNumber = (phoneNumber: string) => {
+    const phoneRegex =
+      /^\+?(\d{1,3})?[-.\s]?(\(?\d{1,4}\)?)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/;
+    return phoneRegex.test(phoneNumber);
+  };
+
+  const validateForm = (method: string): boolean => {
     if (!userName) {
       toast({
         title: "Please enter your name.",
@@ -177,7 +184,7 @@ export default function FiveStarReviewBuilder({
 
     if (!phoneNumber) {
       // If no phone number, perform email validation
-      if (!userEmail) {
+      if (!userEmail && method !== "airdrop") {
         toast({
           title: "Please enter your email.",
           duration: 2000,
@@ -186,7 +193,7 @@ export default function FiveStarReviewBuilder({
         return false;
       }
 
-      if (!validateEmail(userEmail)) {
+      if (!validateEmail(userEmail) && method !== "airdrop") {
         toast({
           title: "Please enter a valid email.",
           duration: 2000,
@@ -194,9 +201,18 @@ export default function FiveStarReviewBuilder({
         });
         return false;
       }
+    } else if (phoneNumber) {
+      if (!validatePhoneNumber(phoneNumber)) {
+        toast({
+          title: "Please enter a valid phone number.",
+          duration: 2000,
+          variant: "destructive",
+        });
+        return false;
+      }
     }
 
-    if (!date || !time) {
+    if ((!date || !time) && method !== "airdrop") {
       toast({
         title: "Please select a date and time.",
         duration: 2000,
@@ -447,20 +463,22 @@ export default function FiveStarReviewBuilder({
           setIsLoading(false);
         });
 
-      await axios
-        .post(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/already-posted-to-google/`,
-          {
-            customerEmail: email,
-            placeId: placeId,
-          },
-        )
-        .then((response) => {
-          setAlreadyPostedToGoogle(response.data.data);
-        })
-        .catch((error) => {
-          setAlreadyPostedToGoogle(false);
-        });
+      if (email) {
+        await axios
+          .post(
+            `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/already-posted-to-google/`,
+            {
+              customerEmail: email,
+              placeId: placeId,
+            },
+          )
+          .then((response) => {
+            setAlreadyPostedToGoogle(response.data.data);
+          })
+          .catch((error) => {
+            setAlreadyPostedToGoogle(false);
+          });
+      }
     };
 
     fetchCategories();
@@ -502,20 +520,34 @@ export default function FiveStarReviewBuilder({
         });
       });
   };
-  const sendEmailToClientWithReview = async () => {
-    if (!validateForm()) {
+  const sendEmailToClientWithReview = async (method = "notAirdrop") => {
+    if (!validateForm(method)) {
       return;
     }
-    toast({
-      className: cn(
-        "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
-      ),
-      title: `You're good to go 😇`,
-      description: "Thank you!",
-      duration: 3000,
-    });
-    setIsSendingEmail(true);
-    setIsEmailReviewDialogOpen(false);
+    if (method === "airdrop") {
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+        ),
+        title: `Airdrop Initiated 🚀`,
+        description: "Go ahead and save the link when ready.",
+        duration: 3000,
+      });
+    } else {
+      toast({
+        className: cn(
+          "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+        ),
+        title: `You're good to go 😇`,
+        description: "Thank you!",
+        duration: 3000,
+      });
+    }
+    if (method !== "airdrop") {
+      setIsSendingEmail(true);
+      setIsEmailReviewDialogOpen(false);
+    }
+
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${badge}`),
     );
@@ -590,6 +622,11 @@ export default function FiveStarReviewBuilder({
         },
       )
       .then((response) => {
+        if (response.data.url) {
+          console.log(response.data.url);
+          setAirDropUrl(response.data.url);
+          return response.data.url;
+        }
         setIsEmailReviewDialogOpen(false);
         if (inStoreMode) {
           setTimeout(() => {
@@ -827,6 +864,7 @@ export default function FiveStarReviewBuilder({
           positiveTones={positiveTones}
           setTone={setTone}
           tone={tone}
+          airDropUrl={airDropUrl}
         />
       );
     }

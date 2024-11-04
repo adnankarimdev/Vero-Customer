@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -33,7 +34,7 @@ interface EmailPostFiveStarReviewProps {
   setUserEmail: (email: string) => void;
   handleWorryRatingDialog: (open: boolean) => void;
   handleSaveReviewWithoutGenerate: () => void;
-  sendEmailToClientWithReview: () => void;
+  sendEmailToClientWithReview: (method?: any) => Promise<void>;
   setDate: (date: Date) => void;
   date?: Date;
   setTime: (time: string) => void;
@@ -44,6 +45,7 @@ interface EmailPostFiveStarReviewProps {
   positiveTones: string[];
   tone: string;
   setTone: (tone: string) => void;
+  airDropUrl?: string;
 }
 
 const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
@@ -65,8 +67,40 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
   positiveTones,
   tone,
   setTone,
+  airDropUrl,
 }) => {
-  const [method, setMethod] = useState<"email" | "phone" | null>(null); // State for selected method
+  const [method, setMethod] = useState<"email" | "phone" | "airdrop" | null>(
+    null,
+  ); // State for selected method
+  const { toast } = useToast();
+
+  const handleShareLink = async () => {
+    const response = await sendEmailToClientWithReview("airdrop");
+    if (navigator.share && userName) {
+      try {
+        await navigator.share({
+          title: `For ${userName}, With Good Vibes ❤️: `,
+          url: airDropUrl,
+        });
+        console.log("Link shared successfully");
+        toast({
+          className: cn(
+            "top-0 right-0 flex fixed md:max-w-[420px] md:top-4 md:right-4",
+          ),
+          title: `You're good to go 😇`,
+          description: "Thank you!",
+          duration: 3000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      } catch (err) {
+        console.error("Error sharing: ", err);
+      }
+    } else {
+      console.warn("Web Share API not supported in this browser.");
+    }
+  };
 
   return (
     <Dialog
@@ -79,12 +113,39 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             {"You're the best 🤩"}
           </DialogTitle>
           <DialogDescription>
-            <div className="text-center">
-              <span className="text-orange-500 mr-2">Name.</span>
-              <span className="text-blue-500 mr-2">Contact.</span>
-              <span className="text-violet-500 mr-2">Time.</span>
-              <span className="text-emerald-500 mr-2">Sent.</span>
-            </div>
+            {method && method !== "airdrop" && (
+              <div className="text-center">
+                <span
+                  className={`text-orange-500 mr-2 ${userName.length > 10 ? "line-through" : ""}`}
+                  style={{
+                    textDecorationThickness:
+                      userName.length > 0 ? `${2}px` : "0px",
+                    transition: "text-decoration-thickness 0.3s ease-in-out",
+                  }}
+                >
+                  Name.
+                </span>
+                <span
+                  className={`text-blue-500 mr-2 ${method ? "line-through" : ""}`}
+                  style={{
+                    textDecorationThickness: method ? `${2}px` : "0px",
+                    transition: "text-decoration-thickness 0.3s ease-in-out",
+                  }}
+                >
+                  Contact.
+                </span>
+                <span
+                  className={`text-purple-500 mr-2 ${date && time ? "line-through" : ""}`}
+                  style={{
+                    textDecorationThickness: date && time ? `${2}px` : "0px",
+                    transition: "text-decoration-thickness 0.3s ease-in-out",
+                  }}
+                >
+                  Time.
+                </span>
+                <span className="text-emerald-500 mr-2">Sent.</span>
+              </div>
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -111,7 +172,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
               {" "}
               {/* Change to flex-row */}
               <Button
-                variant={method === "email" ? "default" : "ghost"}
+                variant={"ghost"}
                 onClick={() => {
                   setMethod("email");
                   setPhoneNumber("");
@@ -121,7 +182,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
                 <Mail />
               </Button>
               <Button
-                variant={method === "phone" ? "default" : "ghost"}
+                variant={"ghost"}
                 onClick={() => {
                   setMethod("phone");
                   setUserEmail("");
@@ -129,6 +190,18 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
                 className="flex items-center gap-2"
               >
                 <Phone />
+              </Button>
+              <Button
+                variant={"ghost"}
+                onClick={() => {
+                  setMethod("airdrop");
+                  handleShareLink();
+                }}
+                className="flex items-center gap-2"
+              >
+                <span className="bg-gradient-to-r from-purple-500 to-rose-400 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                  {"Airdrop"}
+                </span>
               </Button>
             </div>
           </div>
@@ -159,42 +232,21 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
               />
             </div>
           )}
-
-          {/* <div className="flex flex-col gap-2" hidden={true}>
-            <Label htmlFor="email" className="text-left">
-              Review Tone
-            </Label>
-            <Select onValueChange={(value) => setTone(value)}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue
-                  placeholder="Select a tone"
-                  defaultValue={positiveTones[0]}
-                />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  {positiveTones.map((tone) => (
-                    <SelectItem key={tone} value={tone}>
-                      {tone.charAt(0).toUpperCase() + tone.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div> */}
           {/* DateTimePicker */}
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="email" className="text-left">
-              Send On
-            </Label>
-            <DateTimePicker
-              setDate={setDate}
-              date={date}
-              setTime={setTime}
-              time={time}
-              setSendEmailNow={setSendEmailNow}
-            />
-          </div>
+          {(method === "email" || method === "phone") && (
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email" className="text-left">
+                Send On
+              </Label>
+              <DateTimePicker
+                setDate={setDate}
+                date={date}
+                setTime={setTime}
+                time={time}
+                setSendEmailNow={setSendEmailNow}
+              />
+            </div>
+          )}
         </div>
 
         {/* Dialog Footer */}
@@ -204,6 +256,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
             onClick={sendEmailToClientWithReview}
             className="ml-auto"
             variant="outline"
+            disabled={!method || method === "airdrop"}
           >
             Send
           </Button>
