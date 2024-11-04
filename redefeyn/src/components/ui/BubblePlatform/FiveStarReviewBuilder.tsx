@@ -182,7 +182,7 @@ export default function FiveStarReviewBuilder({
       return false;
     }
 
-    if (!phoneNumber) {
+    if (!phoneNumber && method !== "airdrop") {
       // If no phone number, perform email validation
       if (!userEmail && method !== "airdrop") {
         toast({
@@ -201,8 +201,8 @@ export default function FiveStarReviewBuilder({
         });
         return false;
       }
-    } else if (phoneNumber) {
-      if (!validatePhoneNumber(phoneNumber)) {
+    } else if (phoneNumber && method !== "airdrop") {
+      if (!validatePhoneNumber(phoneNumber) && method !== "airdrop") {
         toast({
           title: "Please enter a valid phone number.",
           duration: 2000,
@@ -602,7 +602,7 @@ export default function FiveStarReviewBuilder({
       "Review Tone:\n" +
       tone;
 
-    axios
+    return axios
       .post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/backend/send-email-to-post-later/`,
         {

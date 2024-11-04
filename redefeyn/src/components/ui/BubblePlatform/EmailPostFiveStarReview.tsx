@@ -34,7 +34,7 @@ interface EmailPostFiveStarReviewProps {
   setUserEmail: (email: string) => void;
   handleWorryRatingDialog: (open: boolean) => void;
   handleSaveReviewWithoutGenerate: () => void;
-  sendEmailToClientWithReview: (method?: any) => Promise<void>;
+  sendEmailToClientWithReview: (method?: any) => Promise<any>;
   setDate: (date: Date) => void;
   date?: Date;
   setTime: (time: string) => void;
@@ -76,7 +76,7 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
 
   const handleShareLink = async () => {
     const response = await sendEmailToClientWithReview("airdrop");
-    if (navigator.share && userName) {
+    if (response && navigator.share && userName) {
       try {
         await navigator.share({
           title: `For ${userName}, With Good Vibes ❤️: `,
