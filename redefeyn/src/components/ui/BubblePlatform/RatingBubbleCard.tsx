@@ -43,6 +43,7 @@ import LocationConfirmerSkeleton from "../Skeletons/LocationConfirmerSkeleton";
 import { flattenedIconMap } from "@/utils/IconList";
 import { IconMapType } from "@/components/Types/types";
 import SparklesText from "../sparkles-text";
+import WordPullUp from "../word-pull-up";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -261,7 +262,11 @@ export default function RatingBubbleCard({
       </div>
       <CardHeader className="relative">
         <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-          <SparklesText className="text-sm" text={businessName} sparklesCount={5}/>
+          <SparklesText
+            className="text-sm"
+            text={businessName}
+            sparklesCount={5}
+          />
         </CardTitle>
         <CardDescription className="flex items-center justify-center space-x-1 mb-2">
           {cardDescription}
@@ -369,7 +374,7 @@ export default function RatingBubbleCard({
                             handleToggleBadge(category.name, badge)
                           }
                         >
-                          {badge}
+                          <WordPullUp className="text-xs" words={badge} />
                         </Badge>
                       </motion.div>
                     ))}
