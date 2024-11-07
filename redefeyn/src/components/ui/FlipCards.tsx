@@ -228,27 +228,24 @@ function LocationCard({
                       <div key={index} className="mb-2">
                         {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
                         <div className="flex flex-col items-center gap-2">
-                  <AnimatedList delay={2000}>
-
-                          {summary.badges.map((badge, idx) => (
-                            <Badge
-                              key={idx}
-                              className={`text-white ${
-                                summary.rating === 5
-                                  ? "bg-green-500"
-                                  : summary.rating === 4
-                                    ? "bg-yellow-500"
-                                    : summary.rating === 3
-                                      ? "bg-orange-500"
-                                      : "bg-red-500"
-                              }`}
-                            >
-                              {badge}
-                            </Badge>
-                          ))}
-                  </AnimatedList>
-
-                          
+                          <AnimatedList delay={2000}>
+                            {summary.badges.map((badge, idx) => (
+                              <Badge
+                                key={idx}
+                                className={`text-white ${
+                                  summary.rating === 5
+                                    ? "bg-green-500"
+                                    : summary.rating === 4
+                                      ? "bg-yellow-500"
+                                      : summary.rating === 3
+                                        ? "bg-orange-500"
+                                        : "bg-red-500"
+                                }`}
+                              >
+                                {badge}
+                              </Badge>
+                            ))}
+                          </AnimatedList>
                         </div>
                       </div>
                     ))}

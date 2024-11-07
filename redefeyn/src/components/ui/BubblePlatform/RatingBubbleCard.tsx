@@ -46,6 +46,7 @@ import SparklesText from "../sparkles-text";
 import WordPullUp from "../word-pull-up";
 import BlurFade from "../blur-fade";
 import LetterPullup from "../letter-pullup";
+import { AnimatedBeamTransition } from "../AnimatedBeamTransition";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -249,287 +250,276 @@ export default function RatingBubbleCard({
   const SelectedIcon = flattenedIconMap[chosenIcon as keyof IconMapType];
 
   return (
-    <Card className="w-full max-w-3xl border-0">
-      {confirmingLocation && <LocationConfirmerSkeleton />}
-      <div className="flex justify-end items-start mr-2 mt-2">
-        {!inStoreMode && !locationConfirmed && (
-          <Button
-            className="text-xs px-2 py-1 h-auto"
-            variant="outline"
-            onClick={() => isInLocation()}
-          >
-            {"I'm in store"}
-          </Button>
-        )}
-      </div>
-      <CardHeader className="relative">
-        <CardTitle className="flex items-center justify-center space-x-1 text-sm">
-          <SparklesText
-            className="text-sm"
-            text={businessName}
-            sparklesCount={5}
-          />
-        </CardTitle>
-        <CardDescription className="flex items-center justify-center space-x-1 mb-2">
-          {cardDescription}
-        </CardDescription>
-      </CardHeader>
+    <>
       {isLoading ? (
-        <CardContent>
-          <div className="space-y-6">
-            {[...Array(4)].map((_, index) => (
-              <div key={index} className="flex items-center space-x-4">
-                <div className="h-6 bg-muted rounded w-1/4 animate-pulse"></div>
-                <div className="flex space-x-1">
-                  {[...Array(5)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-5 w-5 bg-muted rounded-full animate-pulse"
-                    ></div>
-                  ))}
+        <AnimatedBeamTransition />
+      ) : (
+        <Card className="w-full max-w-3xl border-0">
+          {confirmingLocation && <LocationConfirmerSkeleton />}
+          <div className="flex justify-end items-start mr-2 mt-2">
+            {!inStoreMode && !locationConfirmed && (
+              <Button
+                className="text-xs px-2 py-1 h-auto"
+                variant="outline"
+                onClick={() => isInLocation()}
+              >
+                {"I'm in store"}
+              </Button>
+            )}
+          </div>
+          <CardHeader className="relative">
+            <CardTitle className="flex items-center justify-center space-x-1 text-sm">
+              <SparklesText
+                className="text-sm"
+                text={businessName}
+                sparklesCount={5}
+              />
+            </CardTitle>
+            <CardDescription className="flex items-center justify-center space-x-1 mb-2">
+              {cardDescription}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {categories.map((category) => (
+              <div key={category.name} className="mb-6">
+                <div
+                  className={
+                    categories.length > 1
+                      ? "flex items-center mb-2 justify-between"
+                      : "flex items-center mb-2 justify-center"
+                  }
+                >
+                  {categories.length > 1 && (
+                    <h3 className="text-lg font-semibold">{category.name}</h3>
+                  )}
+                  <div className="flex items-center space-x-1 justify-center">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                      >
+                        <motion.div
+                          animate={
+                            i < categoryRatings[category.name]
+                              ? {
+                                  y: [0, -10, 0],
+                                }
+                              : {}
+                          }
+                          transition={{ duration: 0.5, delay: i * 0.1 }}
+                        >
+                          <SelectedIcon
+                            key={i}
+                            className={`w-5 h-5 cursor-pointer ${
+                              i < categoryRatings[category.name]
+                                ? "text-yellow-300"
+                                : "text-neutral-400"
+                            }`}
+                            onClick={() => {
+                              if (locationConfirmed) {
+                                handleCategoryRating(category.name, i + 1);
+                              } else {
+                                notifyUser();
+                              }
+                            }}
+                          />
+                        </motion.div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  <motion.div layout className="flex flex-wrap gap-2 relative">
+                    <AnimatePresence>
+                      {getBadgesForRating(category.name).map(
+                        (badge: string) => (
+                          <motion.div
+                            key={badge}
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.8 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            onHoverStart={() => setHoveredBadge(badge)}
+                            onHoverEnd={() => setHoveredBadge(null)}
+                          >
+                            <Badge
+                              variant={
+                                selectedBadges[category.name]?.includes(badge)
+                                  ? "default"
+                                  : "outline"
+                              }
+                              className={`cursor-pointer transition-colors ${
+                                selectedBadges[category.name]?.includes(badge)
+                                  ? categoryRatings[category.name] <=
+                                    worryRating
+                                    ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                                    : "bg-green-500 text-green-foreground hover:bg-green-400"
+                                  : ""
+                              }`}
+                              onClick={() =>
+                                handleToggleBadge(category.name, badge)
+                              }
+                            >
+                              <WordPullUp className="text-xs" words={badge} />
+                            </Badge>
+                          </motion.div>
+                        ),
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                  {selectedBadges[category.name]
+                    ?.filter(
+                      (badge) =>
+                        !getBadgesForRating(category.name).includes(badge),
+                    )
+                    .map((customBadge) => (
+                      <Badge
+                        key={customBadge}
+                        variant="default"
+                        className="cursor-pointer transition-colors bg-blue-500 text-blue-foreground hover:bg-blue-400"
+                        onClick={() =>
+                          handleToggleBadge(category.name, customBadge)
+                        }
+                      >
+                        {customBadge}
+                      </Badge>
+                    ))}
+                  {editingCategory === category.name ? (
+                    <div className="flex items-center">
+                      <Input
+                        ref={inputRef}
+                        value={newBadge}
+                        onChange={(e) => setNewBadge(e.target.value)}
+                        onKeyPress={(e) => {
+                          if (e.key === "Enter") {
+                            handleSaveCustomBadge(category.name);
+                          }
+                        }}
+                        className="w-32 h-8 text-sm"
+                      />
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleSaveCustomBadge(category.name)}
+                        className="ml-1"
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  ) : categoryRatings[category.name] > 0 ? (
+                    <Badge
+                      variant="outline"
+                      className="cursor-pointer"
+                      onClick={() => handleOtherBadgeClick(category.name)}
+                    >
+                      Other
+                    </Badge>
+                  ) : null}
                 </div>
               </div>
             ))}
-          </div>
-        </CardContent>
-      ) : (
-        <CardContent>
-          {categories.map((category) => (
-            <div key={category.name} className="mb-6">
-              <div
-                className={
-                  categories.length > 1
-                    ? "flex items-center mb-2 justify-between"
-                    : "flex items-center mb-2 justify-center"
-                }
-              >
-                {categories.length > 1 && (
-                  <h3 className="text-lg font-semibold">{category.name}</h3>
-                )}
-                <div className="flex items-center space-x-1 justify-center">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                    >
-                      <motion.div
-                        animate={
-                          i < categoryRatings[category.name]
-                            ? {
-                                y: [0, -10, 0],
-                              }
-                            : {}
-                        }
-                        transition={{ duration: 0.5, delay: i * 0.1 }}
-                      >
-                        <SelectedIcon
-                          key={i}
-                          className={`w-5 h-5 cursor-pointer ${
-                            i < categoryRatings[category.name]
-                              ? "text-yellow-300"
-                              : "text-neutral-400"
-                          }`}
-                          onClick={() => {
-                            if (locationConfirmed) {
-                              handleCategoryRating(category.name, i + 1);
-                            } else {
-                              notifyUser();
-                            }
-                          }}
-                        />
-                      </motion.div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+          </CardContent>
+          <CardFooter className="flex justify-between">
+            <AlertDialog open={isAlertDialogOpen}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle className="text-center mb-2">
+                    {"We've got your feedback, Thank You! 🙌🏼"}
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {inStoreMode ? (
+                      <>
+                        {businessName}{" "}
+                        <LetterPullup
+                          className="text-emerald-500 text-sm"
+                          words={"knows you're helpful."}
+                          delay={0.05}
+                        />{" "}
+                        <br /> <br />
+                        <span>
+                          Let Vero help you post to Google and
+                          <LetterPullup
+                            className="text-blue-500 text-xs"
+                            words="assist you in crafting a review?"
+                            delay={0.05}
+                          />{" "}
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        {businessName}{" "}
+                        <LetterPullup
+                          className="text-emerald-500 text-sm"
+                          words={"knows you're helpful."}
+                          delay={0.05}
+                        />{" "}
+                        <br /> <br />
+                        <span>
+                          Let Vero help you post to Google and
+                          <LetterPullup
+                            className="text-blue-500 text-xs"
+                            words="assist you in crafting a review?"
+                            delay={0.05}
+                          />{" "}
+                        </span>
+                      </>
+                    )}
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>
+                    {"No Thanks"}
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleGenerateReview}>
+                    {"Let's do it"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
 
-              <div className="flex flex-wrap gap-2">
-                <motion.div layout className="flex flex-wrap gap-2 relative">
-                  <AnimatePresence>
-                    {getBadgesForRating(category.name).map((badge: string) => (
-                      <motion.div
-                        key={badge}
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.8 }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        onHoverStart={() => setHoveredBadge(badge)}
-                        onHoverEnd={() => setHoveredBadge(null)}
-                      >
-                        <Badge
-                          variant={
-                            selectedBadges[category.name]?.includes(badge)
-                              ? "default"
-                              : "outline"
-                          }
-                          className={`cursor-pointer transition-colors ${
-                            selectedBadges[category.name]?.includes(badge)
-                              ? categoryRatings[category.name] <= worryRating
-                                ? "bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                                : "bg-green-500 text-green-foreground hover:bg-green-400"
-                              : ""
-                          }`}
-                          onClick={() =>
-                            handleToggleBadge(category.name, badge)
-                          }
-                        >
-                          <WordPullUp className="text-xs" words={badge} />
-                        </Badge>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </motion.div>
-                {selectedBadges[category.name]
-                  ?.filter(
-                    (badge) =>
-                      !getBadgesForRating(category.name).includes(badge),
-                  )
-                  .map((customBadge) => (
-                    <Badge
-                      key={customBadge}
-                      variant="default"
-                      className="cursor-pointer transition-colors bg-blue-500 text-blue-foreground hover:bg-blue-400"
-                      onClick={() =>
-                        handleToggleBadge(category.name, customBadge)
-                      }
-                    >
-                      {customBadge}
-                    </Badge>
-                  ))}
-                {editingCategory === category.name ? (
-                  <div className="flex items-center">
-                    <Input
-                      ref={inputRef}
-                      value={newBadge}
-                      onChange={(e) => setNewBadge(e.target.value)}
-                      onKeyPress={(e) => {
-                        if (e.key === "Enter") {
-                          handleSaveCustomBadge(category.name);
-                        }
-                      }}
-                      className="w-32 h-8 text-sm"
-                    />
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      onClick={() => handleSaveCustomBadge(category.name)}
-                      className="ml-1"
-                    >
-                      Save
-                    </Button>
-                  </div>
-                ) : categoryRatings[category.name] > 0 ? (
-                  <Badge
-                    variant="outline"
-                    className="cursor-pointer"
-                    onClick={() => handleOtherBadgeClick(category.name)}
-                  >
-                    Other
-                  </Badge>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </CardContent>
-      )}
-      <CardFooter className="flex justify-between">
-        <AlertDialog open={isAlertDialogOpen}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle className="text-center mb-2">
-                {"We've got your feedback, Thank You! 🙌🏼"}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                {inStoreMode ? (
-                  <>
-                    {businessName}{" "}
-                    <LetterPullup
-                      className="text-emerald-500 text-sm"
-                      words={"knows you're helpful."}
-                      delay={0.05}
-                    />{" "}
-                    <br /> <br />
-                    <span>
-                      Let Vero help you post to Google and
-                      <LetterPullup
-                        className="text-blue-500 text-xs"
-                        words="assist you in crafting a review?"
-                        delay={0.05}
-                      />{" "}
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    {businessName}{" "}
-                    <LetterPullup
-                      className="text-emerald-500 text-sm"
-                      words={"knows you're helpful."}
-                      delay={0.05}
-                    />{" "}
-                    <br /> <br />
-                    <span>
-                      Let Vero help you post to Google and
-                      <LetterPullup
-                        className="text-blue-500 text-xs"
-                        words="assist you in crafting a review?"
-                        delay={0.05}
-                      />{" "}
-                    </span>
-                  </>
-                )}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel onClick={handleSaveReviewWithoutGenerate}>
-                {"No Thanks"}
-              </AlertDialogCancel>
-              <AlertDialogAction onClick={handleGenerateReview}>
-                {"Let's do it"}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+            {translateLanguage && (
+              <>
+                <Select
+                  onValueChange={(value) => {
+                    translateLanguage(value);
+                    setSelectedLanguage(value);
+                  }} // Capture the selected value and pass it
+                  defaultValue={selectedLanguage}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+                    <SelectValue placeholder="Select a language" />
+                  </SelectTrigger>
+                  <SelectContent className="overflow-y-auto max-h-[10rem]">
+                    <SelectGroup>
+                      <SelectLabel>Language</SelectLabel>
 
-        {translateLanguage && (
-          <>
-            <Select
-              onValueChange={(value) => {
-                translateLanguage(value);
-                setSelectedLanguage(value);
-              }} // Capture the selected value and pass it
-              defaultValue={selectedLanguage}
-              disabled={isLoading}
+                      {languageOptions.map((type) => (
+                        <SelectItem key={type.value} value={type.value}>
+                          {type.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </>
+            )}
+            <Button
+              variant="ghost"
+              disabled={Object.keys(selectedBadges).every(
+                (key) => selectedBadges[key].length === 0,
+              )}
+              onClick={() => stopTimer(categoryRatings)}
             >
-              <SelectTrigger className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
-                <SelectValue placeholder="Select a language" />
-              </SelectTrigger>
-              <SelectContent className="overflow-y-auto max-h-[10rem]">
-                <SelectGroup>
-                  <SelectLabel>Language</SelectLabel>
-
-                  {languageOptions.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </>
-        )}
-        <Button
-          variant="ghost"
-          disabled={Object.keys(selectedBadges).every(
-            (key) => selectedBadges[key].length === 0,
-          )}
-          onClick={() => stopTimer(categoryRatings)}
-        >
-          <Send className="h-4 w-4" />
-        </Button>
-      </CardFooter>
-    </Card>
+              <Send className="h-4 w-4" />
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
+    </>
   );
 }

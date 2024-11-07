@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import WordRotate from "./word-rotate";
 import TypingAnimation from "./typing-animation";
+import Logo from "./Logo";
 
 const Circle = forwardRef<
   HTMLDivElement,
@@ -64,7 +65,8 @@ export function AnimatedBeamTransition() {
             <BookHeart />
           </Circle>
           <Circle ref={div4Ref} className="size-16">
-            <FcGoogle size={24} />
+            {/* <FcGoogle size={24} /> */}
+            <Logo />
           </Circle>
           <Circle ref={div6Ref}>
             <HandHeart />
