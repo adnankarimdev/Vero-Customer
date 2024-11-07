@@ -23,6 +23,7 @@ import { placeIcons } from "../Icons/icons";
 import TimerBadge from "./TimerBadge";
 import { isThreeDaysPassed } from "@/utils/time";
 import AnimatedLayout from "@/animations/AnimatedLayout";
+import { AnimatedList } from "./animated-list";
 
 function LocationCard({
   location,
@@ -226,7 +227,9 @@ function LocationCard({
                     .map((summary, index) => (
                       <div key={index} className="mb-2">
                         {/* <h4 className="text-lg mb-2">Rating: {summary.rating}</h4> */}
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-col items-center gap-2">
+                  <AnimatedList delay={2000}>
+
                           {summary.badges.map((badge, idx) => (
                             <Badge
                               key={idx}
@@ -243,6 +246,9 @@ function LocationCard({
                               {badge}
                             </Badge>
                           ))}
+                  </AnimatedList>
+
+                          
                         </div>
                       </div>
                     ))}
