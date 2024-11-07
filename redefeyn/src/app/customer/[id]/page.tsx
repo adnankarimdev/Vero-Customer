@@ -35,6 +35,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import RecordingLoader from "@/components/ui/Skeletons/RecordingLoader";
+import { RainbowButton } from "@/components/ui/rainbow-button";
+import { AnimatedBeamTransition } from "@/components/ui/AnimatedBeamTransition";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -56,8 +58,10 @@ export default function AtHomeCustomerReview() {
   const [sentences, setSentences] = useState([]);
   const [copyPasteClicked, setCopyPasteClicked] = useState(false);
   const [translateX, setTranslateX] = useState(0);
+  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  
 
   useEffect(() => {
     const container = containerRef.current;
@@ -134,6 +138,7 @@ export default function AtHomeCustomerReview() {
   const handlePostGeneratedReviewToGoogle = async () => {
     copy(generatedReview);
     setIsLoading(true);
+    setShowAnimatedBeam(true)
 
     await axios
       .post(
@@ -169,8 +174,8 @@ export default function AtHomeCustomerReview() {
   return (
     <AnimatedLayout>
       <div className="flex items-center justify-center min-h-screen">
-        {isLoading ? (
-          <RecordingLoader />
+        {showAnimatedBeam ? (
+          <AnimatedBeamTransition />
         ) : (
           <Card className="w-full h-full max-w-3xl mx-auto rounded-none border-0 shadow-none">
             <CardContent className="w-full">
@@ -356,7 +361,20 @@ export default function AtHomeCustomerReview() {
                       I confirm this reflects my experience.
                     </label>
                   </div>
-                  <Button
+                  <RainbowButton
+                        type="submit"
+                        onClick={() => {
+                          setCopyPasteClicked(true);
+                          handlePostGeneratedReviewToGoogle();
+                        }}
+                        // variant="default"
+                        className="mt-4 px-2 py-[-2] text-xs"
+                        disabled={!(isChecked && generatedReview.length > 10)}
+                      >
+                        Copy & Paste to Google
+
+          </RainbowButton>
+                  {/* <Button
                     type="submit"
                     onClick={() => {
                       setCopyPasteClicked(true);
@@ -370,7 +388,7 @@ export default function AtHomeCustomerReview() {
                     disabled={!(isChecked && generatedReview.length > 10)} // Disable the button if checkbox is not checked
                   >
                     Copy & Paste
-                  </Button>
+                  </Button> */}
                 </div>
               </CardFooter>
             </CardContent>

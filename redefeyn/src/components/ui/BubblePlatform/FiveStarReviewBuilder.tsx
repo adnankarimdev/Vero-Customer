@@ -130,6 +130,7 @@ export default function FiveStarReviewBuilder({
   const [customerEmail, setCustomerEmail] = useState("");
   const [alreadyPostedToGoogle, setAlreadyPostedToGoogle] = useState(false);
   const [generatedSentences, setGeneratedSentences] = useState([]);
+  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false)
   const [airDropUrl, setAirDropUrl] = useState("");
   let globalRating = 0;
   const positiveTones = [
@@ -393,6 +394,7 @@ export default function FiveStarReviewBuilder({
     // Saves us having to reload the page again. so all good!
     copy(generatedReview);
     setIsLoading(true);
+    setShowAnimatedBeam(true)
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${badge}`),
     );
@@ -434,6 +436,7 @@ export default function FiveStarReviewBuilder({
         "Your review has been copied to the clipboard! You can now paste it into the Google review form.",
       duration: 1000,
     });
+
     setTimeout(() => {
       window.location.href = reviewUrl;
     }, 2000);
@@ -798,6 +801,7 @@ export default function FiveStarReviewBuilder({
         inStoreMode={inStoreMode}
         handlePostGeneratedReviewToGoogle={handlePostGeneratedReviewToGoogle}
         handleGoogleReviewDialogChange={handleGoogleReviewDialogChange}
+        showAnimatedBeam={showAnimatedBeam}
         allBadges={Object.entries(selectedBadges).flatMap(
           ([category, badges]) => badges.map((badge) => `${badge}`),
         )}
@@ -838,6 +842,7 @@ export default function FiveStarReviewBuilder({
           customerEmail={customerEmail}
           setCustomerEmail={setCustomerEmail}
           inStoreMode={inStoreMode}
+          showAnimatedBeam={showAnimatedBeam}
           allBadges={Object.entries(selectedBadges).flatMap(
             ([category, badges]) => badges.map((badge) => `${badge}`),
           )}
