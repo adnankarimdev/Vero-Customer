@@ -44,6 +44,8 @@ import { flattenedIconMap } from "@/utils/IconList";
 import { IconMapType } from "@/components/Types/types";
 import SparklesText from "../sparkles-text";
 import WordPullUp from "../word-pull-up";
+import BlurFade from "../blur-fade";
+import LetterPullup from "../letter-pullup";
 
 interface RatingBubbleCardProps {
   businessName: string;
@@ -444,28 +446,38 @@ export default function RatingBubbleCard({
                 {inStoreMode ? (
                   <>
                     {businessName}{" "}
-                    <span className="text-emerald-500">
-                      {"knows you're helpful."}
-                    </span>{" "}
+                    <LetterPullup
+                      className="text-emerald-500 text-sm"
+                      words={"knows you're helpful."}
+                      delay={0.05}
+                    />{" "}
                     <br /> <br />
-                    Let Vero{" "}
-                    <span className="text-blue-500">
-                      remind and help build you a review
-                    </span>{" "}
-                    for later to post on Google?
+                    <span>
+                      Let Vero help you post to Google and
+                      <LetterPullup
+                        className="text-blue-500 text-xs"
+                        words="assist you in crafting a review?"
+                        delay={0.05}
+                      />{" "}
+                    </span>
                   </>
                 ) : (
                   <>
                     {businessName}{" "}
-                    <span className="text-emerald-500">
-                      {"knows you're helpful."}
-                    </span>{" "}
+                    <LetterPullup
+                      className="text-emerald-500 text-sm"
+                      words={"knows you're helpful."}
+                      delay={0.05}
+                    />{" "}
                     <br /> <br />
-                    Let Vero{" "}
-                    <span className="text-blue-500">
-                      help you build a review
-                    </span>{" "}
-                    and post to Google?
+                    <span>
+                      Let Vero help you post to Google and
+                      <LetterPullup
+                        className="text-blue-500 text-xs"
+                        words="assist you in crafting a review?"
+                        delay={0.05}
+                      />{" "}
+                    </span>
                   </>
                 )}
               </AlertDialogDescription>
@@ -480,6 +492,7 @@ export default function RatingBubbleCard({
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
+
         {translateLanguage && (
           <>
             <Select

@@ -58,10 +58,9 @@ export default function AtHomeCustomerReview() {
   const [sentences, setSentences] = useState([]);
   const [copyPasteClicked, setCopyPasteClicked] = useState(false);
   const [translateX, setTranslateX] = useState(0);
-  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false)
+  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  
 
   useEffect(() => {
     const container = containerRef.current;
@@ -138,7 +137,7 @@ export default function AtHomeCustomerReview() {
   const handlePostGeneratedReviewToGoogle = async () => {
     copy(generatedReview);
     setIsLoading(true);
-    setShowAnimatedBeam(true)
+    setShowAnimatedBeam(true);
 
     await axios
       .post(
@@ -362,18 +361,17 @@ export default function AtHomeCustomerReview() {
                     </label>
                   </div>
                   <RainbowButton
-                        type="submit"
-                        onClick={() => {
-                          setCopyPasteClicked(true);
-                          handlePostGeneratedReviewToGoogle();
-                        }}
-                        // variant="default"
-                        className="mt-4 px-2 py-[-2] text-xs"
-                        disabled={!(isChecked && generatedReview.length > 10)}
-                      >
-                        Copy & Paste to Google
-
-          </RainbowButton>
+                    type="submit"
+                    onClick={() => {
+                      setCopyPasteClicked(true);
+                      handlePostGeneratedReviewToGoogle();
+                    }}
+                    // variant="default"
+                    className="mt-4 px-2 py-[-2] text-xs"
+                    disabled={!(isChecked && generatedReview.length > 10)}
+                  >
+                    Copy & Paste to Google
+                  </RainbowButton>
                   {/* <Button
                     type="submit"
                     onClick={() => {

@@ -24,6 +24,8 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone } from "lucide-react";
 import PhoneInput from "react-phone-input-2";
+import WordRotate from "../word-rotate";
+import SparklesText from "../sparkles-text";
 // import 'react-phone-input-2/lib/style.css'
 
 interface EmailPostFiveStarReviewProps {
@@ -119,7 +121,11 @@ const EmailPostFiveStarReview: React.FC<EmailPostFiveStarReviewProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="flex justify-center items-center">
-            {"You're the best 🤩"}
+            <WordRotate
+              // className="text-4xl font-bold text-black dark:text-white"
+              words={["You're", "the", "best", "🤩"]}
+              duration={1500}
+            />
           </DialogTitle>
           <DialogDescription>
             {method && method !== "airdrop" && (

@@ -5,7 +5,14 @@ import React, { forwardRef, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { AnimatedBeam } from "./animated-beam";
 import { FcGoogle } from "react-icons/fc";
-import { BookHeart, HandHeart, HeartHandshake, MessageCircleHeart, NotebookPen, Pencil } from "lucide-react";
+import {
+  BookHeart,
+  HandHeart,
+  HeartHandshake,
+  MessageCircleHeart,
+  NotebookPen,
+  Pencil,
+} from "lucide-react";
 import WordRotate from "./word-rotate";
 import TypingAnimation from "./typing-animation";
 
@@ -46,18 +53,18 @@ export function AnimatedBeamTransition() {
       <div className="flex size-full flex-col max-w-lg max-h-[200px] items-stretch justify-between gap-10">
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div1Ref}>
-            <HeartHandshake/>
+            <HeartHandshake />
           </Circle>
           <Circle ref={div5Ref}>
-            <Pencil/>
+            <Pencil />
           </Circle>
         </div>
         <div className="flex flex-row items-center justify-between">
           <Circle ref={div2Ref}>
-            <BookHeart/>
+            <BookHeart />
           </Circle>
           <Circle ref={div4Ref} className="size-16">
-            <FcGoogle size={24}/>
+            <FcGoogle size={24} />
           </Circle>
           <Circle ref={div6Ref}>
             <HandHeart />
@@ -68,7 +75,7 @@ export function AnimatedBeamTransition() {
             <NotebookPen />
           </Circle>
           <Circle ref={div7Ref}>
-            <MessageCircleHeart/>
+            <MessageCircleHeart />
           </Circle>
         </div>
       </div>
@@ -117,4 +124,3 @@ export function AnimatedBeamTransition() {
     </div>
   );
 }
-

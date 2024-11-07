@@ -130,7 +130,7 @@ export default function FiveStarReviewBuilder({
   const [customerEmail, setCustomerEmail] = useState("");
   const [alreadyPostedToGoogle, setAlreadyPostedToGoogle] = useState(false);
   const [generatedSentences, setGeneratedSentences] = useState([]);
-  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false)
+  const [showAnimatedBeam, setShowAnimatedBeam] = useState(false);
   const [airDropUrl, setAirDropUrl] = useState("");
   let globalRating = 0;
   const positiveTones = [
@@ -394,7 +394,7 @@ export default function FiveStarReviewBuilder({
     // Saves us having to reload the page again. so all good!
     copy(generatedReview);
     setIsLoading(true);
-    setShowAnimatedBeam(true)
+    setShowAnimatedBeam(true);
     const allBadges: string[] = Object.entries(selectedBadges).flatMap(
       ([category, badges]) => badges.map((badge) => `${badge}`),
     );

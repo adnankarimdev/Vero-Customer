@@ -43,7 +43,7 @@ interface GoogleReviewCardProps {
   setCustomerEmail?: (email: string) => void;
   inStoreMode?: boolean;
   generatedSentences?: string[];
-  showAnimatedBeam?: boolean
+  showAnimatedBeam?: boolean;
 }
 const inter = Inter({ subsets: ["latin"] });
 
@@ -112,199 +112,200 @@ const GoogleReviewCard: React.FC<GoogleReviewCardProps> = ({
   }, [generatedReview.length]);
   return (
     <BlurFade key={""} delay={0.25} inView>
-    <div className="min-h-screen flex items-center justify-center bg-background p-4">
-      {showAnimatedBeam && (
-        <AnimatedBeamTransition/>
-      )}
+      <div className="min-h-screen flex items-center justify-center bg-background p-4">
+        {showAnimatedBeam && <AnimatedBeamTransition />}
 
-      {!showAnimatedBeam && (
-      <Card className="w-full h-full max-w-3xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-center">
-          Your review is ready to take the spotlight! 🌟
-        </CardTitle>
-        {!inStoreMode && customerEmail === "" && (
-          <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-            <DrawerTrigger asChild>
-              <div className="w-fit mx-auto flex items-center justify-center">
-                <Badge
-                  className={cn(
-                    "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 cursor-pointer",
-                  )}
-                >
-                  Sign up/Log in to Receive Vero Points: 1
-                </Badge>
-              </div>
-            </DrawerTrigger>
-            <DrawerContent className="items-center">
-              <DrawerHeader>
-                <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
-                <DrawerDescription>
-                  {"You'll get 1 Vero Point for posting this to Google."}
-                </DrawerDescription>
-              </DrawerHeader>
-              <QuickAuthPage
-                setCustomerEmail={setCustomerEmail}
-                onDrawerClose={handleDrawerClose}
-              />
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="outline">Cancel</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        )}
-        <CardDescription className="text-center">
-          <div>
-            <span
-              className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
-              style={{
-                textDecorationThickness:
-                  generatedReview.length > 10 ? `${2}px` : "0px",
-                transition: "text-decoration-thickness 0.3s ease-in-out",
-              }}
-            >
-              Build.
-            </span>
-            <span
-              className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
-              style={{
-                textDecorationThickness: isChecked ? `${2}px` : "0px",
-                transition: "text-decoration-thickness 0.3s ease-in-out",
-              }}
-            >
-              Confirm.
-            </span>
-            <span
-              className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
-              style={{
-                textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
-                transition: "text-decoration-thickness 0.3s ease-in-out",
-              }}
-            >
-              Copy.
-            </span>
-            <span
-              className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
-              style={{
-                textDecorationThickness: copyPasteClicked ? `${2}px` : "0px",
-                transition: "text-decoration-thickness 0.3s ease-in-out",
-              }}
-            >
-              Paste.
-            </span>
-          </div>
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="flex flex-col w-full h-full min-h-[400px]">
-          <div className="flex justify-center mt-2">
-            <span className="bg-gradient-to-r from-purple-500 to-rose-400 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
-              Vibes felt Today
-            </span>
-          </div>
-          <div className="bg-background border rounded-md mb-4">
-            {" "}
-            <div
-              ref={containerRef}
-              className="relative overflow-hidden whitespace-nowrap"
-              role="region"
-              aria-live="polite"
-              aria-label="Scrolling vibes banner"
-            >
-              <div
-                ref={contentRef}
-                className="inline-block transition-transform duration-100 ease-linear mb-2"
-                style={{ transform: `translateX(${translateX}px)` }}
-              >
-                {renderBadges()}
-              </div>
-              <div
-                className="inline-block transition-transform duration-100 ease-linear mb-2 mt-2"
-                style={{ transform: `translateX(${translateX}px)` }}
-              >
-                {renderBadges()}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center mt-2">
-            {/* Non-editable label text */}
-            <span className="bg-gradient-to-r from-blue-500 to-emerald-300 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
-              {"Build & Type"}
-            </span>
-
-            {/* Textarea where the user can input text */}
-            <Textarea
-              value={generatedReview}
-              onChange={(e) => setGeneratedReview(e.target.value)}
-              rows={generatedReview.split("\n").length + 10}
-              className="flex-grow resize-none mb-2"
-            />
-          </div>
-          <span className="bg-gradient-to-r from-yellow-100 to-orange-900 text-xs font-medium text-center mt-2 bg-clip-text text-transparent">
-            Review Helper
-          </span>
-          <div className="bg-background border rounded-md p-2 mt-2">
-            <ScrollArea className="h-auto">
-              <div className="flex flex-wrap gap-2 justify-center">
-                {generatedSentences &&
-                  generatedSentences.length > 0 &&
-                  generatedSentences.map((sentence, index) => (
-                    <Badge
-                      key={index}
-                      className={`bg-green-500 text-white ${inter.className}`}
-                      onClick={() =>
-                        setGeneratedReview(
-                          ((prev: any) => prev + " " + sentence) as any,
-                        )
-                      }
-                    >
-                      {sentence}
-                    </Badge>
-                  ))}
-                  
-              </div>
-            </ScrollArea>
-          </div>
-        </div>
-      </CardContent>
-      <CardFooter className="flex flex-col justify-between items-center">
-        <div className="flex flex-col justify-center items-center h-full w-full">
-          <div className="flex items-center">
-            <Checkbox
-              id="terms"
-              checked={isChecked}
-              onCheckedChange={(checked) => setIsChecked(checked === true)}
-              className="mr-4"
-              disabled={generatedReview.length < 10}
-            />
-            <label
-              htmlFor="terms"
-              className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              I confirm this is my genuine experience.
-            </label>
-          </div>
-          <RainbowButton
-                        type="submit"
-                        onClick={() => {
-                          setCopyPasteClicked(true);
-                          handlePostGeneratedReviewToGoogle();
-                        }}
-                        // variant="default"
-                        className="mt-4 px-2 py-[-2] text-xs"
-                        disabled={!(isChecked && generatedReview.length > 10)}
+        {!showAnimatedBeam && (
+          <Card className="w-full h-full max-w-3xl mx-auto">
+            <CardHeader>
+              <CardTitle className="text-center">
+                Your review is ready to take the spotlight! 🌟
+              </CardTitle>
+              {!inStoreMode && customerEmail === "" && (
+                <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+                  <DrawerTrigger asChild>
+                    <div className="w-fit mx-auto flex items-center justify-center">
+                      <Badge
+                        className={cn(
+                          "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2 cursor-pointer",
+                        )}
                       >
-                        Copy & Paste to Google
+                        Sign up/Log in to Receive Vero Points: 1
+                      </Badge>
+                    </div>
+                  </DrawerTrigger>
+                  <DrawerContent className="items-center">
+                    <DrawerHeader>
+                      <DrawerTitle>Get rewarded for your reviews!</DrawerTitle>
+                      <DrawerDescription>
+                        {"You'll get 1 Vero Point for posting this to Google."}
+                      </DrawerDescription>
+                    </DrawerHeader>
+                    <QuickAuthPage
+                      setCustomerEmail={setCustomerEmail}
+                      onDrawerClose={handleDrawerClose}
+                    />
+                    <DrawerFooter>
+                      <DrawerClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DrawerClose>
+                    </DrawerFooter>
+                  </DrawerContent>
+                </Drawer>
+              )}
+              <CardDescription className="text-center">
+                <div>
+                  <span
+                    className={`text-orange-500 mr-2 ${generatedReview.length > 10 ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness:
+                        generatedReview.length > 10 ? `${2}px` : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Build.
+                  </span>
+                  <span
+                    className={`text-blue-500 mr-2 ${isChecked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: isChecked ? `${2}px` : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Confirm.
+                  </span>
+                  <span
+                    className={`text-violet-500 mr-2 ${copyPasteClicked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: copyPasteClicked
+                        ? `${2}px`
+                        : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Copy.
+                  </span>
+                  <span
+                    className={`text-emerald-500 ${copyPasteClicked ? "line-through" : ""}`}
+                    style={{
+                      textDecorationThickness: copyPasteClicked
+                        ? `${2}px`
+                        : "0px",
+                      transition: "text-decoration-thickness 0.3s ease-in-out",
+                    }}
+                  >
+                    Paste.
+                  </span>
+                </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-col w-full h-full min-h-[400px]">
+                <div className="flex justify-center mt-2">
+                  <span className="bg-gradient-to-r from-purple-500 to-rose-400 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                    Vibes felt Today
+                  </span>
+                </div>
+                <div className="bg-background border rounded-md mb-4">
+                  {" "}
+                  <div
+                    ref={containerRef}
+                    className="relative overflow-hidden whitespace-nowrap"
+                    role="region"
+                    aria-live="polite"
+                    aria-label="Scrolling vibes banner"
+                  >
+                    <div
+                      ref={contentRef}
+                      className="inline-block transition-transform duration-100 ease-linear mb-2"
+                      style={{ transform: `translateX(${translateX}px)` }}
+                    >
+                      {renderBadges()}
+                    </div>
+                    <div
+                      className="inline-block transition-transform duration-100 ease-linear mb-2 mt-2"
+                      style={{ transform: `translateX(${translateX}px)` }}
+                    >
+                      {renderBadges()}
+                    </div>
+                  </div>
+                </div>
+                <div className="flex flex-col items-center mt-2">
+                  {/* Non-editable label text */}
+                  <span className="bg-gradient-to-r from-blue-500 to-emerald-300 text-xs font-medium text-center mb-2 bg-clip-text text-transparent">
+                    {"Build & Type"}
+                  </span>
 
-          </RainbowButton>
-        </div>
-      </CardFooter>
-    </Card>
-      )}
-
-    </div>
+                  {/* Textarea where the user can input text */}
+                  <Textarea
+                    value={generatedReview}
+                    onChange={(e) => setGeneratedReview(e.target.value)}
+                    rows={generatedReview.split("\n").length + 10}
+                    className="flex-grow resize-none mb-2"
+                  />
+                </div>
+                <span className="bg-gradient-to-r from-yellow-100 to-orange-900 text-xs font-medium text-center mt-2 bg-clip-text text-transparent">
+                  Review Helper
+                </span>
+                <div className="bg-background border rounded-md p-2 mt-2">
+                  <ScrollArea className="h-auto">
+                    <div className="flex flex-wrap gap-2 justify-center">
+                      {generatedSentences &&
+                        generatedSentences.length > 0 &&
+                        generatedSentences.map((sentence, index) => (
+                          <Badge
+                            key={index}
+                            className={`bg-green-500 text-white ${inter.className}`}
+                            onClick={() =>
+                              setGeneratedReview(
+                                ((prev: any) => prev + " " + sentence) as any,
+                              )
+                            }
+                          >
+                            {sentence}
+                          </Badge>
+                        ))}
+                    </div>
+                  </ScrollArea>
+                </div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col justify-between items-center">
+              <div className="flex flex-col justify-center items-center h-full w-full">
+                <div className="flex items-center">
+                  <Checkbox
+                    id="terms"
+                    checked={isChecked}
+                    onCheckedChange={(checked) =>
+                      setIsChecked(checked === true)
+                    }
+                    className="mr-4"
+                    disabled={generatedReview.length < 10}
+                  />
+                  <label
+                    htmlFor="terms"
+                    className="text-xs font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    I confirm this is my genuine experience.
+                  </label>
+                </div>
+                <RainbowButton
+                  type="submit"
+                  onClick={() => {
+                    setCopyPasteClicked(true);
+                    handlePostGeneratedReviewToGoogle();
+                  }}
+                  // variant="default"
+                  className="mt-4 px-2 py-[-2] text-xs"
+                  disabled={!(isChecked && generatedReview.length > 10)}
+                >
+                  Copy & Paste to Google
+                </RainbowButton>
+              </div>
+            </CardFooter>
+          </Card>
+        )}
+      </div>
     </BlurFade>
   );
 };
