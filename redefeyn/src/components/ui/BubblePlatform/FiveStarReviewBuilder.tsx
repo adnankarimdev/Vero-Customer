@@ -335,6 +335,13 @@ export default function FiveStarReviewBuilder({
       })
       .catch((error) => {
         //  setIsLoading(false);
+        toast({
+          title: "Thank you for your feedback!",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       });
   };
   const handleWorryRatingDialog = async () => {
@@ -385,6 +392,13 @@ export default function FiveStarReviewBuilder({
       })
       .catch((error) => {
         // setIsLoading(false);
+        toast({
+          title: "Thank you for your feedback!",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       });
   };
   const handlePostGeneratedReviewToGoogle = async () => {
@@ -586,6 +600,13 @@ export default function FiveStarReviewBuilder({
         // setIsLoading(false);
       })
       .catch((error) => {
+        toast({
+          title: "Thank you for your feedback!",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         // setIsLoading(false);
       });
 
@@ -690,6 +711,13 @@ export default function FiveStarReviewBuilder({
         // setIsLoading(false);
       })
       .catch((error) => {
+        toast({
+          title: "Thank you for your feedback!",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         // setIsLoading(false);
       });
     const context =

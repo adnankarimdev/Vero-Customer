@@ -406,6 +406,13 @@ const SmartReviewBuilder = ({
       })
       .catch((error) => {
         // setIsLoading(false);
+        toast({
+          title: "Thank you for your feedback!",
+          duration: 1000,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
       });
     const context =
       "User Rating:" +
