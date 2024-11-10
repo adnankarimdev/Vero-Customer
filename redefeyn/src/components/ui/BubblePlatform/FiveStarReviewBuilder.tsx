@@ -838,6 +838,11 @@ export default function FiveStarReviewBuilder({
   }
 
   if (isWorryDialogOpen && showEmailWorryDialog && !sendingEmail) {
+    if (customerEmail != "" && !inStoreMode)
+    {
+      sendEmail()
+      return
+    }
     return (
       <WorryDialogContent
         isWorryDialogOpen={isWorryDialogOpen}
