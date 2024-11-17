@@ -193,10 +193,13 @@ export default function AtHomeCustomerReview() {
                             "bg-gradient-to-r from-purple-500 to-purple-700 text-white font-medium mt-2 mb-2",
                           )}
                         >
-                          {`Sign up/Log in as `}
+                          {`Sign up/Log in `}
+                          {tempEmail != "" && (
                           <span className="text-black ml-1 mr-1">
-                            {tempEmail}
-                          </span>
+                          {"as "}{tempEmail}
+                        </span>
+                          )}
+
                           {`to Receive Vero Points: 1 `}
                         </Badge>
                       }
